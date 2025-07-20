@@ -1,110 +1,99 @@
 ---
-import TransitionLayout from "../layouts/TransitionLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<TransitionLayout>
+<BaseLayout title="Page 1">
 	<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
 		<nav class="mb-4">
-			<a 
-				href="/page2" 
-				class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+			<a
+				href="/page2"
+				class="inline-block rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
 			>
 				Navigate to Page 2
 			</a>
 		</nav>
 
-		<main class="max-w-6xl mx-auto space-y-4">
+		<main class="mx-auto max-w-6xl space-y-4">
 			<!-- Header -->
 			<header class="text-center">
-				<h1 
+				<h1
 					transition:name="page-title"
-					class="text-4xl font-bold text-gray-900 mb-2"
+					class="mb-2 text-4xl font-bold text-gray-900"
 				>
 					Page 1 - View Transitions Test
 				</h1>
-				<p 
-					transition:name="page-subtitle"
-					class="text-lg text-gray-600"
-				>
+				<p transition:name="page-subtitle" class="text-lg text-gray-600">
 					Testing morph animations and persistent video
 				</p>
 			</header>
 
 			<!-- Video section with transition:persist at the top -->
-			<section class="bg-white rounded-xl p-6 shadow-lg">
-				<h2 
+			<section class="rounded-xl bg-white p-6 shadow-lg">
+				<h2
 					transition:name="video-title"
-					class="text-2xl font-bold text-gray-800 mb-4"
+					class="mb-4 text-2xl font-bold text-gray-800"
 				>
 					Persistent Video
 				</h2>
 				<div class="flex items-center gap-6">
-					<video 
+					<video
 						transition:persist="video"
 						controls
-						class="w-80 h-48 object-cover rounded-lg bg-gray-200"
+						class="h-48 w-80 rounded-lg bg-gray-200 object-cover"
 						poster="https://picsum.photos/320/192?random=1"
 					>
-						<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+						<source
+							src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+							type="video/mp4"
+						/>
 						Your browser does not support the video tag.
 					</video>
 					<div>
-						<p 
+						<p
 							transition:name="video-description"
-							class="text-gray-700 leading-relaxed"
+							class="leading-relaxed text-gray-700"
 						>
-							This video uses <code>transition:persist="video"</code> and will continue playing 
-							without interruption during page transitions. Start playing and navigate to Page 2!
+							This video uses <code>transition:persist="video"</code> and will continue
+							playing without interruption during page transitions. Start playing
+							and navigate to Page 2!
 						</p>
 					</div>
 				</div>
 			</section>
 
 			<!-- Content cards in a compact grid -->
-			<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<div 
-					transition:name="card-1"
-					class="bg-white rounded-xl p-4 shadow-lg"
-				>
-					<h3 
+			<section class="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<div transition:name="card-1" class="rounded-xl bg-white p-4 shadow-lg">
+					<h3
 						transition:name="card-1-title"
-						class="text-xl font-bold text-gray-800 mb-2"
+						class="mb-2 text-xl font-bold text-gray-800"
 					>
 						Card 1
 					</h3>
-					<p 
-						transition:name="card-1-content"
-						class="text-gray-600 text-sm"
-					>
+					<p transition:name="card-1-content" class="text-sm text-gray-600">
 						This card will morph and transform during view transitions.
 					</p>
-					<div 
+					<div
 						transition:name="card-1-badge"
-						class="mt-3 inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium"
+						class="mt-3 inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-medium text-purple-800"
 					>
 						Featured
 					</div>
 				</div>
 
-				<div 
-					transition:name="card-2"
-					class="bg-white rounded-xl p-4 shadow-lg"
-				>
-					<h3 
+				<div transition:name="card-2" class="rounded-xl bg-white p-4 shadow-lg">
+					<h3
 						transition:name="card-2-title"
-						class="text-xl font-bold text-gray-800 mb-2"
+						class="mb-2 text-xl font-bold text-gray-800"
 					>
 						Card 2
 					</h3>
-					<p 
-						transition:name="card-2-content"
-						class="text-gray-600 text-sm"
-					>
+					<p transition:name="card-2-content" class="text-sm text-gray-600">
 						Another card with different content that will also morph.
 					</p>
-					<div 
+					<div
 						transition:name="card-2-badge"
-						class="mt-3 inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium"
+						class="mt-3 inline-block rounded-full bg-orange-100 px-2 py-1 text-xs font-medium text-orange-800"
 					>
 						New
 					</div>
@@ -112,37 +101,37 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 			</section>
 
 			<!-- Compact list section -->
-			<section class="bg-white rounded-xl p-4 shadow-lg">
-				<h2 
+			<section class="rounded-xl bg-white p-4 shadow-lg">
+				<h2
 					transition:name="list-title"
-					class="text-2xl font-bold text-gray-800 mb-3"
+					class="mb-3 text-2xl font-bold text-gray-800"
 				>
 					List Items
 				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-					<div 
+				<div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+					<div
 						transition:name="list-item-1"
-						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
 					>
-						<span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-						<span class="text-gray-700 text-sm">List item 1</span>
+						<span class="h-2 w-2 rounded-full bg-blue-500"></span>
+						<span class="text-sm text-gray-700">List item 1</span>
 					</div>
-					<div 
+					<div
 						transition:name="list-item-2"
-						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
 					>
-						<span class="w-2 h-2 bg-green-500 rounded-full"></span>
-						<span class="text-gray-700 text-sm">List item 2</span>
+						<span class="h-2 w-2 rounded-full bg-green-500"></span>
+						<span class="text-sm text-gray-700">List item 2</span>
 					</div>
-					<div 
+					<div
 						transition:name="list-item-3"
-						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
 					>
-						<span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-						<span class="text-gray-700 text-sm">List item 3</span>
+						<span class="h-2 w-2 rounded-full bg-purple-500"></span>
+						<span class="text-sm text-gray-700">List item 3</span>
 					</div>
 				</div>
 			</section>
 		</main>
 	</div>
-</TransitionLayout>
+</BaseLayout>
