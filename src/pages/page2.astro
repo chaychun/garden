@@ -1,0 +1,156 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page 2">
+	<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-6">
+		<nav class="mb-4">
+			<a
+				href="/page1"
+				class="inline-block rounded-lg bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700"
+			>
+				Navigate to Page 1
+			</a>
+		</nav>
+
+		<main class="mx-auto max-w-6xl space-y-4">
+			<!-- Header -->
+			<header class="text-center">
+				<h1
+					transition:name="page-title"
+					class="mb-2 text-4xl font-bold text-gray-900"
+				>
+					Page 2 - View Transitions Test
+				</h1>
+				<p transition:name="page-subtitle" class="text-lg text-gray-600">
+					Different content with matching transition names
+				</p>
+			</header>
+
+			<!-- Video section with transition:persist at the top -->
+			<section class="rounded-xl bg-white p-6 shadow-lg">
+				<h2
+					transition:name="video-title"
+					class="mb-4 text-2xl font-bold text-gray-800"
+				>
+					Persistent Video (Continued)
+				</h2>
+				<div class="flex items-center gap-6">
+					<video
+						transition:persist="video"
+						controls
+						class="h-48 w-80 rounded-lg bg-gray-200 object-cover"
+						poster="https://picsum.photos/320/192?random=2"
+					>
+						<source
+							src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+							type="video/mp4"
+						/>
+						Your browser does not support the video tag.
+					</video>
+					<div>
+						<p
+							transition:name="video-description"
+							class="leading-relaxed text-gray-700"
+						>
+							This is the same video from Page 1! It continues playing during
+							the transition thanks to
+							<code>transition:persist="video"</code>. The video state is
+							preserved.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Content cards with different layout -->
+			<section class="grid grid-cols-1 gap-4 md:grid-cols-3">
+				<div transition:name="card-1" class="rounded-xl bg-white p-4 shadow-lg">
+					<h3
+						transition:name="card-1-title"
+						class="mb-2 text-xl font-bold text-gray-800"
+					>
+						Updated Card 1
+					</h3>
+					<p transition:name="card-1-content" class="text-sm text-gray-600">
+						This card has been updated with new content and will morph smoothly.
+					</p>
+					<div
+						transition:name="card-1-badge"
+						class="mt-3 inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800"
+					>
+						Updated
+					</div>
+				</div>
+
+				<div transition:name="card-2" class="rounded-xl bg-white p-4 shadow-lg">
+					<h3
+						transition:name="card-2-title"
+						class="mb-2 text-xl font-bold text-gray-800"
+					>
+						New Card 2
+					</h3>
+					<p transition:name="card-2-content" class="text-sm text-gray-600">
+						This card now has different content but maintains the same
+						transition name.
+					</p>
+					<div
+						transition:name="card-2-badge"
+						class="mt-3 inline-block rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800"
+					>
+						Hot
+					</div>
+				</div>
+
+				<div class="rounded-xl bg-white p-4 shadow-lg">
+					<h3 class="mb-2 text-xl font-bold text-gray-800">New Card 3</h3>
+					<p class="text-sm text-gray-600">
+						This is a completely new card without a transition name, so it will
+						fade in normally.
+					</p>
+					<div
+						class="mt-3 inline-block rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800"
+					>
+						New
+					</div>
+				</div>
+			</section>
+
+			<!-- Compact list section with different items -->
+			<section class="rounded-xl bg-white p-4 shadow-lg">
+				<h2
+					transition:name="list-title"
+					class="mb-3 text-2xl font-bold text-gray-800"
+				>
+					Updated List Items
+				</h2>
+				<div class="grid grid-cols-1 gap-3 md:grid-cols-4">
+					<div
+						transition:name="list-item-1"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+					>
+						<span class="h-2 w-2 rounded-full bg-red-500"></span>
+						<span class="text-sm text-gray-700">Updated item 1</span>
+					</div>
+					<div
+						transition:name="list-item-2"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+					>
+						<span class="h-2 w-2 rounded-full bg-yellow-500"></span>
+						<span class="text-sm text-gray-700">Updated item 2</span>
+					</div>
+					<div
+						transition:name="list-item-3"
+						class="flex items-center gap-2 rounded-lg bg-gray-50 p-2"
+					>
+						<span class="h-2 w-2 rounded-full bg-pink-500"></span>
+						<span class="text-sm text-gray-700">Updated item 3</span>
+					</div>
+					<div class="flex items-center gap-2 rounded-lg bg-gray-50 p-2">
+						<span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+						<span class="text-sm text-gray-700">New item 4</span>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</BaseLayout>
