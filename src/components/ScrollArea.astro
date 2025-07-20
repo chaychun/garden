@@ -142,7 +142,7 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
   }
 
   .scroll-area-thumb {
-    background: #52525b;
+    background: #d4d4d8;
     border-radius: 0;
     min-width: 18px;
     min-height: 18px;
@@ -152,11 +152,13 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
   .scroll-area-scrollbar-y .scroll-area-thumb {
     width: 4px;
     transform: translateY(0);
+    margin: 0;
   }
 
   .scroll-area-scrollbar-x .scroll-area-thumb {
     height: 4px;
     transform: translateX(0);
+    margin: 0;
   }
 
   .scroll-area-scrollbar:hover .scroll-area-thumb {
@@ -290,16 +292,20 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
       if (this.thumbY) {
         const scrollTop = this.viewport.scrollTop;
         const maxScrollTop = this.viewport.scrollHeight - this.viewport.offsetHeight;
-        const scrollbarHeight = this.scrollbarY.offsetHeight - this.thumbY.offsetHeight;
-        const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * scrollbarHeight : 0;
+        const scrollbarHeight = this.scrollbarY.offsetHeight;
+        const thumbHeight = this.thumbY.offsetHeight;
+        const maxThumbTop = scrollbarHeight - thumbHeight;
+        const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
         this.thumbY.style.transform = `translateY(${thumbTop}px)`;
       }
 
       if (this.thumbX) {
         const scrollLeft = this.viewport.scrollLeft;
         const maxScrollLeft = this.viewport.scrollWidth - this.viewport.offsetWidth;
-        const scrollbarWidth = this.scrollbarX.offsetWidth - this.thumbX.offsetWidth;
-        const thumbLeft = maxScrollLeft > 0 ? (scrollLeft / maxScrollLeft) * scrollbarWidth : 0;
+        const scrollbarWidth = this.scrollbarX.offsetWidth;
+        const thumbWidth = this.thumbX.offsetWidth;
+        const maxThumbLeft = scrollbarWidth - thumbWidth;
+        const thumbLeft = maxScrollLeft > 0 ? (scrollLeft / maxScrollLeft) * maxThumbLeft : 0;
         this.thumbX.style.transform = `translateX(${thumbLeft}px)`;
       }
     }
