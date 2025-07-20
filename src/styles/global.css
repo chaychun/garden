@@ -4,3 +4,17 @@
 	--font-sans: var(--font-switzer);
 	--font-cabinet: var(--font-cabinet);
 }
+
+@theme {
+	--color-base-50: #f6f6f5;
+	--color-base-100: #e7e7e6;
+	--color-base-200: #d1d1d0;
+	--color-base-300: #b1b0af;
+	--color-base-400: #8a8a86;
+	--color-base-500: #6f6f6b;
+	--color-base-600: #5e5d5c;
+	--color-base-700: #504f4e;
+	--color-base-800: #464644;
+	--color-base-900: #353534;
+	--color-base-950: #262626;
+}
