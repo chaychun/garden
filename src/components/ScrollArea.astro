@@ -124,25 +124,25 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 
   .scroll-area-scrollbar-y {
     top: 0;
-    right: 4px;
-    bottom: 4px;
-    width: 12px;
+    right: 2px;
+    bottom: 2px;
+    width: 6px;
   }
 
   .scroll-area-scrollbar-x {
-    left: 4px;
-    right: 4px;
-    bottom: 4px;
-    height: 12px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    height: 6px;
   }
 
   [dir="rtl"] .scroll-area-scrollbar-y {
     right: auto;
-    left: 4px;
+    left: 2px;
   }
 
   .scroll-area-thumb {
-    background: #374151;
+    background: #52525b;
     border-radius: 0;
     min-width: 18px;
     min-height: 18px;
@@ -150,17 +150,17 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
   }
 
   .scroll-area-scrollbar-y .scroll-area-thumb {
-    width: 8px;
+    width: 4px;
     transform: translateY(0);
   }
 
   .scroll-area-scrollbar-x .scroll-area-thumb {
-    height: 8px;
+    height: 4px;
     transform: translateX(0);
   }
 
   .scroll-area-scrollbar:hover .scroll-area-thumb {
-    background: #1f2937;
+    background: #18181b;
   }
 
   .scroll-area-scrollbar[data-state="hidden"] {
