@@ -3,5 +3,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
-	<h1>Astro</h1>
+	<div class="min-h-screen space-y-8 p-8">
+		<h1 class="font-sans text-8xl font-bold text-gray-900">
+			Switzer Font Test
+		</h1>
+
+		<h2
+			class="text-6xl font-bold text-gray-800"
+			style="font-family: var(--font-cabinet);"
+		>
+			Cabinet Font Test
+		</h2>
+
+		<p class="font-sans text-2xl text-gray-600">
+			This text uses Switzer (default sans font)
+		</p>
+
+		<p class="text-2xl text-gray-600" style="font-family: var(--font-cabinet);">
+			This text uses Cabinet Grotesk
+		</p>
+	</div>
 </BaseLayout>
