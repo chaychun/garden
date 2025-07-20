@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScrollArea from '../components/ScrollArea.astro';
+---
+
+<BaseLayout title="Scroll Area Demo">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8">Scroll Area Component Demo</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Basic Vertical Scroll -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">Basic Vertical Scroll</h2>
+        <ScrollArea class="border border-gray-300 rounded-lg h-64">
+          <div class="p-4 space-y-4">
+            {Array.from({ length: 20 }, (_, i) => (
+              <div class="bg-blue-100 p-3 rounded">
+                <h3 class="font-semibold">Item {i + 1}</h3>
+                <p class="text-sm text-gray-600">
+                  This is some content for item {i + 1}. It demonstrates vertical scrolling with a custom scrollbar.
+                </p>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <!-- Horizontal Scroll -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">Horizontal Scroll</h2>
+        <ScrollArea class="border border-gray-300 rounded-lg h-32">
+          <div class="p-4 flex space-x-4" style="width: max-content;">
+            {Array.from({ length: 15 }, (_, i) => (
+              <div class="bg-green-100 p-4 rounded min-w-48">
+                <h3 class="font-semibold">Card {i + 1}</h3>
+                <p class="text-sm text-gray-600">Horizontal scroll content</p>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <!-- Both Directions -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">Both Directions</h2>
+        <ScrollArea class="border border-gray-300 rounded-lg h-48">
+          <div class="p-4" style="width: max-content;">
+            <div class="grid grid-cols-8 gap-4">
+              {Array.from({ length: 80 }, (_, i) => (
+                <div class="bg-purple-100 p-2 rounded text-center">
+                  <span class="text-xs">{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
+
+      <!-- Custom Styled -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">Custom Styled</h2>
+        <ScrollArea 
+          class="border border-gray-300 rounded-lg h-64"
+          scrollbarClass="bg-gray-200 rounded-full"
+          thumbClass="bg-blue-500 rounded-full"
+          scrollHideDelay={1000}
+        >
+          <div class="p-4 space-y-4">
+            {Array.from({ length: 15 }, (_, i) => (
+              <div class="bg-yellow-100 p-3 rounded">
+                <h3 class="font-semibold">Custom Item {i + 1}</h3>
+                <p class="text-sm text-gray-600">
+                  This scroll area has custom styled scrollbars with a longer hide delay.
+                </p>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <!-- RTL Support -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">RTL Support</h2>
+        <ScrollArea 
+          class="border border-gray-300 rounded-lg h-48"
+          dir="rtl"
+        >
+          <div class="p-4 flex space-x-4 rtl:space-x-reverse" style="width: max-content;">
+            {Array.from({ length: 12 }, (_, i) => (
+              <div class="bg-red-100 p-4 rounded min-w-48">
+                <h3 class="font-semibold">RTL Card {i + 1}</h3>
+                <p class="text-sm text-gray-600">Right-to-left content</p>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <!-- Hidden Scrollbar -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold">Hidden Scrollbar</h2>
+        <ScrollArea 
+          class="border border-gray-300 rounded-lg h-48"
+          hideScrollbar={true}
+        >
+          <div class="p-4 space-y-4">
+            {Array.from({ length: 12 }, (_, i) => (
+              <div class="bg-gray-100 p-3 rounded">
+                <h3 class="font-semibold">Hidden Scrollbar Item {i + 1}</h3>
+                <p class="text-sm text-gray-600">
+                  This scroll area has no visible scrollbar but still supports scrolling.
+                </p>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+    </div>
+
+    <!-- Usage Examples -->
+    <div class="mt-12 space-y-6">
+      <h2 class="text-3xl font-bold">Usage Examples</h2>
+      
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4">Basic Usage</h3>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code>&lt;ScrollArea class="h-64"&gt;
+  &lt;div class="p-4"&gt;
+    &lt;!-- Your content here --&gt;
+  &lt;/div&gt;
+&lt;/ScrollArea&gt;</code></pre>
+      </div>
+
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4">With Custom Styling</h3>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code>&lt;ScrollArea 
+  class="h-64 border rounded"
+  scrollbarClass="bg-blue-200"
+  thumbClass="bg-blue-600"
+  scrollHideDelay={800}
+&gt;
+  &lt;div class="p-4"&gt;
+    &lt;!-- Your content here --&gt;
+  &lt;/div&gt;
+&lt;/ScrollArea&gt;</code></pre>
+      </div>
+
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4">RTL Support</h3>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code>&lt;ScrollArea 
+  class="h-64"
+  dir="rtl"
+&gt;
+  &lt;div class="p-4"&gt;
+    &lt;!-- RTL content here --&gt;
+  &lt;/div&gt;
+&lt;/ScrollArea&gt;</code></pre>
+      </div>
+
+      <div class="bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4">Hidden Scrollbar</h3>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code>&lt;ScrollArea 
+  class="h-64"
+  hideScrollbar={true}
+&gt;
+  &lt;div class="p-4"&gt;
+    &lt;!-- Content with invisible scrollbar --&gt;
+  &lt;/div&gt;
+&lt;/ScrollArea&gt;</code></pre>
+      </div>
+    </div>
+
+    <!-- Features List -->
+    <div class="mt-12">
+      <h2 class="text-3xl font-bold mb-6">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-blue-800">✅ Native Scrolling</h3>
+          <p class="text-blue-700 text-sm">Uses native browser scrolling, no CSS transformations</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-green-800">✅ Hover Behavior</h3>
+          <p class="text-green-700 text-sm">Scrollbars appear on hover and disappear after delay</p>
+        </div>
+        <div class="bg-purple-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-purple-800">✅ RTL Support</h3>
+          <p class="text-purple-700 text-sm">Full right-to-left language support</p>
+        </div>
+        <div class="bg-orange-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-orange-800">✅ Customizable</h3>
+          <p class="text-orange-700 text-sm">Style scrollbars and thumbs with CSS classes</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-red-800">✅ Accessible</h3>
+          <p class="text-red-700 text-sm">Proper ARIA attributes and keyboard support</p>
+        </div>
+        <div class="bg-indigo-50 p-4 rounded-lg">
+          <h3 class="font-semibold text-indigo-800">✅ Responsive</h3>
+          <p class="text-indigo-700 text-sm">Automatically adjusts to content changes</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
