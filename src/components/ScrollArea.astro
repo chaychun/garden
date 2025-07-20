@@ -111,8 +111,7 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 
   .scroll-area-scrollbar {
     position: absolute;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    background: transparent;
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
@@ -127,14 +126,14 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
     top: 0;
     right: 4px;
     bottom: 4px;
-    width: 8px;
+    width: 12px;
   }
 
   .scroll-area-scrollbar-x {
     left: 4px;
     right: 4px;
     bottom: 4px;
-    height: 8px;
+    height: 12px;
   }
 
   [dir="rtl"] .scroll-area-scrollbar-y {
@@ -143,25 +142,25 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
   }
 
   .scroll-area-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+    background: #374151;
+    border-radius: 0;
     min-width: 18px;
     min-height: 18px;
     position: relative;
   }
 
   .scroll-area-scrollbar-y .scroll-area-thumb {
-    width: 100%;
+    width: 8px;
     transform: translateY(0);
   }
 
   .scroll-area-scrollbar-x .scroll-area-thumb {
-    height: 100%;
+    height: 8px;
     transform: translateX(0);
   }
 
   .scroll-area-scrollbar:hover .scroll-area-thumb {
-    background: rgba(0, 0, 0, 0.5);
+    background: #1f2937;
   }
 
   .scroll-area-scrollbar[data-state="hidden"] {
