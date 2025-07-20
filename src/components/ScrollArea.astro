@@ -125,17 +125,15 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 	}
 
 	.scroll-area-scrollbar-y {
-		top: 0;
+		top: 2px;
 		right: 2px;
 		bottom: 2px;
-		width: 6px;
 	}
 
 	.scroll-area-scrollbar-x {
 		left: 2px;
 		right: 2px;
 		bottom: 2px;
-		height: 6px;
 	}
 
 	[dir="rtl"] .scroll-area-scrollbar-y {
@@ -144,10 +142,10 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 	}
 
 	.scroll-area-thumb {
-		background: #d4d4d8;
+		background: var(--color-base-700);
 		border-radius: 0;
-		min-width: 18px;
-		min-height: 18px;
+		min-width: 8px;
+		min-height: 8px;
 		position: relative;
 	}
 
@@ -161,10 +159,6 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 		height: 4px;
 		transform: translateX(0);
 		margin: 0 1px;
-	}
-
-	.scroll-area-scrollbar:hover .scroll-area-thumb {
-		background: #18181b;
 	}
 
 	.scroll-area-scrollbar[data-state="hidden"] {
@@ -188,7 +182,7 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 		private thumbX: HTMLElement | null;
 		private hideDelay: number;
 		private hideScrollbar: boolean;
-		private dir: string;
+
 		private isDragging: boolean;
 		private dragStartPos: { x: number; y: number };
 		private dragStartScroll: { x: number; y: number };
@@ -213,7 +207,6 @@ const uniqueId = Math.random().toString(36).substring(2, 9);
 			) as HTMLElement | null;
 			this.hideDelay = parseInt(element.dataset.scrollHideDelay || "600");
 			this.hideScrollbar = element.dataset.hideScrollbar === "true";
-			this.dir = element.dir || "ltr";
 
 			this.isDragging = false;
 			this.dragStartPos = { x: 0, y: 0 };
