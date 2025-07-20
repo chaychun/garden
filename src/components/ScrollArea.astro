@@ -1,0 +1,404 @@
+---
+export interface Props {
+  class?: string;
+  style?: string;
+  dir?: 'ltr' | 'rtl';
+  scrollHideDelay?: number;
+  hideScrollbar?: boolean;
+  viewportClass?: string;
+  viewportStyle?: string;
+  scrollbarClass?: string;
+  scrollbarStyle?: string;
+  thumbClass?: string;
+  thumbStyle?: string;
+}
+
+const {
+  class: className = '',
+  style = '',
+  dir = 'ltr',
+  scrollHideDelay = 600,
+  hideScrollbar = false,
+  viewportClass = '',
+  viewportStyle = '',
+  scrollbarClass = '',
+  scrollbarStyle = '',
+  thumbClass = '',
+  thumbStyle = '',
+} = Astro.props;
+
+const uniqueId = Math.random().toString(36).substring(2, 9);
+---
+
+<div
+  class={`scroll-area ${className}`}
+  style={style}
+  dir={dir}
+  data-scroll-area-id={uniqueId}
+  data-scroll-hide-delay={scrollHideDelay}
+  data-hide-scrollbar={hideScrollbar}
+>
+  <div
+    class={`scroll-area-viewport ${viewportClass}`}
+    style={viewportStyle}
+    data-viewport-id={uniqueId}
+  >
+    <div class="scroll-area-content">
+      <slot />
+    </div>
+  </div>
+  
+  {!hideScrollbar && (
+    <>
+      <div
+        class={`scroll-area-scrollbar scroll-area-scrollbar-y ${scrollbarClass}`}
+        style={scrollbarStyle}
+        data-scrollbar-id={uniqueId}
+        data-orientation="vertical"
+        role="scrollbar"
+        aria-orientation="vertical"
+        aria-controls={`viewport-${uniqueId}`}
+      >
+        <div
+          class={`scroll-area-thumb ${thumbClass}`}
+          style={thumbStyle}
+          data-thumb-id={uniqueId}
+        ></div>
+      </div>
+      
+      <div
+        class={`scroll-area-scrollbar scroll-area-scrollbar-x ${scrollbarClass}`}
+        style={scrollbarStyle}
+        data-scrollbar-id={uniqueId}
+        data-orientation="horizontal"
+        role="scrollbar"
+        aria-orientation="horizontal"
+        aria-controls={`viewport-${uniqueId}`}
+      >
+        <div
+          class={`scroll-area-thumb ${thumbClass}`}
+          style={thumbStyle}
+          data-thumb-id={uniqueId}
+        ></div>
+      </div>
+    </>
+  )}
+</div>
+
+<style>
+  .scroll-area {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-area-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-area-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-area-content {
+    min-width: 100%;
+    display: table;
+  }
+
+  .scroll-area-scrollbar {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .scroll-area:hover .scroll-area-scrollbar {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .scroll-area-scrollbar-y {
+    top: 0;
+    right: 4px;
+    bottom: 4px;
+    width: 8px;
+  }
+
+  .scroll-area-scrollbar-x {
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    height: 8px;
+  }
+
+  [dir="rtl"] .scroll-area-scrollbar-y {
+    right: auto;
+    left: 4px;
+  }
+
+  .scroll-area-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    min-width: 18px;
+    min-height: 18px;
+    position: relative;
+  }
+
+  .scroll-area-scrollbar-y .scroll-area-thumb {
+    width: 100%;
+    transform: translateY(0);
+  }
+
+  .scroll-area-scrollbar-x .scroll-area-thumb {
+    height: 100%;
+    transform: translateX(0);
+  }
+
+  .scroll-area-scrollbar:hover .scroll-area-thumb {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .scroll-area-scrollbar[data-state="hidden"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .scroll-area-scrollbar[data-state="visible"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
+<script>
+  class ScrollArea {
+    constructor(element) {
+      this.element = element;
+      this.viewport = element.querySelector('.scroll-area-viewport');
+      this.scrollbarY = element.querySelector('.scroll-area-scrollbar-y');
+      this.scrollbarX = element.querySelector('.scroll-area-scrollbar-x');
+      this.thumbY = element.querySelector('.scroll-area-scrollbar-y .scroll-area-thumb');
+      this.thumbX = element.querySelector('.scroll-area-scrollbar-x .scroll-area-thumb');
+      this.hideDelay = parseInt(element.dataset.scrollHideDelay) || 600;
+      this.hideScrollbar = element.dataset.hideScrollbar === 'true';
+      this.dir = element.dir || 'ltr';
+      
+      this.isDragging = false;
+      this.dragStartPos = { x: 0, y: 0 };
+      this.dragStartScroll = { x: 0, y: 0 };
+      this.hideTimer = null;
+      
+      this.init();
+    }
+
+    init() {
+      if (this.hideScrollbar) return;
+      
+      this.updateScrollbars();
+      this.bindEvents();
+      this.setupResizeObserver();
+    }
+
+    bindEvents() {
+      // Viewport scroll events
+      this.viewport.addEventListener('scroll', () => {
+        this.updateThumbPositions();
+        this.showScrollbars();
+      });
+
+      // Mouse enter/leave for hover behavior
+      this.element.addEventListener('mouseenter', () => {
+        this.showScrollbars();
+      });
+
+      this.element.addEventListener('mouseleave', () => {
+        this.hideScrollbars();
+      });
+
+      // Scrollbar interactions
+      if (this.scrollbarY) {
+        this.scrollbarY.addEventListener('pointerdown', (e) => this.handleScrollbarPointerDown(e, 'y'));
+        this.scrollbarY.addEventListener('wheel', (e) => this.handleScrollbarWheel(e, 'y'));
+      }
+
+      if (this.scrollbarX) {
+        this.scrollbarX.addEventListener('pointerdown', (e) => this.handleScrollbarPointerDown(e, 'x'));
+        this.scrollbarX.addEventListener('wheel', (e) => this.handleScrollbarWheel(e, 'x'));
+      }
+
+      // Global pointer events for dragging
+      document.addEventListener('pointermove', (e) => this.handlePointerMove(e));
+      document.addEventListener('pointerup', () => this.handlePointerUp());
+    }
+
+    setupResizeObserver() {
+      if (!window.ResizeObserver) return;
+
+      const resizeObserver = new ResizeObserver(() => {
+        this.updateScrollbars();
+      });
+
+      resizeObserver.observe(this.viewport);
+      resizeObserver.observe(this.viewport.firstElementChild);
+    }
+
+    updateScrollbars() {
+      const contentRect = this.viewport.firstElementChild.getBoundingClientRect();
+      const viewportRect = this.viewport.getBoundingClientRect();
+      
+      const hasVerticalScroll = contentRect.height > viewportRect.height;
+      const hasHorizontalScroll = contentRect.width > viewportRect.width;
+
+      if (this.scrollbarY) {
+        this.scrollbarY.style.display = hasVerticalScroll ? 'block' : 'none';
+        this.updateThumbSize('y');
+      }
+
+      if (this.scrollbarX) {
+        this.scrollbarX.style.display = hasHorizontalScroll ? 'block' : 'none';
+        this.updateThumbSize('x');
+      }
+    }
+
+    updateThumbSize(orientation) {
+      const viewport = this.viewport;
+      const scrollbar = orientation === 'y' ? this.scrollbarY : this.scrollbarX;
+      const thumb = orientation === 'y' ? this.thumbY : this.thumbX;
+
+      if (!scrollbar || !thumb) return;
+
+      const isVertical = orientation === 'y';
+      const viewportSize = isVertical ? viewport.offsetHeight : viewport.offsetWidth;
+      const contentSize = isVertical ? viewport.scrollHeight : viewport.scrollWidth;
+      const scrollbarSize = isVertical ? scrollbar.offsetHeight : scrollbar.offsetWidth;
+
+      const ratio = viewportSize / contentSize;
+      const thumbSize = Math.max(scrollbarSize * ratio, 18);
+
+      if (isVertical) {
+        thumb.style.height = `${thumbSize}px`;
+      } else {
+        thumb.style.width = `${thumbSize}px`;
+      }
+    }
+
+    updateThumbPositions() {
+      if (this.thumbY) {
+        const scrollTop = this.viewport.scrollTop;
+        const maxScrollTop = this.viewport.scrollHeight - this.viewport.offsetHeight;
+        const scrollbarHeight = this.scrollbarY.offsetHeight - this.thumbY.offsetHeight;
+        const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * scrollbarHeight : 0;
+        this.thumbY.style.transform = `translateY(${thumbTop}px)`;
+      }
+
+      if (this.thumbX) {
+        const scrollLeft = this.viewport.scrollLeft;
+        const maxScrollLeft = this.viewport.scrollWidth - this.viewport.offsetWidth;
+        const scrollbarWidth = this.scrollbarX.offsetWidth - this.thumbX.offsetWidth;
+        const thumbLeft = maxScrollLeft > 0 ? (scrollLeft / maxScrollLeft) * scrollbarWidth : 0;
+        this.thumbX.style.transform = `translateX(${thumbLeft}px)`;
+      }
+    }
+
+    handleScrollbarPointerDown(e, orientation) {
+      e.preventDefault();
+      this.isDragging = true;
+      this.dragStartPos = { x: e.clientX, y: e.clientY };
+      this.dragStartScroll = { 
+        x: this.viewport.scrollLeft, 
+        y: this.viewport.scrollTop 
+      };
+
+      const scrollbar = orientation === 'y' ? this.scrollbarY : this.scrollbarX;
+      scrollbar.setPointerCapture(e.pointerId);
+    }
+
+    handlePointerMove(e) {
+      if (!this.isDragging) return;
+
+      const deltaX = e.clientX - this.dragStartPos.x;
+      const deltaY = e.clientY - this.dragStartPos.y;
+
+      const scrollbarY = this.scrollbarY;
+      const scrollbarX = this.scrollbarX;
+
+      if (scrollbarY && Math.abs(deltaY) > Math.abs(deltaX)) {
+        const scrollbarHeight = scrollbarY.offsetHeight - this.thumbY.offsetHeight;
+        const maxScrollTop = this.viewport.scrollHeight - this.viewport.offsetHeight;
+        const scrollRatio = deltaY / scrollbarHeight;
+        const newScrollTop = this.dragStartScroll.y + (scrollRatio * maxScrollTop);
+        this.viewport.scrollTop = Math.max(0, Math.min(maxScrollTop, newScrollTop));
+      }
+
+      if (scrollbarX && Math.abs(deltaX) > Math.abs(deltaY)) {
+        const scrollbarWidth = scrollbarX.offsetWidth - this.thumbX.offsetWidth;
+        const maxScrollLeft = this.viewport.scrollWidth - this.viewport.offsetWidth;
+        const scrollRatio = deltaX / scrollbarWidth;
+        const newScrollLeft = this.dragStartScroll.x + (scrollRatio * maxScrollLeft);
+        this.viewport.scrollLeft = Math.max(0, Math.min(maxScrollLeft, newScrollLeft));
+      }
+    }
+
+    handlePointerUp() {
+      if (this.isDragging) {
+        this.isDragging = false;
+        if (this.scrollbarY) this.scrollbarY.releasePointerCapture();
+        if (this.scrollbarX) this.scrollbarX.releasePointerCapture();
+      }
+    }
+
+    handleScrollbarWheel(e, orientation) {
+      e.preventDefault();
+      const isVertical = orientation === 'y';
+      const delta = isVertical ? e.deltaY : e.deltaX;
+      const currentScroll = isVertical ? this.viewport.scrollTop : this.viewport.scrollLeft;
+      this.viewport[isVertical ? 'scrollTop' : 'scrollLeft'] = currentScroll + delta;
+    }
+
+    showScrollbars() {
+      if (this.hideTimer) {
+        clearTimeout(this.hideTimer);
+        this.hideTimer = null;
+      }
+
+      if (this.scrollbarY) this.scrollbarY.setAttribute('data-state', 'visible');
+      if (this.scrollbarX) this.scrollbarX.setAttribute('data-state', 'visible');
+    }
+
+    hideScrollbars() {
+      this.hideTimer = setTimeout(() => {
+        if (this.scrollbarY) this.scrollbarY.setAttribute('data-state', 'hidden');
+        if (this.scrollbarX) this.scrollbarX.setAttribute('data-state', 'hidden');
+      }, this.hideDelay);
+    }
+  }
+
+  // Initialize scroll areas when the DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrollAreas = document.querySelectorAll('[data-scroll-area-id]');
+    scrollAreas.forEach(element => {
+      new ScrollArea(element);
+    });
+  });
+
+  // Handle dynamically added scroll areas
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollAreas);
+  } else {
+    initScrollAreas();
+  }
+
+  function initScrollAreas() {
+    const scrollAreas = document.querySelectorAll('[data-scroll-area-id]');
+    scrollAreas.forEach(element => {
+      if (!element.scrollAreaInstance) {
+        element.scrollAreaInstance = new ScrollArea(element);
+      }
+    });
+  }
+</script>
