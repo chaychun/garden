@@ -1,0 +1,53 @@
+---
+import Block from "@/components/Block.astro";
+import { cn } from "@/lib/utils";
+
+interface Props {
+	title: string;
+	description: string;
+	bgImage: string;
+	previewImage: string;
+	position?: "top" | "bottom";
+	layout?: "landscape" | "portrait";
+}
+
+const {
+	title,
+	description,
+	bgImage,
+	previewImage,
+	position = "top",
+	layout = "portrait",
+} = Astro.props;
+---
+
+<Block
+	class:list={[
+		"flex flex-col gap-4 p-6",
+		"mb-12 md:mb-0",
+		position === "top" && "md:justify-between",
+		position === "bottom" && "md:flex-col-reverse md:justify-start",
+	]}
+>
+	<div
+		class:list={[
+			"flex w-full items-center justify-center",
+			layout === "portrait" && "aspect-4/5",
+			layout === "landscape" && "aspect-5/4",
+		]}
+		style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
+	>
+		<img
+			src={previewImage}
+			alt="Preview"
+			class="h-auto w-[80%]"
+			loading="lazy"
+		/>
+	</div>
+	<div class="flex flex-col gap-1 md:w-[480px]">
+		<h2 class="font-cabinet text-base-900 text-2xl font-medium">{title}</h2>
+		<p class="font-switzer text-base-500 text-sm leading-tight">
+			{description}
+		</p>
+	</div>
+</Block>

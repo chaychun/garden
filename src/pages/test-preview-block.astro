@@ -1,0 +1,25 @@
+---
+import PreviewBlock from "@/components/PreviewBlock.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+	<div class="mx-auto h-screen w-screen max-w-[528px] md:flex md:max-w-none">
+		<PreviewBlock
+			title="Test Interaction 1"
+			description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos."
+			bgImage="https://picsum.photos/800/600?random=1"
+			previewImage="https://picsum.photos/400/300?random=2"
+			position="top"
+			layout="landscape"
+		/>
+		<PreviewBlock
+			title="Test Interaction 2"
+			description="This is a test description for the preview block component to demonstrate how it looks and functions."
+			bgImage="https://picsum.photos/800/600?random=3"
+			previewImage="https://picsum.photos/400/300?random=4"
+			position="bottom"
+			layout="portrait"
+		/>
+	</div>
+</BaseLayout>
