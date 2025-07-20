@@ -23,6 +23,7 @@ export default defineConfig([
 		},
 		plugins: {
 			"react-compiler": reactCompiler,
+			"react-hooks": reactHooks,
 		},
 		rules: {
 			...reactHooks.configs.recommended.rules,
