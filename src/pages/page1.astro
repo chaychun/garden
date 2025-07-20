@@ -40,7 +40,7 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 				</h2>
 				<div class="flex items-center gap-6">
 					<video 
-						transition:persist
+						transition:persist="video"
 						controls
 						class="w-80 h-48 object-cover rounded-lg bg-gray-200"
 						poster="https://picsum.photos/320/192?random=1"
@@ -53,7 +53,7 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 							transition:name="video-description"
 							class="text-gray-700 leading-relaxed"
 						>
-							This video uses <code>transition:persist</code> and will continue playing 
+							This video uses <code>transition:persist="video"</code> and will continue playing 
 							without interruption during page transitions. Start playing and navigate to Page 2!
 						</p>
 					</div>

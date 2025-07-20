@@ -40,7 +40,7 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 				</h2>
 				<div class="flex items-center gap-6">
 					<video 
-						transition:persist
+						transition:persist="video"
 						controls
 						class="w-80 h-48 object-cover rounded-lg bg-gray-200"
 						poster="https://picsum.photos/320/192?random=2"
@@ -54,7 +54,7 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 							class="text-gray-700 leading-relaxed"
 						>
 							This is the same video from Page 1! It continues playing during the transition thanks to 
-							<code>transition:persist</code>. The video state is preserved.
+							<code>transition:persist="video"</code>. The video state is preserved.
 						</p>
 					</div>
 				</div>

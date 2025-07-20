@@ -9,9 +9,10 @@ This project includes test pages to demonstrate Astro's view transitions API wit
 - **Cards**: Content cards that transform with new content
 - **List items**: List items that update content while maintaining position
 
-### 2. Persistent Elements (`transition:persist`)
+### 2. Persistent Elements (`transition:persist="video"`)
 - **Video element**: Same video on both pages that continues playing during transitions
 - Video state (playback position, playing/paused) is preserved
+- Uses named transition persist for better control
 
 ### 3. Navigation
 - Smooth navigation between test pages
@@ -22,13 +23,13 @@ This project includes test pages to demonstrate Astro's view transitions API wit
 
 ### Page 1 (`/page1`)
 - Blue gradient background
-- Video with `transition:persist` at the top
+- Video with `transition:persist="video"` at the top
 - Two content cards with transition names
 - Compact list items
 
 ### Page 2 (`/page2`)
 - Green gradient background
-- Same video with `transition:persist` (continues playing)
+- Same video with `transition:persist="video"` (continues playing)
 - Three content cards (two morphed, one new)
 - Updated list items with one new item
 
@@ -56,10 +57,11 @@ This project includes test pages to demonstrate Astro's view transitions API wit
 - Elements smoothly transform from their old state to new state
 - Useful for maintaining visual continuity during navigation
 
-### `transition:persist`
+### `transition:persist="name"`
 - Preserves element state during page transitions
 - Perfect for videos, audio players, or interactive elements
 - Element continues functioning without interruption
+- Named persist allows multiple persistent elements with different names
 
 ### `ClientRouter` Component
 - Must be imported from `astro:transitions`
@@ -105,3 +107,4 @@ src/
 - ✅ Compact layout that fits in one view without scrolling
 - ✅ Removed unnecessary elements to focus on core functionality
 - ✅ Video positioned at the top for better visibility
+- ✅ Using named transition persist: `transition:persist="video"`
