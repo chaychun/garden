@@ -3,88 +3,84 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 ---
 
 <TransitionLayout>
-	<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-		<nav class="mb-8">
+	<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+		<nav class="mb-4">
 			<a 
 				href="/page2" 
-				class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+				class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
 			>
 				Navigate to Page 2
 			</a>
 		</nav>
 
-		<main class="max-w-4xl mx-auto space-y-8">
-			<!-- Header with transition name -->
-			<header>
+		<main class="max-w-6xl mx-auto space-y-4">
+			<!-- Header -->
+			<header class="text-center">
 				<h1 
 					transition:name="page-title"
-					class="text-6xl font-bold text-gray-900 mb-4"
+					class="text-4xl font-bold text-gray-900 mb-2"
 				>
 					Page 1 - View Transitions Test
 				</h1>
 				<p 
 					transition:name="page-subtitle"
-					class="text-xl text-gray-600"
+					class="text-lg text-gray-600"
 				>
-					Testing various HTML elements with morph animations
+					Testing morph animations and persistent video
 				</p>
 			</header>
 
-			<!-- Hero section with image -->
-			<section class="bg-white rounded-xl p-8 shadow-lg">
+			<!-- Video section with transition:persist at the top -->
+			<section class="bg-white rounded-xl p-6 shadow-lg">
 				<h2 
-					transition:name="section-title"
-					class="text-3xl font-bold text-gray-800 mb-4"
+					transition:name="video-title"
+					class="text-2xl font-bold text-gray-800 mb-4"
 				>
-					Hero Section
+					Persistent Video
 				</h2>
-				<div class="flex items-center gap-8">
-					<img 
-						transition:name="hero-image"
-						src="https://picsum.photos/400/300?random=1" 
-						alt="Random image 1"
-						class="w-96 h-64 object-cover rounded-lg"
-					/>
+				<div class="flex items-center gap-6">
+					<video 
+						transition:persist
+						controls
+						class="w-80 h-48 object-cover rounded-lg bg-gray-200"
+						poster="https://picsum.photos/320/192?random=1"
+					>
+						<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
 					<div>
 						<p 
-							transition:name="hero-text"
-							class="text-lg text-gray-700 leading-relaxed"
+							transition:name="video-description"
+							class="text-gray-700 leading-relaxed"
 						>
-							This is a hero section with an image that will morph during transitions. 
-							The image and text will smoothly animate between pages.
+							This video uses <code>transition:persist</code> and will continue playing 
+							without interruption during page transitions. Start playing and navigate to Page 2!
 						</p>
-						<button 
-							transition:name="cta-button"
-							class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-						>
-							Call to Action
-						</button>
 					</div>
 				</div>
 			</section>
 
-			<!-- Content cards -->
-			<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<!-- Content cards in a compact grid -->
+			<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div 
 					transition:name="card-1"
-					class="bg-white rounded-xl p-6 shadow-lg"
+					class="bg-white rounded-xl p-4 shadow-lg"
 				>
 					<h3 
 						transition:name="card-1-title"
-						class="text-2xl font-bold text-gray-800 mb-3"
+						class="text-xl font-bold text-gray-800 mb-2"
 					>
 						Card 1
 					</h3>
 					<p 
 						transition:name="card-1-content"
-						class="text-gray-600"
+						class="text-gray-600 text-sm"
 					>
-						This card will morph and transform during view transitions. 
-						The content and styling will smoothly animate.
+						This card will morph and transform during view transitions.
 					</p>
 					<div 
 						transition:name="card-1-badge"
-						class="mt-4 inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium"
+						class="mt-3 inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium"
 					>
 						Featured
 					</div>
@@ -92,90 +88,60 @@ import TransitionLayout from "../layouts/TransitionLayout.astro";
 
 				<div 
 					transition:name="card-2"
-					class="bg-white rounded-xl p-6 shadow-lg"
+					class="bg-white rounded-xl p-4 shadow-lg"
 				>
 					<h3 
 						transition:name="card-2-title"
-						class="text-2xl font-bold text-gray-800 mb-3"
+						class="text-xl font-bold text-gray-800 mb-2"
 					>
 						Card 2
 					</h3>
 					<p 
 						transition:name="card-2-content"
-						class="text-gray-600"
+						class="text-gray-600 text-sm"
 					>
-						Another card with different content that will also morph during transitions.
+						Another card with different content that will also morph.
 					</p>
 					<div 
 						transition:name="card-2-badge"
-						class="mt-4 inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium"
+						class="mt-3 inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium"
 					>
 						New
 					</div>
 				</div>
 			</section>
 
-			<!-- Video section with transition:persist -->
-			<section class="bg-white rounded-xl p-8 shadow-lg">
-				<h2 
-					transition:name="video-title"
-					class="text-3xl font-bold text-gray-800 mb-4"
-				>
-					Video Section
-				</h2>
-				<div class="flex items-center gap-8">
-					<video 
-						transition:persist
-						controls
-						class="w-96 h-64 object-cover rounded-lg bg-gray-200"
-						poster="https://picsum.photos/400/300?random=2"
-					>
-						<source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
-						Your browser does not support the video tag.
-					</video>
-					<div>
-						<p 
-							transition:name="video-description"
-							class="text-lg text-gray-700 leading-relaxed"
-						>
-							This video uses <code>transition:persist</code> which means it will continue playing 
-							without interruption during page transitions. The video state is preserved.
-						</p>
-					</div>
-				</div>
-			</section>
-
-			<!-- List section -->
-			<section class="bg-white rounded-xl p-8 shadow-lg">
+			<!-- Compact list section -->
+			<section class="bg-white rounded-xl p-4 shadow-lg">
 				<h2 
 					transition:name="list-title"
-					class="text-3xl font-bold text-gray-800 mb-4"
+					class="text-2xl font-bold text-gray-800 mb-3"
 				>
 					List Items
 				</h2>
-				<ul class="space-y-3">
-					<li 
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+					<div 
 						transition:name="list-item-1"
-						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
 					>
 						<span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-						<span class="text-gray-700">List item 1 with transition name</span>
-					</li>
-					<li 
+						<span class="text-gray-700 text-sm">List item 1</span>
+					</div>
+					<div 
 						transition:name="list-item-2"
-						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
 					>
 						<span class="w-2 h-2 bg-green-500 rounded-full"></span>
-						<span class="text-gray-700">List item 2 with transition name</span>
-					</li>
-					<li 
+						<span class="text-gray-700 text-sm">List item 2</span>
+					</div>
+					<div 
 						transition:name="list-item-3"
-						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+						class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
 					>
 						<span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-						<span class="text-gray-700">List item 3 with transition name</span>
-					</li>
-				</ul>
+						<span class="text-gray-700 text-sm">List item 3</span>
+					</div>
+				</div>
 			</section>
 		</main>
 	</div>

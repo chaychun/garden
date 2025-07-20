@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import "../styles/global.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <html lang="en">
@@ -16,9 +16,9 @@ import { ViewTransitions } from "astro:transitions";
 		<title>View Transitions Test</title>
 		<Font cssVariable="--font-switzer" preload />
 		<Font cssVariable="--font-cabinet" preload />
-		<ViewTransitions />
 	</head>
 	<body>
 		<slot />
+		<ClientRouter />
 	</body>
 </html>
