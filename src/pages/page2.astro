@@ -1,0 +1,235 @@
+---
+import TransitionLayout from "../layouts/TransitionLayout.astro";
+---
+
+<TransitionLayout>
+	<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-8">
+		<nav class="mb-8">
+			<a 
+				href="/page1" 
+				class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+			>
+				Navigate to Page 1
+			</a>
+		</nav>
+
+		<main class="max-w-4xl mx-auto space-y-8">
+			<!-- Header with transition name -->
+			<header>
+				<h1 
+					transition:name="page-title"
+					class="text-6xl font-bold text-gray-900 mb-4"
+				>
+					Page 2 - View Transitions Test
+				</h1>
+				<p 
+					transition:name="page-subtitle"
+					class="text-xl text-gray-600"
+				>
+					Different content with matching transition names for smooth morphing
+				</p>
+			</header>
+
+			<!-- Hero section with different image -->
+			<section class="bg-white rounded-xl p-8 shadow-lg">
+				<h2 
+					transition:name="section-title"
+					class="text-3xl font-bold text-gray-800 mb-4"
+				>
+					Updated Hero Section
+				</h2>
+				<div class="flex items-center gap-8">
+					<img 
+						transition:name="hero-image"
+						src="https://picsum.photos/400/300?random=3" 
+						alt="Random image 2"
+						class="w-96 h-64 object-cover rounded-lg"
+					/>
+					<div>
+						<p 
+							transition:name="hero-text"
+							class="text-lg text-gray-700 leading-relaxed"
+						>
+							This hero section has been updated with new content and a different image. 
+							Notice how the elements smoothly morph between pages.
+						</p>
+						<button 
+							transition:name="cta-button"
+							class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+						>
+							Updated Action
+						</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- Content cards with different layout -->
+			<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div 
+					transition:name="card-1"
+					class="bg-white rounded-xl p-6 shadow-lg"
+				>
+					<h3 
+						transition:name="card-1-title"
+						class="text-2xl font-bold text-gray-800 mb-3"
+					>
+						Updated Card 1
+					</h3>
+					<p 
+						transition:name="card-1-content"
+						class="text-gray-600"
+					>
+						This card has been updated with new content and will morph smoothly from the previous page.
+					</p>
+					<div 
+						transition:name="card-1-badge"
+						class="mt-4 inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+					>
+						Updated
+					</div>
+				</div>
+
+				<div 
+					transition:name="card-2"
+					class="bg-white rounded-xl p-6 shadow-lg"
+				>
+					<h3 
+						transition:name="card-2-title"
+						class="text-2xl font-bold text-gray-800 mb-3"
+					>
+						New Card 2
+					</h3>
+					<p 
+						transition:name="card-2-content"
+						class="text-gray-600"
+					>
+						This card now has completely different content but maintains the same transition name.
+					</p>
+					<div 
+						transition:name="card-2-badge"
+						class="mt-4 inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium"
+					>
+						Hot
+					</div>
+				</div>
+
+				<div class="bg-white rounded-xl p-6 shadow-lg">
+					<h3 class="text-2xl font-bold text-gray-800 mb-3">
+						New Card 3
+					</h3>
+					<p class="text-gray-600">
+						This is a completely new card that doesn't have a transition name, so it will fade in normally.
+					</p>
+					<div class="mt-4 inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+						New
+					</div>
+				</div>
+			</section>
+
+			<!-- Video section with transition:persist -->
+			<section class="bg-white rounded-xl p-8 shadow-lg">
+				<h2 
+					transition:name="video-title"
+					class="text-3xl font-bold text-gray-800 mb-4"
+				>
+					Persistent Video Section
+				</h2>
+				<div class="flex items-center gap-8">
+					<video 
+						transition:persist
+						controls
+						class="w-96 h-64 object-cover rounded-lg bg-gray-200"
+						poster="https://picsum.photos/400/300?random=4"
+					>
+						<source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<div>
+						<p 
+							transition:name="video-description"
+							class="text-lg text-gray-700 leading-relaxed"
+						>
+							This video continues playing during the transition thanks to <code>transition:persist</code>. 
+							The video state, including playback position, is preserved across page navigation.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- List section with different items -->
+			<section class="bg-white rounded-xl p-8 shadow-lg">
+				<h2 
+					transition:name="list-title"
+					class="text-3xl font-bold text-gray-800 mb-4"
+				>
+					Updated List Items
+				</h2>
+				<ul class="space-y-3">
+					<li 
+						transition:name="list-item-1"
+						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+					>
+						<span class="w-2 h-2 bg-red-500 rounded-full"></span>
+						<span class="text-gray-700">Updated list item 1 with new content</span>
+					</li>
+					<li 
+						transition:name="list-item-2"
+						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+					>
+						<span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+						<span class="text-gray-700">Updated list item 2 with new content</span>
+					</li>
+					<li 
+						transition:name="list-item-3"
+						class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+					>
+						<span class="w-2 h-2 bg-pink-500 rounded-full"></span>
+						<span class="text-gray-700">Updated list item 3 with new content</span>
+					</li>
+					<li class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+						<span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
+						<span class="text-gray-700">New list item 4 (no transition name)</span>
+					</li>
+				</ul>
+			</section>
+
+			<!-- Additional test section -->
+			<section class="bg-white rounded-xl p-8 shadow-lg">
+				<h2 class="text-3xl font-bold text-gray-800 mb-4">
+					Additional Test Elements
+				</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="space-y-4">
+						<h3 class="text-xl font-semibold text-gray-800">Form Elements</h3>
+						<input 
+							transition:name="test-input"
+							type="text" 
+							placeholder="This input has a transition name"
+							class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						/>
+						<textarea 
+							transition:name="test-textarea"
+							placeholder="This textarea also has a transition name"
+							class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24"
+						></textarea>
+					</div>
+					<div class="space-y-4">
+						<h3 class="text-xl font-semibold text-gray-800">Progress Elements</h3>
+						<div 
+							transition:name="progress-bar"
+							class="w-full bg-gray-200 rounded-full h-4"
+						>
+							<div class="bg-blue-600 h-4 rounded-full" style="width: 75%"></div>
+						</div>
+						<div 
+							transition:name="progress-text"
+							class="text-sm text-gray-600"
+						>
+							Progress: 75% complete
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</TransitionLayout>

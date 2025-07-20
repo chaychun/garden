@@ -18,3 +18,52 @@
 	--color-base-900: #353534;
 	--color-base-950: #262626;
 }
+
+/* Custom styles for view transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 0.5s;
+}
+
+/* Smooth transitions for elements with transition names */
+[transition\:name] {
+	transition: all 0.3s ease-in-out;
+}
+
+/* Enhanced focus styles for form elements */
+input:focus,
+textarea:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Custom animation for cards */
+.card-animate {
+	animation: cardSlideIn 0.6s ease-out;
+}
+
+@keyframes cardSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Smooth background transitions */
+body {
+	transition: background-color 0.3s ease-in-out;
+}
+
+/* Enhanced button hover effects */
+.btn-transition {
+	transition: all 0.2s ease-in-out;
+}
+
+.btn-transition:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
