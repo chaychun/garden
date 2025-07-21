@@ -3,11 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 const SIDEBAR_WIDTH_EXPANDED = 400;
 const SIDEBAR_WIDTH_COLLAPSED = 48; // enough for vertical text + padding
 
-export default function SidebarMenu() {
+export default function SidebarMenu({ scrollAreaId }) {
   const [isMobile, setIsMobile] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const lastScrollX = useRef(0);
+  const scrollAreaViewport = useRef(null);
   const ticking = useRef(false);
 
   // Responsive check
@@ -20,24 +20,46 @@ export default function SidebarMenu() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Desktop scroll-to-collapse
+  // Find the scroll area viewport
   useEffect(() => {
-    if (isMobile) return;
+    if (!scrollAreaId) return;
+    const scrollArea = document.getElementById(scrollAreaId);
+    if (!scrollArea) return;
+    // The viewport is the first child with class 'scroll-area-viewport'
+    scrollAreaViewport.current = scrollArea.querySelector('.scroll-area-viewport');
+  }, [scrollAreaId]);
+
+  // Desktop scroll-to-collapse (horizontal scroll only)
+  useEffect(() => {
+    if (isMobile || !scrollAreaViewport.current) return;
     function onScroll(e) {
       if (ticking.current) return;
       window.requestAnimationFrame(() => {
-        const scrollX = window.scrollX;
+        const scrollX = scrollAreaViewport.current.scrollLeft;
         if (expanded && scrollX > 0) {
           setExpanded(false);
         }
-        lastScrollX.current = scrollX;
         ticking.current = false;
       });
       ticking.current = true;
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [expanded, isMobile]);
+    const viewport = scrollAreaViewport.current;
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    return () => viewport.removeEventListener('scroll', onScroll);
+  }, [expanded, isMobile, scrollAreaViewport.current]);
+
+  // Prevent vertical scroll on desktop
+  useEffect(() => {
+    if (isMobile || !scrollAreaViewport.current) return;
+    const viewport = scrollAreaViewport.current;
+    function preventVerticalScroll(e) {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+      }
+    }
+    viewport.addEventListener('wheel', preventVerticalScroll, { passive: false });
+    return () => viewport.removeEventListener('wheel', preventVerticalScroll);
+  }, [isMobile, scrollAreaViewport.current]);
 
   // Expand sidebar even if not at scroll start
   function handleExpand() {

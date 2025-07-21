@@ -7,9 +7,9 @@ import SidebarMenu from "@/components/SidebarMenu.jsx";
 ---
 
 <BaseLayout>
-  <SidebarMenu client:load />
+  <SidebarMenu scrollAreaId="main-scroll-area" client:load />
   <div class="md:ml-[400px]">
-    <ScrollArea class="h-screen w-screen">
+    <ScrollArea id="main-scroll-area" class="h-screen w-screen">
       <div
         class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
       >
