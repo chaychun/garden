@@ -41,9 +41,7 @@
         }
 
         .left-column {
-            position: sticky;
-            top: 20px;
-            height: fit-content;
+            position: relative;
             border-right: 1px solid #eee;
             padding-right: 20px;
         }
@@ -52,24 +50,32 @@
             min-height: 100vh;
         }
 
-        .section-marker {
-            font-size: 0.9em;
-            color: #666;
+        .pulled-heading {
+            font-size: 1.8em;
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
             margin-bottom: 20px;
-            padding: 8px 12px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            border-left: 3px solid #007acc;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #007acc;
         }
 
-        .footer-marker {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 10px;
-            padding: 6px 10px;
+        .pulled-footnote {
+            font-size: 0.9em;
+            color: #666;
             background: #fafafa;
-            border-radius: 3px;
-            border-left: 2px solid #ddd;
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 3px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .pulled-footnote .footnote-number {
+            font-weight: bold;
+            color: #007acc;
+            margin-right: 8px;
         }
 
         .content h1 {
@@ -198,6 +204,15 @@
             color: #4caf50;
             font-weight: bold;
         }
+
+        /* Spacer elements to align content */
+        .spacer {
+            height: 20px;
+        }
+
+        .spacer-large {
+            height: 40px;
+        }
     </style>
 </head>
 <body>
@@ -205,56 +220,70 @@
         <div class="test-info">
             <h3>Layout Test Features</h3>
             <ul>
-                <li>Two-column layout: Left (300px) for headers/footers, Right for content</li>
-                <li>Sticky left column that follows scroll</li>
+                <li>Two-column layout: Left shows pulled content, Right shows main content</li>
+                <li>Headings and footnotes pulled out of main flow to left column</li>
+                <li>Vertical alignment matches where content appears in main flow</li>
+                <li>No duplicates - content appears either in left column OR main flow</li>
                 <li>Mobile responsive: Single column on small screens</li>
-                <li>Inline footnotes with superscript references</li>
-                <li>Section headers highlighted in left column</li>
                 <li>Max width capped to prevent overly wide layout</li>
             </ul>
         </div>
 
         <div class="article-layout">
-            <!-- Left Column: Headers and Footers -->
+            <!-- Left Column: Pulled Content -->
             <div class="left-column">
-                <div class="section-marker">
-                    <strong>Introduction</strong>
+                <!-- Spacer for title -->
+                <div class="spacer-large"></div>
+                
+                <!-- Pulled heading for "Getting Started" section -->
+                <div class="pulled-heading">Getting Started</div>
+                
+                <!-- Pulled footnotes -->
+                <div class="pulled-footnote">
+                    <span class="footnote-number">1</span>
+                    Basic setup guide: <a href="#">https://example.com/setup</a>
                 </div>
                 
-                <div class="section-marker">
-                    <strong>Getting Started</strong>
+                <div class="pulled-footnote">
+                    <span class="footnote-number">2</span>
+                    Configuration options: <a href="#">https://example.com/config</a>
                 </div>
                 
-                <div class="footer-marker">
-                    <strong>Footnotes</strong>
-                </div>
-                <div class="footer-marker">
-                    1. Basic setup guide
-                </div>
-                <div class="footer-marker">
-                    2. Configuration options
+                <!-- Spacer for "Installation Process" -->
+                <div class="spacer"></div>
+                
+                <!-- Pulled heading for "Advanced Features" section -->
+                <div class="pulled-heading">Advanced Features</div>
+                
+                <!-- Spacer for "Performance Optimization" -->
+                <div class="spacer"></div>
+                
+                <!-- Pulled footnotes -->
+                <div class="pulled-footnote">
+                    <span class="footnote-number">3</span>
+                    Performance considerations: <a href="#">https://example.com/performance</a>
                 </div>
                 
-                <div class="section-marker">
-                    <strong>Advanced Features</strong>
+                <!-- Spacer for "Best Practices" -->
+                <div class="spacer"></div>
+                
+                <div class="pulled-footnote">
+                    <span class="footnote-number">4</span>
+                    Best practices: <a href="#">https://example.com/best-practices</a>
                 </div>
                 
-                <div class="footer-marker">
-                    3. Performance considerations
-                </div>
-                <div class="footer-marker">
-                    4. Best practices
+                <!-- Pulled heading for "Conclusion" section -->
+                <div class="pulled-heading">Conclusion</div>
+                
+                <!-- Pulled footnotes -->
+                <div class="pulled-footnote">
+                    <span class="footnote-number">5</span>
+                    Additional resources: <a href="#">https://example.com/resources</a>
                 </div>
                 
-                <div class="section-marker">
-                    <strong>Conclusion</strong>
-                </div>
-                
-                <div class="footer-marker">
-                    5. Additional resources
-                </div>
-                <div class="footer-marker">
-                    6. Community support
+                <div class="pulled-footnote">
+                    <span class="footnote-number">6</span>
+                    Community support: <a href="#">https://example.com/community</a>
                 </div>
             </div>
 
@@ -265,7 +294,7 @@
                     
                     <p>This is a comprehensive guide to building modern web applications using the latest technologies and best practices. We'll cover everything from basic setup to advanced optimization techniques.</p>
 
-                    <h2>Getting Started</h2>
+                    <!-- Note: H2 "Getting Started" is pulled to left column -->
                     
                     <p>Before diving into the advanced features, it's essential to understand the fundamentals. The setup process has been streamlined to get you up and running quickly<sup><a href="#fn1" class="footnote-ref">1</a></sup>.</p>
 
@@ -281,7 +310,7 @@
                         <li>Configure your environment variables</li>
                     </ul>
 
-                    <h2>Advanced Features</h2>
+                    <!-- Note: H2 "Advanced Features" is pulled to left column -->
                     
                     <p>Once you're comfortable with the basics, you can explore advanced features that will significantly enhance your application's capabilities.</p>
 
@@ -305,13 +334,13 @@
                         <li>Security considerations</li>
                     </ul>
 
-                    <h2>Conclusion</h2>
+                    <!-- Note: H2 "Conclusion" is pulled to left column -->
                     
                     <p>Building modern web applications requires a solid understanding of both fundamental concepts and advanced techniques. By following this guide, you'll be well-equipped to create robust, scalable applications.</p>
 
                     <p>For further learning, consider exploring the additional resources<sup><a href="#fn5" class="footnote-ref">5</a></sup> and community support<sup><a href="#fn6" class="footnote-ref">6</a></sup> available online.</p>
 
-                    <!-- Footnotes (hidden on desktop, shown on mobile) -->
+                    <!-- Footnotes (only shown on mobile) -->
                     <div class="footnote">
                         <ol>
                             <li id="fn1">Basic setup guide: <a href="#">https://example.com/setup</a></li>
