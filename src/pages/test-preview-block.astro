@@ -8,10 +8,10 @@ import SidebarMenu from "@/components/SidebarMenu.jsx";
 
 <BaseLayout>
   <ScrollArea id="main-scroll-area" class="h-screen w-screen">
-    <SidebarMenu scrollAreaId="main-scroll-area" client:load />
     <div
       class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
     >
+      <SidebarMenu scrollAreaId="main-scroll-area" client:load />
       <PreviewBlock
         title="Test Interaction 1"
         description="Exercitation nisi esse ut enim. Culpa reprehenderit aute sint elit in tempor veniam labore duis. Voluptate ad ipsum eu laboris laboris amet ad ullamco commodo enim sit."

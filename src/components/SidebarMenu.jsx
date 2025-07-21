@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const SIDEBAR_WIDTH_EXPANDED = 400;
-const SIDEBAR_WIDTH_COLLAPSED = 48; // enough for vertical text + padding
+const SIDEBAR_WIDTH_COLLAPSED = 48;
 
 export default function SidebarMenu({ scrollAreaId }) {
   const [isMobile, setIsMobile] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const scrollAreaViewport = useRef(null);
   const ticking = useRef(false);
 
   // Responsive check
@@ -20,22 +19,20 @@ export default function SidebarMenu({ scrollAreaId }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Find the scroll area viewport
+  // Desktop scroll-to-collapse
   useEffect(() => {
-    if (!scrollAreaId) return;
+    if (isMobile) return;
+    
     const scrollArea = document.getElementById(scrollAreaId);
     if (!scrollArea) return;
-    // The viewport is the first child with class 'scroll-area-viewport'
-    scrollAreaViewport.current = scrollArea.querySelector('.scroll-area-viewport');
-  }, [scrollAreaId]);
+    
+    const viewport = scrollArea.querySelector('.scroll-area-viewport');
+    if (!viewport) return;
 
-  // Desktop scroll-to-collapse (horizontal scroll only)
-  useEffect(() => {
-    if (isMobile || !scrollAreaViewport.current) return;
-    function onScroll(e) {
+    function onScroll() {
       if (ticking.current) return;
       window.requestAnimationFrame(() => {
-        const scrollX = scrollAreaViewport.current.scrollLeft;
+        const scrollX = viewport.scrollLeft;
         if (expanded && scrollX > 0) {
           setExpanded(false);
         }
@@ -43,68 +40,43 @@ export default function SidebarMenu({ scrollAreaId }) {
       });
       ticking.current = true;
     }
-    const viewport = scrollAreaViewport.current;
+
     viewport.addEventListener('scroll', onScroll, { passive: true });
     return () => viewport.removeEventListener('scroll', onScroll);
-  }, [expanded, isMobile, scrollAreaViewport.current]);
+  }, [expanded, isMobile, scrollAreaId]);
 
-  // Prevent vertical scroll on desktop
-  useEffect(() => {
-    if (isMobile || !scrollAreaViewport.current) return;
-    const viewport = scrollAreaViewport.current;
-    function preventVerticalScroll(e) {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-      }
-    }
-    viewport.addEventListener('wheel', preventVerticalScroll, { passive: false });
-    return () => viewport.removeEventListener('wheel', preventVerticalScroll);
-  }, [isMobile, scrollAreaViewport.current]);
-
-  // Expand sidebar even if not at scroll start
   function handleExpand() {
     setExpanded(true);
   }
 
-  // Mobile hamburger
   function handleHamburger() {
     setMobileMenuOpen((v) => !v);
   }
-
-  // Sidebar content
-  const sidebarContent = (
-    <div className="flex flex-col items-center justify-center h-full w-full text-white">
-      <span className="text-lg font-bold">Sidebar/Menu</span>
-      {!isMobile && !expanded && (
-        <button className="mt-4 text-xs bg-white/20 rounded p-2" onClick={handleExpand}>
-          Expand
-        </button>
-      )}
-    </div>
-  );
 
   // Desktop sidebar
   if (!isMobile) {
     return (
       <div
         style={{
-          position: 'absolute',
+          position: 'sticky',
           left: 0,
           top: 0,
-          bottom: 0,
+          height: '100vh',
           width: expanded ? SIDEBAR_WIDTH_EXPANDED : SIDEBAR_WIDTH_COLLAPSED,
           background: expanded ? '#2563eb' : '#1e293b',
-          zIndex: expanded ? 30 : 10,
           transition: 'width 0.2s cubic-bezier(.4,0,.2,1)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          flexShrink: 0,
         }}
       >
         {expanded ? (
-          sidebarContent
+          <div className="flex flex-col items-center justify-center h-full w-full text-white">
+            <span className="text-lg font-bold">Sidebar/Menu</span>
+          </div>
         ) : (
           <div
             className="flex flex-col items-center justify-center h-full w-full rotate-180"
@@ -125,7 +97,7 @@ export default function SidebarMenu({ scrollAreaId }) {
     <>
       <div
         style={{
-          position: 'absolute',
+          position: 'sticky',
           top: 0,
           left: 0,
           right: 0,
@@ -136,6 +108,7 @@ export default function SidebarMenu({ scrollAreaId }) {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 24px',
+          flexShrink: 0,
         }}
       >
         <span className="text-white text-lg font-bold">Menu</span>
@@ -150,7 +123,7 @@ export default function SidebarMenu({ scrollAreaId }) {
       {mobileMenuOpen && (
         <div
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: 0,
             left: 0,
             right: 0,
