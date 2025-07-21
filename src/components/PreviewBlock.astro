@@ -58,13 +58,15 @@ const {
 		/>
 	</div>
 	<div class="flex flex-col gap-1 md:w-[480px]">
-		<p class="font-switzer text-base-300 text-sm">
-			{date}
-		</p>
 		<h2 class="font-cabinet text-base-900 text-2xl font-medium">{title}</h2>
-		<p class="text-base-300 inline-flex items-center gap-2 text-sm">
-			<span>Interaction</span>
-		</p>
+		<div class="flex justify-between items-center">
+			<p class="font-switzer text-base-300 text-sm">
+				{date}
+			</p>
+			<p class="font-switzer text-base-300 text-sm">
+				Interaction
+			</p>
+		</div>
 		<hr class="border-base-200 mt-1" />
 		<p class="font-switzer text-base-500 text-sm leading-tight">
 			{description}
