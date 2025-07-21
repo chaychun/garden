@@ -3,8 +3,8 @@
 @theme inline {
 	--font-sans: var(--font-switzer);
 	--font-cabinet: var(--font-cabinet);
- 	--font-tabular: var(--font-tabular);
- 	--font-mono: var(--font-tabular);
+	--font-tabular: var(--font-tabular);
+	--font-mono: var(--font-tabular);
 }
 
 @theme {
@@ -19,8 +19,4 @@
 	--color-base-800: #464644;
 	--color-base-900: #353534;
 	--color-base-950: #262626;
-}
-
-code, pre, kbd, samp {
-  font-family: var(--font-mono, monospace);
 }

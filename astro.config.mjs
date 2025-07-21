@@ -8,45 +8,55 @@ import vtbot from "astro-vtbot";
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [react({
-        babel: {
-            plugins: [["babel-plugin-react-compiler"]],
-        },
-		}), vtbot()],
+	integrations: [
+		react({
+			babel: {
+				plugins: [["babel-plugin-react-compiler"]],
+			},
+		}),
+		vtbot(),
+	],
 
-    vite: {
-        plugins: [tailwindcss()],
-    },
+	vite: {
+		plugins: [tailwindcss()],
+	},
 
-    experimental: {
-        fonts: [
-            {
-                provider: fontProviders.fontshare(),
-                name: "Switzer",
-                cssVariable: "--font-switzer",
-                weights: ["100 900"],
-                styles: ["normal", "italic"],
-                subsets: ["latin"],
-                fallbacks: ["system-ui", "sans-serif"],
-            },
-            {
-                provider: fontProviders.fontshare(),
-                name: "Cabinet Grotesk",
-                cssVariable: "--font-cabinet",
-                weights: ["100 900"],
-                styles: ["normal", "italic"],
-                subsets: ["latin"],
-                fallbacks: ["system-ui", "sans-serif"],
-            },
-            {
-                provider: fontProviders.fontshare(),
-                name: "Share Tech Mono",
-                cssVariable: "--font-tabular",
-                weights: ["400"],
-                styles: ["normal"],
-                subsets: ["latin"],
-                fallbacks: ["monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "Courier New"],
-            },
-        ],
-    },
+	experimental: {
+		fonts: [
+			{
+				provider: fontProviders.fontshare(),
+				name: "Switzer",
+				cssVariable: "--font-switzer",
+				weights: ["100 900"],
+				styles: ["normal", "italic"],
+				subsets: ["latin"],
+				fallbacks: ["system-ui", "sans-serif"],
+			},
+			{
+				provider: fontProviders.fontshare(),
+				name: "Cabinet Grotesk",
+				cssVariable: "--font-cabinet",
+				weights: ["100 900"],
+				styles: ["normal", "italic"],
+				subsets: ["latin"],
+				fallbacks: ["system-ui", "sans-serif"],
+			},
+			{
+				provider: fontProviders.fontshare(),
+				name: "Tabular",
+				cssVariable: "--font-tabular",
+				weights: ["300 700"],
+				styles: ["normal", "italic"],
+				subsets: ["latin"],
+				fallbacks: [
+					"monospace",
+					"SFMono-Regular",
+					"Menlo",
+					"Consolas",
+					"Liberation Mono",
+					"Courier New",
+				],
+			},
+		],
+	},
 });
