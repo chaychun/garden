@@ -8,7 +8,7 @@ export default function Sidebar({ children }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [hasScrolledFromStart, setHasScrolledFromStart] = useState(false);
+  const [canCollapseByScroll, setCanCollapseByScroll] = useState(true);
   const scrollContainerRef = useRef<HTMLElement | null>(null);
 
   // Check if we're on mobile
@@ -55,16 +55,18 @@ export default function Sidebar({ children }: SidebarProps) {
       
       // If we're at the start (scrollLeft === 0)
       if (scrollLeft === 0) {
-        setHasScrolledFromStart(false);
         // Reopen sidebar when back at start
         if (!isExpanded) {
           setIsExpanded(true);
         }
+        // Re-enable scroll-based collapse when at start
+        setCanCollapseByScroll(true);
       } else {
-        // If we start scrolling from the start position, collapse the sidebar
-        if (!hasScrolledFromStart && isExpanded) {
-          setHasScrolledFromStart(true);
+        // Only collapse if we're allowed to and the sidebar is expanded
+        if (canCollapseByScroll && isExpanded) {
           setIsExpanded(false);
+          // Disable further scroll-based collapse until back at start
+          setCanCollapseByScroll(false);
         }
       }
     };
@@ -75,13 +77,14 @@ export default function Sidebar({ children }: SidebarProps) {
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll);
     };
-  }, [isExpanded, isMobile, hasScrolledFromStart]);
+  }, [isExpanded, isMobile, canCollapseByScroll]);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
-    // If manually expanding, reset the scroll tracking
+    // If manually expanding, only re-enable scroll collapse if at start
     if (!isExpanded) {
-      setHasScrolledFromStart(false);
+      const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
+      setCanCollapseByScroll(scrollLeft === 0);
     }
   };
 
