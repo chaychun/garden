@@ -1,0 +1,330 @@
+---
+// Test page for two-column article layout
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Layout Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .article-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .left-column {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
+        }
+
+        .right-column {
+            min-height: 100vh;
+        }
+
+        .section-marker {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            border-left: 3px solid #007acc;
+        }
+
+        .footer-marker {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 10px;
+            padding: 6px 10px;
+            background: #fafafa;
+            border-radius: 3px;
+            border-left: 2px solid #ddd;
+        }
+
+        .content h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .content h2 {
+            font-size: 1.8em;
+            margin: 40px 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+        }
+
+        .content h3 {
+            font-size: 1.4em;
+            margin: 30px 0 15px 0;
+            color: #444;
+        }
+
+        .content p {
+            margin-bottom: 16px;
+            font-size: 1.1em;
+        }
+
+        .content ul, .content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+
+        .footnote {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .footnote ol {
+            list-style: none;
+            counter-reset: footnote-counter;
+        }
+
+        .footnote li {
+            counter-increment: footnote-counter;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .footnote li::before {
+            content: counter(footnote-counter);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #007acc;
+        }
+
+        .footnote-ref {
+            font-size: 0.8em;
+            vertical-align: super;
+            color: #007acc;
+            text-decoration: none;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .article-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .left-column {
+                display: none;
+            }
+
+            .right-column {
+                min-height: auto;
+            }
+
+            .content h2 {
+                margin: 30px 0 15px 0;
+            }
+
+            .content h3 {
+                margin: 25px 0 12px 0;
+            }
+        }
+
+        /* Test styles for visual clarity */
+        .test-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .test-info h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .test-info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .test-info li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .test-info li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-info">
+            <h3>Layout Test Features</h3>
+            <ul>
+                <li>Two-column layout: Left (300px) for headers/footers, Right for content</li>
+                <li>Sticky left column that follows scroll</li>
+                <li>Mobile responsive: Single column on small screens</li>
+                <li>Inline footnotes with superscript references</li>
+                <li>Section headers highlighted in left column</li>
+                <li>Max width capped to prevent overly wide layout</li>
+            </ul>
+        </div>
+
+        <div class="article-layout">
+            <!-- Left Column: Headers and Footers -->
+            <div class="left-column">
+                <div class="section-marker">
+                    <strong>Introduction</strong>
+                </div>
+                
+                <div class="section-marker">
+                    <strong>Getting Started</strong>
+                </div>
+                
+                <div class="footer-marker">
+                    <strong>Footnotes</strong>
+                </div>
+                <div class="footer-marker">
+                    1. Basic setup guide
+                </div>
+                <div class="footer-marker">
+                    2. Configuration options
+                </div>
+                
+                <div class="section-marker">
+                    <strong>Advanced Features</strong>
+                </div>
+                
+                <div class="footer-marker">
+                    3. Performance considerations
+                </div>
+                <div class="footer-marker">
+                    4. Best practices
+                </div>
+                
+                <div class="section-marker">
+                    <strong>Conclusion</strong>
+                </div>
+                
+                <div class="footer-marker">
+                    5. Additional resources
+                </div>
+                <div class="footer-marker">
+                    6. Community support
+                </div>
+            </div>
+
+            <!-- Right Column: Main Content -->
+            <div class="right-column">
+                <div class="content">
+                    <h1>Building Modern Web Applications</h1>
+                    
+                    <p>This is a comprehensive guide to building modern web applications using the latest technologies and best practices. We'll cover everything from basic setup to advanced optimization techniques.</p>
+
+                    <h2>Getting Started</h2>
+                    
+                    <p>Before diving into the advanced features, it's essential to understand the fundamentals. The setup process has been streamlined to get you up and running quickly<sup><a href="#fn1" class="footnote-ref">1</a></sup>.</p>
+
+                    <p>Configuration is straightforward but offers extensive customization options<sup><a href="#fn2" class="footnote-ref">2</a></sup>. You can start with the defaults and gradually adjust settings as your project grows.</p>
+
+                    <h3>Installation Process</h3>
+                    
+                    <p>The installation process involves several steps:</p>
+                    <ul>
+                        <li>Download the latest version</li>
+                        <li>Extract the files to your project directory</li>
+                        <li>Run the initialization script</li>
+                        <li>Configure your environment variables</li>
+                    </ul>
+
+                    <h2>Advanced Features</h2>
+                    
+                    <p>Once you're comfortable with the basics, you can explore advanced features that will significantly enhance your application's capabilities.</p>
+
+                    <h3>Performance Optimization</h3>
+                    
+                    <p>Performance is crucial for user experience. Several techniques can be employed to ensure your application runs smoothly<sup><a href="#fn3" class="footnote-ref">3</a></sup>:</p>
+                    <ol>
+                        <li>Code splitting and lazy loading</li>
+                        <li>Image optimization and compression</li>
+                        <li>Caching strategies</li>
+                        <li>Database query optimization</li>
+                    </ol>
+
+                    <h3>Best Practices</h3>
+                    
+                    <p>Following established best practices will help you maintain code quality and avoid common pitfalls<sup><a href="#fn4" class="footnote-ref">4</a></sup>. These include:</p>
+                    <ul>
+                        <li>Consistent code formatting</li>
+                        <li>Comprehensive testing</li>
+                        <li>Documentation standards</li>
+                        <li>Security considerations</li>
+                    </ul>
+
+                    <h2>Conclusion</h2>
+                    
+                    <p>Building modern web applications requires a solid understanding of both fundamental concepts and advanced techniques. By following this guide, you'll be well-equipped to create robust, scalable applications.</p>
+
+                    <p>For further learning, consider exploring the additional resources<sup><a href="#fn5" class="footnote-ref">5</a></sup> and community support<sup><a href="#fn6" class="footnote-ref">6</a></sup> available online.</p>
+
+                    <!-- Footnotes (hidden on desktop, shown on mobile) -->
+                    <div class="footnote">
+                        <ol>
+                            <li id="fn1">Basic setup guide: <a href="#">https://example.com/setup</a></li>
+                            <li id="fn2">Configuration options: <a href="#">https://example.com/config</a></li>
+                            <li id="fn3">Performance considerations: <a href="#">https://example.com/performance</a></li>
+                            <li id="fn4">Best practices: <a href="#">https://example.com/best-practices</a></li>
+                            <li id="fn5">Additional resources: <a href="#">https://example.com/resources</a></li>
+                            <li id="fn6">Community support: <a href="#">https://example.com/community</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
