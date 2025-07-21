@@ -1,0 +1,16 @@
+---
+export interface Props {
+	text: string;
+	class?: string;
+}
+const { text, class: className = "" } = Astro.props;
+---
+
+<span
+	class:list={[
+		"border-base-50/30 hover:bg-base-50/30 text-base-50 inline-block rounded-sm border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none hover:border-transparent",
+		className,
+	]}
+>
+	{text}
+</span>
