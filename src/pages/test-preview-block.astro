@@ -1,25 +1,47 @@
 ---
 import PreviewBlock from "@/components/PreviewBlock.astro";
+import ArticleBlock from "@/components/ArticleBlock.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import ScrollArea from "@/components/ScrollArea.astro";
 ---
 
 <BaseLayout>
-	<div class="mx-auto h-screen w-screen max-w-[528px] md:flex md:max-w-none">
-		<PreviewBlock
-			title="Test Interaction 1"
-			description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos."
-			bgImage="https://picsum.photos/800/600?random=1"
-			previewImage="https://picsum.photos/400/300?random=2"
-			position="top"
-			layout="landscape"
-		/>
-		<PreviewBlock
-			title="Test Interaction 2"
-			description="This is a test description for the preview block component to demonstrate how it looks and functions."
-			bgImage="https://picsum.photos/800/600?random=3"
-			previewImage="https://picsum.photos/400/300?random=4"
-			position="bottom"
-			layout="portrait"
-		/>
-	</div>
+	<ScrollArea class="h-screen w-screen">
+		<div
+			class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
+		>
+			<PreviewBlock
+				title="Test Interaction 1"
+				description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos."
+				bgImage="https://picsum.photos/800/600?random=1"
+				previewImage="https://picsum.photos/400/300?random=2"
+				position="top"
+				layout="portrait"
+			/>
+			<ArticleBlock
+				title="Creativity arise from restrictions, not despite of them"
+				description="Voluptate eiusmod ad irure ullamco est aliquip magna nulla irure commodo do. Culpa et dolore proident laboris eu ipsum Lorem et dolore veniam. Magna Lorem nulla consequat incididunt sint labore exercitation magna ad. Esse Lorem aliqua eu laboris commodo quis. Aliquip irure ea aliquip occaecat ullamco excepteur dolore ullamco ad labore. Quis occaecat aliquip cupidatat proident cupidatat do est do magna aliqua magna laborum quis eu. Consequat consequat dolor incididunt esse anim deserunt nostrud ut sint minim."
+				date="Jan 15, 2024"
+				link="/"
+				position="top"
+			/>
+			<PreviewBlock
+				title="Test Interaction 2"
+				description="This is a test description for the preview block component to demonstrate how it looks and functions."
+				bgImage="https://picsum.photos/800/600?random=3"
+				previewImage="https://picsum.photos/400/300?random=4"
+				position="bottom"
+				layout="portrait"
+			/>
+
+			<ArticleBlock
+				title="The best way to predict the future is to invent it"
+				description="Dolor in irure tempor labore dolore cillum culpa magna minim duis cupidatat amet nisi ullamco. Pariatur ipsum cupidatat aliquip. Nulla amet enim culpa consectetur est ut magna minim veniam sunt nisi elit Lorem sit. Dolor id velit culpa do occaecat Lorem eiusmod enim ea minim consectetur deserunt ut eu."
+				date="Jan 20, 2024"
+				link="/"
+				previewImage="https://picsum.photos/400/300?random=5"
+				position="bottom"
+			/>
+		</div>
+	</ScrollArea>
 </BaseLayout>
