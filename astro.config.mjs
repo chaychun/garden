@@ -38,6 +38,15 @@ export default defineConfig({
                 subsets: ["latin"],
                 fallbacks: ["system-ui", "sans-serif"],
             },
+            {
+                provider: fontProviders.fontshare(),
+                name: "Share Tech Mono",
+                cssVariable: "--font-tabular",
+                weights: ["400"],
+                styles: ["normal"],
+                subsets: ["latin"],
+                fallbacks: ["monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "Courier New"],
+            },
         ],
     },
 });
