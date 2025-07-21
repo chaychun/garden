@@ -30,7 +30,7 @@
 
         .article-layout {
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 1fr 300px;
             gap: 40px;
             max-width: 1000px;
             margin: 0 auto;
@@ -42,8 +42,8 @@
 
         .left-column {
             position: relative;
-            border-right: 1px solid #eee;
-            padding-right: 20px;
+            border-left: 1px solid #eee;
+            padding-left: 20px;
         }
 
         .right-column {
@@ -220,18 +220,85 @@
         <div class="test-info">
             <h3>Layout Test Features</h3>
             <ul>
-                <li>Two-column layout: Left shows pulled content, Right shows main content</li>
-                <li>Headings and footnotes pulled out of main flow to left column</li>
+                <li>Two-column layout: Left shows main content, Right shows pulled content</li>
+                <li>Headings and footnotes pulled out of main flow to right column</li>
                 <li>Vertical alignment matches where content appears in main flow</li>
-                <li>No duplicates - content appears either in left column OR main flow</li>
+                <li>No duplicates - content appears either in right column OR main flow</li>
                 <li>Mobile responsive: Single column on small screens</li>
                 <li>Max width capped to prevent overly wide layout</li>
             </ul>
         </div>
 
         <div class="article-layout">
-            <!-- Left Column: Pulled Content -->
+            <!-- Left Column: Main Content -->
             <div class="left-column">
+                <div class="content">
+                    <h1>Building Modern Web Applications</h1>
+                    
+                    <p>This is a comprehensive guide to building modern web applications using the latest technologies and best practices. We'll cover everything from basic setup to advanced optimization techniques.</p>
+
+                    <!-- Note: H2 "Getting Started" is pulled to right column -->
+                    
+                    <p>Before diving into the advanced features, it's essential to understand the fundamentals. The setup process has been streamlined to get you up and running quickly<sup><a href="#fn1" class="footnote-ref">1</a></sup>.</p>
+
+                    <p>Configuration is straightforward but offers extensive customization options<sup><a href="#fn2" class="footnote-ref">2</a></sup>. You can start with the defaults and gradually adjust settings as your project grows.</p>
+
+                    <h3>Installation Process</h3>
+                    
+                    <p>The installation process involves several steps:</p>
+                    <ul>
+                        <li>Download the latest version</li>
+                        <li>Extract the files to your project directory</li>
+                        <li>Run the initialization script</li>
+                        <li>Configure your environment variables</li>
+                    </ul>
+
+                    <!-- Note: H2 "Advanced Features" is pulled to right column -->
+                    
+                    <p>Once you're comfortable with the basics, you can explore advanced features that will significantly enhance your application's capabilities.</p>
+
+                    <h3>Performance Optimization</h3>
+                    
+                    <p>Performance is crucial for user experience. Several techniques can be employed to ensure your application runs smoothly<sup><a href="#fn3" class="footnote-ref">3</a></sup>:</p>
+                    <ol>
+                        <li>Code splitting and lazy loading</li>
+                        <li>Image optimization and compression</li>
+                        <li>Caching strategies</li>
+                        <li>Database query optimization</li>
+                    </ol>
+
+                    <h3>Best Practices</h3>
+                    
+                    <p>Following established best practices will help you maintain code quality and avoid common pitfalls<sup><a href="#fn4" class="footnote-ref">4</a></sup>. These include:</p>
+                    <ul>
+                        <li>Consistent code formatting</li>
+                        <li>Comprehensive testing</li>
+                        <li>Documentation standards</li>
+                        <li>Security considerations</li>
+                    </ul>
+
+                    <!-- Note: H2 "Conclusion" is pulled to right column -->
+                    
+                    <p>Building modern web applications requires a solid understanding of both fundamental concepts and advanced techniques. By following this guide, you'll be well-equipped to create robust, scalable applications.</p>
+
+                    <p>For further learning, consider exploring the additional resources<sup><a href="#fn5" class="footnote-ref">5</a></sup> and community support<sup><a href="#fn6" class="footnote-ref">6</a></sup> available online.</p>
+
+                    <!-- Footnotes (only shown on mobile) -->
+                    <div class="footnote">
+                        <ol>
+                            <li id="fn1">Basic setup guide: <a href="#">https://example.com/setup</a></li>
+                            <li id="fn2">Configuration options: <a href="#">https://example.com/config</a></li>
+                            <li id="fn3">Performance considerations: <a href="#">https://example.com/performance</a></li>
+                            <li id="fn4">Best practices: <a href="#">https://example.com/best-practices</a></li>
+                            <li id="fn5">Additional resources: <a href="#">https://example.com/resources</a></li>
+                            <li id="fn6">Community support: <a href="#">https://example.com/community</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Pulled Content -->
+            <div class="right-column">
                 <!-- Spacer for title -->
                 <div class="spacer-large"></div>
                 
@@ -284,73 +351,6 @@
                 <div class="pulled-footnote">
                     <span class="footnote-number">6</span>
                     Community support: <a href="#">https://example.com/community</a>
-                </div>
-            </div>
-
-            <!-- Right Column: Main Content -->
-            <div class="right-column">
-                <div class="content">
-                    <h1>Building Modern Web Applications</h1>
-                    
-                    <p>This is a comprehensive guide to building modern web applications using the latest technologies and best practices. We'll cover everything from basic setup to advanced optimization techniques.</p>
-
-                    <!-- Note: H2 "Getting Started" is pulled to left column -->
-                    
-                    <p>Before diving into the advanced features, it's essential to understand the fundamentals. The setup process has been streamlined to get you up and running quickly<sup><a href="#fn1" class="footnote-ref">1</a></sup>.</p>
-
-                    <p>Configuration is straightforward but offers extensive customization options<sup><a href="#fn2" class="footnote-ref">2</a></sup>. You can start with the defaults and gradually adjust settings as your project grows.</p>
-
-                    <h3>Installation Process</h3>
-                    
-                    <p>The installation process involves several steps:</p>
-                    <ul>
-                        <li>Download the latest version</li>
-                        <li>Extract the files to your project directory</li>
-                        <li>Run the initialization script</li>
-                        <li>Configure your environment variables</li>
-                    </ul>
-
-                    <!-- Note: H2 "Advanced Features" is pulled to left column -->
-                    
-                    <p>Once you're comfortable with the basics, you can explore advanced features that will significantly enhance your application's capabilities.</p>
-
-                    <h3>Performance Optimization</h3>
-                    
-                    <p>Performance is crucial for user experience. Several techniques can be employed to ensure your application runs smoothly<sup><a href="#fn3" class="footnote-ref">3</a></sup>:</p>
-                    <ol>
-                        <li>Code splitting and lazy loading</li>
-                        <li>Image optimization and compression</li>
-                        <li>Caching strategies</li>
-                        <li>Database query optimization</li>
-                    </ol>
-
-                    <h3>Best Practices</h3>
-                    
-                    <p>Following established best practices will help you maintain code quality and avoid common pitfalls<sup><a href="#fn4" class="footnote-ref">4</a></sup>. These include:</p>
-                    <ul>
-                        <li>Consistent code formatting</li>
-                        <li>Comprehensive testing</li>
-                        <li>Documentation standards</li>
-                        <li>Security considerations</li>
-                    </ul>
-
-                    <!-- Note: H2 "Conclusion" is pulled to left column -->
-                    
-                    <p>Building modern web applications requires a solid understanding of both fundamental concepts and advanced techniques. By following this guide, you'll be well-equipped to create robust, scalable applications.</p>
-
-                    <p>For further learning, consider exploring the additional resources<sup><a href="#fn5" class="footnote-ref">5</a></sup> and community support<sup><a href="#fn6" class="footnote-ref">6</a></sup> available online.</p>
-
-                    <!-- Footnotes (only shown on mobile) -->
-                    <div class="footnote">
-                        <ol>
-                            <li id="fn1">Basic setup guide: <a href="#">https://example.com/setup</a></li>
-                            <li id="fn2">Configuration options: <a href="#">https://example.com/config</a></li>
-                            <li id="fn3">Performance considerations: <a href="#">https://example.com/performance</a></li>
-                            <li id="fn4">Best practices: <a href="#">https://example.com/best-practices</a></li>
-                            <li id="fn5">Additional resources: <a href="#">https://example.com/resources</a></li>
-                            <li id="fn6">Community support: <a href="#">https://example.com/community</a></li>
-                        </ol>
-                    </div>
                 </div>
             </div>
         </div>
