@@ -88,7 +88,7 @@ export default function SidebarMenu({ scrollAreaId }) {
     return (
       <div
         style={{
-          position: 'fixed',
+          position: 'absolute',
           left: 0,
           top: 0,
           bottom: 0,
@@ -125,7 +125,7 @@ export default function SidebarMenu({ scrollAreaId }) {
     <>
       <div
         style={{
-          position: 'fixed',
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
@@ -150,7 +150,7 @@ export default function SidebarMenu({ scrollAreaId }) {
       {mobileMenuOpen && (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
