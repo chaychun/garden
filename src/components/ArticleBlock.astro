@@ -30,16 +30,16 @@ const {
 		position === "bottom" && "md:justify-end",
 	]}
 >
-	<p class="font-switzer text-base-300 text-sm">
-		{date}
-	</p>
-	<h2 class="font-cabinet text-base-900 mt-2 text-4xl leading-none font-medium">
+	<h2 class="font-cabinet text-base-900 text-4xl leading-none font-medium">
 		{title}
 	</h2>
-	<p class="text-base-300 mt-2 inline-flex items-center gap-2 text-sm">
-		<span>Article</span>
-		<span> / </span>
-		<span>{growthStage}</span>
+	<p class="text-base-300 mt-2 flex items-center justify-between text-sm">
+		<span class="inline-flex items-center gap-2">
+			<span>Article</span>
+			<span> / </span>
+			<span>{growthStage}</span>
+		</span>
+		<span>{date}</span>
 	</p>
 	<hr class="border-base-200 mt-1" />
 
