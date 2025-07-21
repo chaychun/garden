@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Article Test - Two Column Layout">
+	<div class="min-h-screen bg-gray-50">
+		<!-- Header -->
+		<header class="border-b bg-white">
+			<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+				<h1 class="text-3xl font-bold text-gray-900">Article Test Page</h1>
+				<p class="mt-2 text-gray-600">Two-column layout with responsive footnotes</p>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+			<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+				<!-- Main Content Column -->
+				<article class="lg:col-span-2 prose prose-lg max-w-none">
+					<h2 class="text-4xl font-bold text-gray-900 mb-8">
+						Understanding the Two-Column Layout Pattern
+					</h2>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						This article demonstrates a sophisticated layout pattern where the main content flows in the left column while footnotes and supplementary information appear in the right column on desktop devices. This creates a reading experience that minimizes the need to scroll back and forth between content and references.
+					</p>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						The key insight behind this design is that readers can maintain their focus on the main narrative while having immediate access to supporting information. This is particularly valuable for academic or technical content where citations and explanations are frequent.
+					</p>
+
+					<h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
+						The Mobile Experience
+					</h3>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						On mobile devices, the layout gracefully adapts to a single-column format. All footnotes are collected at the bottom of the article, ensuring that the content remains readable and accessible regardless of screen size. This responsive behavior is crucial for modern web design.
+					</p>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						The transition between desktop and mobile layouts is handled through CSS Grid and media queries, allowing for a seamless experience across all devices. This approach ensures that the content remains the primary focus while maintaining the utility of supplementary information.
+					</p>
+
+					<h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
+						Implementation Details
+					</h3>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						The layout uses CSS Grid with a 2:1 ratio on desktop (two columns for content, one for footnotes). Footnotes are positioned using CSS Grid areas and order properties to ensure they appear in the correct location relative to their references in the main text.
+					</p>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						Each footnote is marked with a superscript number in the main text, and the corresponding footnote content appears in the right column at the same vertical position. On mobile, these footnotes are reordered to appear at the bottom of the article.
+					</p>
+
+					<div class="bg-blue-50 border-l-4 border-blue-400 p-6 my-8">
+						<p class="text-lg text-blue-800">
+							<strong>Note:</strong> This layout pattern is inspired by Andy Matuschak's prompts page, which demonstrates an elegant solution to the perennial problem of footnote placement in digital reading experiences.
+						</p>
+					</div>
+
+					<p class="text-xl text-gray-700 leading-relaxed mb-6">
+						The success of this pattern lies in its ability to maintain the flow of reading while providing immediate access to supplementary information. It represents a thoughtful approach to digital typography and layout design that prioritizes both readability and functionality.
+					</p>
+				</article>
+
+				<!-- Footnotes Column (Desktop) -->
+				<aside class="hidden lg:block space-y-6">
+					<div class="sticky top-8">
+						<h4 class="text-lg font-semibold text-gray-700 mb-4">Footnotes</h4>
+						<div class="space-y-4 text-sm text-gray-600">
+							<div id="footnote-1" class="p-4 bg-white rounded-lg border border-gray-200">
+								<p><strong>1.</strong> This footnote appears in the right column on desktop and demonstrates how supplementary information can be positioned alongside the main content without disrupting the reading flow.</p>
+							</div>
+							<div id="footnote-2" class="p-4 bg-white rounded-lg border border-gray-200">
+								<p><strong>2.</strong> The responsive behavior ensures that on mobile devices, all footnotes are collected at the bottom of the article, maintaining readability across all screen sizes.</p>
+							</div>
+							<div id="footnote-3" class="p-4 bg-white rounded-lg border border-gray-200">
+								<p><strong>3.</strong> CSS Grid provides the foundation for this layout, with media queries handling the transition between desktop and mobile views.</p>
+							</div>
+							<div id="footnote-4" class="p-4 bg-white rounded-lg border border-gray-200">
+								<p><strong>4.</strong> This pattern is particularly effective for academic, technical, or reference-heavy content where readers frequently need to consult supplementary information.</p>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</div>
+
+			<!-- Mobile Footnotes (Hidden on Desktop) -->
+			<div class="lg:hidden mt-12">
+				<h4 class="text-xl font-semibold text-gray-700 mb-6">Footnotes</h4>
+				<div class="space-y-4">
+					<div class="p-4 bg-white rounded-lg border border-gray-200">
+						<p class="text-gray-700"><strong>1.</strong> This footnote appears in the right column on desktop and demonstrates how supplementary information can be positioned alongside the main content without disrupting the reading flow.</p>
+					</div>
+					<div class="p-4 bg-white rounded-lg border border-gray-200">
+						<p class="text-gray-700"><strong>2.</strong> The responsive behavior ensures that on mobile devices, all footnotes are collected at the bottom of the article, maintaining readability across all screen sizes.</p>
+					</div>
+					<div class="p-4 bg-white rounded-lg border border-gray-200">
+						<p class="text-gray-700"><strong>3.</strong> CSS Grid provides the foundation for this layout, with media queries handling the transition between desktop and mobile views.</p>
+					</div>
+					<div class="p-4 bg-white rounded-lg border border-gray-200">
+						<p class="text-gray-700"><strong>4.</strong> This pattern is particularly effective for academic, technical, or reference-heavy content where readers frequently need to consult supplementary information.</p>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</BaseLayout>
