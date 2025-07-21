@@ -1,0 +1,55 @@
+---
+import Block from "@/components/Block.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	date: string;
+	link: string;
+	growthStage?: "Seedling" | "Budding" | "Evergreen";
+	previewImage?: string;
+	position?: "top" | "bottom";
+}
+
+const {
+	title,
+	description,
+	date,
+	link,
+	growthStage = "Seedling",
+	previewImage,
+	position = "top",
+} = Astro.props;
+---
+
+<Block
+	class:list={[
+		"flex flex-col p-6 md:max-w-[360px]",
+		"mb-12 md:mb-0",
+		position === "top" && "md:justify-start",
+		position === "bottom" && "md:justify-end",
+	]}
+>
+	<p class="font-switzer text-base-300 text-sm">
+		{date}
+	</p>
+	<h2 class="font-cabinet text-base-900 mt-2 text-4xl leading-none font-medium">
+		{title}
+	</h2>
+	<p class="text-base-300 mt-2 inline-flex items-center gap-2 text-sm">
+		<span>Article</span>
+		<span> / </span>
+		<span>{growthStage}</span>
+	</p>
+	<hr class="border-base-200 mt-1" />
+
+	{
+		previewImage && (
+			<img src={previewImage} alt={title} class="mt-4 h-auto w-full" />
+		)
+	}
+	<p class="text-base-500 mt-4 leading-tight font-light">
+		{description}
+	</p>
+	<a href={link} class="text-base-700 mt-2 font-light underline">Read more</a>
+</Block>
