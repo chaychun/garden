@@ -3,6 +3,8 @@
 @theme inline {
 	--font-sans: var(--font-switzer);
 	--font-cabinet: var(--font-cabinet);
+	--font-tabular: var(--font-tabular);
+	--font-mono: var(--font-tabular);
 }
 
 @theme {
