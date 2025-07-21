@@ -8,6 +8,7 @@ export default function Sidebar({ children }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [hasScrolledFromStart, setHasScrolledFromStart] = useState(false);
   const scrollContainerRef = useRef<HTMLElement | null>(null);
 
   // Check if we're on mobile
@@ -45,16 +46,26 @@ export default function Sidebar({ children }: SidebarProps) {
     };
   }, []);
 
-  // Handle horizontal scroll to collapse sidebar (desktop only)
+  // Handle horizontal scroll behavior (desktop only)
   useEffect(() => {
     if (isMobile || !scrollContainerRef.current) return;
 
     const handleScroll = () => {
       const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
       
-      // If we start scrolling horizontally, collapse the sidebar
-      if (scrollLeft > 0 && isExpanded) {
-        setIsExpanded(false);
+      // If we're at the start (scrollLeft === 0)
+      if (scrollLeft === 0) {
+        setHasScrolledFromStart(false);
+        // Reopen sidebar when back at start
+        if (!isExpanded) {
+          setIsExpanded(true);
+        }
+      } else {
+        // If we start scrolling from the start position, collapse the sidebar
+        if (!hasScrolledFromStart && isExpanded) {
+          setHasScrolledFromStart(true);
+          setIsExpanded(false);
+        }
       }
     };
 
@@ -64,10 +75,14 @@ export default function Sidebar({ children }: SidebarProps) {
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll);
     };
-  }, [isExpanded, isMobile]);
+  }, [isExpanded, isMobile, hasScrolledFromStart]);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
+    // If manually expanding, reset the scroll tracking
+    if (!isExpanded) {
+      setHasScrolledFromStart(false);
+    }
   };
 
   const toggleMobileMenu = () => {
