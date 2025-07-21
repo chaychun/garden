@@ -104,10 +104,10 @@ export default function Sidebar({ children }: SidebarProps) {
 
   // Desktop sidebar
   return (
-    <div className="flex w-full min-h-screen">
-      {/* Sidebar */}
+    <>
+      {/* Fixed Sidebar */}
       <div
-        className={`sticky top-0 h-screen bg-green-500 transition-all duration-300 flex-shrink-0 shadow-lg ${
+        className={`fixed top-0 left-0 h-screen bg-green-500 transition-all duration-300 z-30 shadow-lg ${
           isExpanded ? 'w-[400px]' : 'w-16'
         }`}
       >
@@ -142,10 +142,14 @@ export default function Sidebar({ children }: SidebarProps) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 min-w-0 bg-gray-50">
+      {/* Main content with left margin to account for sidebar */}
+      <div 
+        className={`transition-all duration-300 bg-gray-50 min-h-screen ${
+          isExpanded ? 'ml-[400px]' : 'ml-16'
+        }`}
+      >
         {children}
       </div>
-    </div>
+    </>
   );
 }
