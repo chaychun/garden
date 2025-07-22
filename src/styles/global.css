@@ -20,3 +20,16 @@
 	--color-base-900: #353534;
 	--color-base-950: #262626;
 }
+
+@utility text-vertical {
+	writing-mode: sideways-lr;
+}
+
+@utility text-vertical-lr {
+	writing-mode: vertical-lr;
+}
+
+@utility text-horizontal {
+	writing-mode: horizontal-tb;
+	text-orientation: mixed;
+}

@@ -1,11 +1,13 @@
-import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface SidebarProps {
 	scrollAreaId: string;
+	title: string;
 }
 
-export default function Sidebar({ scrollAreaId }: SidebarProps) {
+export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 	const [isExpanded, setIsExpanded] = useState(true);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
@@ -135,41 +137,47 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 	// Desktop sidebar - now as a flex item instead of absolute positioned
 	return (
 		<div
-			className={`h-screen bg-green-500 shadow-lg ${
-				isExpanded ? "w-[400px]" : "w-16"
-			}`}
+			className={cn(
+				"bg-base-50 flex h-screen flex-col justify-between",
+				isExpanded ? "w-[400px]" : "w-16 items-center p-4",
+			)}
 		>
-			<div className="h-full p-6 text-white">
-				{isExpanded ? (
-					<div>
-						<div className="mb-4 text-lg font-bold">Sidebar</div>
-						<div className="mb-4 text-sm">Expanded content goes here</div>
-						<div className="mb-4 text-sm">
-							This is a test sidebar with green background
-						</div>
+			{isExpanded ? (
+				<>
+					<div className="flex w-full items-center justify-between p-4">
+						<div className="text-base-900 text-lg font-semibold">Chayut</div>
+						<a href="/" className="text-base-500 text-sm underline">
+							About
+						</a>
+					</div>
+					<h1 className="text-base-900 font-cabinet p-6 text-4xl font-medium">
+						{title}
+					</h1>
+					<div className="flex w-full items-center justify-end p-4">
 						<button
 							onClick={toggleSidebar}
-							className="mt-4 rounded bg-white px-3 py-1 text-sm text-green-500 hover:bg-gray-100"
+							className="text-base-500 flex items-center justify-center rounded-md"
+							aria-label="Toggle menu"
 						>
-							Collapse
+							<ArrowLeft size={20} />
 						</button>
 					</div>
-				) : (
-					<div className="flex h-full items-center justify-center">
-						<div className="writing-mode-vertical text-center">
-							<div className="-rotate-90 transform font-bold whitespace-nowrap">
-								Sidebar
-							</div>
-							<button
-								onClick={toggleSidebar}
-								className="mt-4 block -rotate-90 transform rounded bg-white px-2 py-1 text-xs text-green-500 hover:bg-gray-100"
-							>
-								Expand
-							</button>
-						</div>
+				</>
+			) : (
+				<>
+					<div className="h-4 w-4" />
+					<div className="text-vertical text-base-900 font-cabinet p-6 text-2xl font-medium">
+						{title}
 					</div>
-				)}
-			</div>
+					<button
+						onClick={toggleSidebar}
+						className="text-base-500 flex items-center justify-center rounded-md"
+						aria-label="Toggle menu"
+					>
+						<ArrowRight size={20} />
+					</button>
+				</>
+			)}
 		</div>
 	);
 }
