@@ -1,11 +1,13 @@
-import { Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 interface SidebarProps {
 	scrollAreaId: string;
+	title: string;
 }
 
-export default function Sidebar({ scrollAreaId }: SidebarProps) {
+export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 	const [isExpanded, setIsExpanded] = useState(true);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
@@ -23,7 +25,6 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 		return () => window.removeEventListener("resize", checkMobile);
 	}, []);
 
-	// Find the scroll container (ScrollArea viewport)
 	useEffect(() => {
 		const findScrollContainer = () => {
 			const scrollArea = document.querySelector(
@@ -48,7 +49,6 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 		};
 	}, [scrollAreaId]);
 
-	// Scroll-based sidebar toggle
 	useEffect(() => {
 		if (isMobile || !scrollContainerRef.current) return;
 
@@ -99,6 +99,12 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 		setIsMobileMenuOpen(!isMobileMenuOpen);
 	};
 
+	const defaultTransition = {
+		type: "spring" as const,
+		duration: 0.8,
+		bounce: 0,
+	};
+
 	if (isMobile) {
 		return (
 			<>
@@ -132,44 +138,82 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 		);
 	}
 
-	// Desktop sidebar - now as a flex item instead of absolute positioned
 	return (
-		<div
-			className={`h-screen bg-green-500 shadow-lg ${
-				isExpanded ? "w-[400px]" : "w-16"
-			}`}
-		>
-			<div className="h-full p-6 text-white">
-				{isExpanded ? (
-					<div>
-						<div className="mb-4 text-lg font-bold">Sidebar</div>
-						<div className="mb-4 text-sm">Expanded content goes here</div>
-						<div className="mb-4 text-sm">
-							This is a test sidebar with green background
-						</div>
-						<button
-							onClick={toggleSidebar}
-							className="mt-4 rounded bg-white px-3 py-1 text-sm text-green-500 hover:bg-gray-100"
+		<MotionConfig transition={defaultTransition}>
+			<motion.div
+				className="bg-base-50 flex h-screen flex-col justify-between overflow-hidden"
+				initial={{ width: 400 }}
+				animate={{
+					width: isExpanded ? 400 : 64,
+				}}
+			>
+				<AnimatePresence mode="popLayout">
+					{isExpanded ? (
+						<motion.div
+							className="flex h-full w-[400px] flex-col justify-between"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							key="expanded"
 						>
-							Collapse
-						</button>
-					</div>
-				) : (
-					<div className="flex h-full items-center justify-center">
-						<div className="writing-mode-vertical text-center">
-							<div className="-rotate-90 transform font-bold whitespace-nowrap">
-								Sidebar
+							<div className="flex w-full items-center justify-between p-4">
+								<a href="/" className="text-base-900 text-lg font-semibold">
+									Chayut
+								</a>
+								<a
+									href="/"
+									className="text-base-500 text-sm underline hover:opacity-75"
+								>
+									About
+								</a>
 							</div>
-							<button
+							<h1 className="text-base-900 font-cabinet p-6 text-4xl font-medium">
+								{title}
+							</h1>
+							<div className="flex w-full items-center justify-end p-4">
+								<motion.button
+									onClick={toggleSidebar}
+									className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
+									aria-label="Toggle menu"
+									initial={{ opacity: 0, x: 40 }}
+									animate={{ opacity: 1, x: 0 }}
+									exit={{ opacity: 0, x: 40 }}
+									whileHover={{ x: -3 }}
+								>
+									<ArrowLeft size={20} />
+								</motion.button>
+							</div>
+						</motion.div>
+					) : (
+						<motion.div
+							className="flex h-full w-16 flex-col items-center justify-between p-4"
+							initial={{ opacity: 0, x: -40 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -40 }}
+							key="collapsed"
+						>
+							<div className="h-4 w-4" />
+							<div
 								onClick={toggleSidebar}
-								className="mt-4 block -rotate-90 transform rounded bg-white px-2 py-1 text-xs text-green-500 hover:bg-gray-100"
+								className="text-vertical text-base-900 font-cabinet cursor-pointer p-6 text-2xl font-medium select-none"
 							>
-								Expand
-							</button>
-						</div>
-					</div>
-				)}
-			</div>
-		</div>
+								{title}
+							</div>
+							<motion.button
+								onClick={toggleSidebar}
+								className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
+								aria-label="Toggle menu"
+								initial={{ opacity: 0, x: -40 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: -40 }}
+								whileHover={{ x: 3 }}
+							>
+								<ArrowRight size={20} />
+							</motion.button>
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</motion.div>
+		</MotionConfig>
 	);
 }
