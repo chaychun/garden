@@ -119,6 +119,7 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		opacity: 0;
 		transition: opacity 0.2s ease;
 		pointer-events: none;
+		display: none;
 	}
 
 	.scroll-area:hover .scroll-area-scrollbar {
@@ -130,12 +131,14 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		top: 2px;
 		right: 2px;
 		bottom: 2px;
+		width: 8px;
 	}
 
 	.scroll-area-scrollbar-x {
 		left: 2px;
 		right: 2px;
 		bottom: 2px;
+		height: 8px;
 	}
 
 	[dir="rtl"] .scroll-area-scrollbar-y {
@@ -154,13 +157,13 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 	.scroll-area-scrollbar-y .scroll-area-thumb {
 		width: 4px;
 		transform: translateY(0);
-		margin: 1px 0;
+		margin: 2px;
 	}
 
 	.scroll-area-scrollbar-x .scroll-area-thumb {
 		height: 4px;
 		transform: translateX(0);
-		margin: 0 1px;
+		margin: 2px;
 	}
 
 	.scroll-area-scrollbar[data-state="hidden"] {
@@ -282,23 +285,23 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		}
 
 		updateScrollbars(): void {
-			const contentRect =
-				this.viewport.firstElementChild?.getBoundingClientRect();
-			const viewportRect = this.viewport.getBoundingClientRect();
-
-			if (!contentRect) return;
-
-			const hasVerticalScroll = contentRect.height > viewportRect.height;
-			const hasHorizontalScroll = contentRect.width > viewportRect.width;
+			const hasVerticalScroll = this.viewport.scrollHeight > this.viewport.offsetHeight;
+			const hasHorizontalScroll = this.viewport.scrollWidth > this.viewport.offsetWidth;
 
 			if (this.scrollbarY) {
 				this.scrollbarY.style.display = hasVerticalScroll ? "block" : "none";
-				this.updateThumbSize("y");
+				if (hasVerticalScroll) {
+					this.updateThumbSize("y");
+					this.updateThumbPositions();
+				}
 			}
 
 			if (this.scrollbarX) {
 				this.scrollbarX.style.display = hasHorizontalScroll ? "block" : "none";
-				this.updateThumbSize("x");
+				if (hasHorizontalScroll) {
+					this.updateThumbSize("x");
+					this.updateThumbPositions();
+				}
 			}
 		}
 
@@ -331,27 +334,25 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		}
 
 		updateThumbPositions(): void {
-			if (this.thumbY && this.scrollbarY) {
+			if (this.thumbY && this.scrollbarY && this.scrollbarY.style.display !== "none") {
 				const scrollTop = this.viewport.scrollTop;
 				const maxScrollTop =
 					this.viewport.scrollHeight - this.viewport.offsetHeight;
 				const scrollbarHeight = this.scrollbarY.offsetHeight;
 				const thumbHeight = this.thumbY.offsetHeight;
-				const margin = 2; // 1px top + 1px bottom
-				const maxThumbTop = scrollbarHeight - thumbHeight - margin;
+				const maxThumbTop = scrollbarHeight - thumbHeight;
 				const thumbTop =
 					maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTop : 0;
 				this.thumbY.style.transform = `translateY(${thumbTop}px)`;
 			}
 
-			if (this.thumbX && this.scrollbarX) {
+			if (this.thumbX && this.scrollbarX && this.scrollbarX.style.display !== "none") {
 				const scrollLeft = this.viewport.scrollLeft;
 				const maxScrollLeft =
 					this.viewport.scrollWidth - this.viewport.offsetWidth;
 				const scrollbarWidth = this.scrollbarX.offsetWidth;
 				const thumbWidth = this.thumbX.offsetWidth;
-				const margin = 2; // 1px left + 1px right
-				const maxThumbLeft = scrollbarWidth - thumbWidth - margin;
+				const maxThumbLeft = scrollbarWidth - thumbWidth;
 				const thumbLeft =
 					maxScrollLeft > 0 ? (scrollLeft / maxScrollLeft) * maxThumbLeft : 0;
 				this.thumbX.style.transform = `translateX(${thumbLeft}px)`;
@@ -435,9 +436,9 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 				this.hideTimer = null;
 			}
 
-			if (this.scrollbarY)
+			if (this.scrollbarY && this.scrollbarY.style.display !== "none")
 				this.scrollbarY.setAttribute("data-state", "visible");
-			if (this.scrollbarX)
+			if (this.scrollbarX && this.scrollbarX.style.display !== "none")
 				this.scrollbarX.setAttribute("data-state", "visible");
 		}
 
