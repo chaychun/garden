@@ -454,19 +454,13 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 	// Track initialized scroll areas to prevent duplicates
 	const initializedScrollAreas = new WeakSet();
 
-	function initScrollAreas(): void {
+	document.addEventListener("astro:page-load", () => {
 		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
 		scrollAreas.forEach((element) => {
-			// Check if this element has already been initialized
 			if (!initializedScrollAreas.has(element)) {
 				initializedScrollAreas.add(element);
 				new ScrollArea(element as HTMLElement);
 			}
 		});
-	}
-
-	// Initialize scroll areas
-	document.addEventListener("DOMContentLoaded", initScrollAreas);
-	document.addEventListener("astro:page-load", initScrollAreas);
-	document.addEventListener("astro:after-swap", initScrollAreas);
+	});
 </script>
