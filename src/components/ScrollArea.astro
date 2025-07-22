@@ -224,7 +224,20 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		init(): void {
 			if (this.hideScrollbar) return;
 
-			this.updateScrollbars();
+			// Use requestAnimationFrame to ensure layout is complete
+			requestAnimationFrame(() => {
+				this.updateScrollbars();
+			});
+
+			// Additional updates to handle late-rendering content (images, fonts, etc.)
+			setTimeout(() => {
+				this.updateScrollbars();
+			}, 100);
+
+			setTimeout(() => {
+				this.updateScrollbars();
+			}, 500);
+
 			this.bindEvents();
 			this.setupResizeObserver();
 		}
@@ -454,18 +467,27 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 
 	// Initialize scroll areas when the DOM is ready
 	document.addEventListener("DOMContentLoaded", () => {
-		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
-		scrollAreas.forEach((element) => {
-			new ScrollArea(element as HTMLElement);
-		});
+		initScrollAreas();
 	});
 
 	// Handle dynamically added scroll areas
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", initScrollAreas);
 	} else {
-		initScrollAreas();
+		// DOM is already ready, initialize immediately
+		setTimeout(initScrollAreas, 0);
 	}
+
+	// Also update scrollbars when window loads (for images, fonts, etc.)
+	window.addEventListener("load", () => {
+		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
+		scrollAreas.forEach((element) => {
+			const instance = (element as any).scrollAreaInstance;
+			if (instance && typeof instance.updateScrollbars === "function") {
+				instance.updateScrollbars();
+			}
+		});
+	});
 
 	function initScrollAreas(): void {
 		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
