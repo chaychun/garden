@@ -7,8 +7,9 @@ import Sidebar from "@/components/Sidebar";
 ---
 
 <BaseLayout>
-	<ScrollArea class="h-screen w-screen" id="main-scroll">
-		<Sidebar client:load scrollAreaId="main-scroll">
+	<div class="flex h-screen w-screen">
+		<Sidebar client:load scrollAreaId="main-scroll" />
+		<ScrollArea class="h-full flex-1" id="main-scroll">
 			<div
 				class="flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
 			>
@@ -49,6 +50,6 @@ import Sidebar from "@/components/Sidebar";
 					position="bottom"
 				/>
 			</div>
-		</Sidebar>
-	</ScrollArea>
+		</ScrollArea>
+	</div>
 </BaseLayout>
