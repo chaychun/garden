@@ -451,29 +451,16 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		}
 	}
 
-	// Initialize scroll areas when the DOM is ready
-	document.addEventListener("DOMContentLoaded", () => {
+	// Track initialized scroll areas to prevent duplicates
+	const initializedScrollAreas = new WeakSet();
+
+	document.addEventListener("astro:page-load", () => {
 		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
 		scrollAreas.forEach((element) => {
-			new ScrollArea(element as HTMLElement);
-		});
-	});
-
-	// Handle dynamically added scroll areas
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initScrollAreas);
-	} else {
-		initScrollAreas();
-	}
-
-	function initScrollAreas(): void {
-		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
-		scrollAreas.forEach((element) => {
-			if (!(element as any).scrollAreaInstance) {
-				(element as any).scrollAreaInstance = new ScrollArea(
-					element as HTMLElement,
-				);
+			if (!initializedScrollAreas.has(element)) {
+				initializedScrollAreas.add(element);
+				new ScrollArea(element as HTMLElement);
 			}
 		});
-	}
+	});
 </script>
