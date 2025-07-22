@@ -1,3 +1,4 @@
+import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface SidebarProps {
@@ -101,18 +102,30 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 	if (isMobile) {
 		return (
 			<>
-				{/* Mobile hamburger button */}
-				<button
-					onClick={toggleMobileMenu}
-					className="fixed top-6 right-6 z-50 rounded bg-blue-500 p-2 text-white shadow-lg"
-				>
-					{isMobileMenuOpen ? "✕" : "☰"}
-				</button>
+				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between bg-blue-500 px-6 py-4">
+					<h1 className="text-white">Test top bar</h1>
+					<button
+						onClick={toggleMobileMenu}
+						className="flex items-center justify-center rounded-md text-white"
+						aria-label="Toggle menu"
+					>
+						{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+					</button>
+				</div>
 
-				{/* Mobile full-screen menu */}
 				{isMobileMenuOpen && (
-					<div className="fixed inset-0 z-40 bg-blue-500 p-6">
-						<div className="text-lg text-white">Mobile Menu Content</div>
+					<div className="fixed inset-0 z-40">
+						<div className="mx-auto h-full w-full max-w-[528px] bg-blue-500 pt-[72px]">
+							<div className="h-full p-6 text-white">
+								<div className="mb-4 text-lg font-bold">Sidebar</div>
+								<div className="mb-4 text-sm">
+									Mobile menu content goes here
+								</div>
+								<div className="mb-4 text-sm">
+									This is the expanded mobile sidebar
+								</div>
+							</div>
+						</div>
 					</div>
 				)}
 			</>
@@ -122,7 +135,7 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 	// Desktop sidebar - now as a flex item instead of absolute positioned
 	return (
 		<div
-			className={`h-screen bg-green-500 shadow-lg transition-all duration-500 ${
+			className={`h-screen bg-green-500 shadow-lg ${
 				isExpanded ? "w-[400px]" : "w-16"
 			}`}
 		>
@@ -136,7 +149,7 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 						</div>
 						<button
 							onClick={toggleSidebar}
-							className="mt-4 rounded bg-white px-3 py-1 text-sm text-green-500 transition-colors hover:bg-gray-100"
+							className="mt-4 rounded bg-white px-3 py-1 text-sm text-green-500 hover:bg-gray-100"
 						>
 							Collapse
 						</button>
@@ -149,7 +162,7 @@ export default function Sidebar({ scrollAreaId }: SidebarProps) {
 							</div>
 							<button
 								onClick={toggleSidebar}
-								className="mt-4 block -rotate-90 transform rounded bg-white px-2 py-1 text-xs text-green-500 transition-colors hover:bg-gray-100"
+								className="mt-4 block -rotate-90 transform rounded bg-white px-2 py-1 text-xs text-green-500 hover:bg-gray-100"
 							>
 								Expand
 							</button>
