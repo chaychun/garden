@@ -1,173 +1,174 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface SidebarProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
+	scrollAreaId: string;
 }
 
-export default function Sidebar({ children }: SidebarProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [canCollapseByScroll, setCanCollapseByScroll] = useState(true);
-  const scrollContainerRef = useRef<HTMLElement | null>(null);
+export default function Sidebar({ children, scrollAreaId }: SidebarProps) {
+	const [isExpanded, setIsExpanded] = useState(true);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
+	const [canCollapseByScroll, setCanCollapseByScroll] = useState(true);
+	const scrollContainerRef = useRef<HTMLElement | null>(null);
 
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+	// Check if we're on mobile
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
 
-  // Find the scroll container (ScrollArea viewport)
-  useEffect(() => {
-    const findScrollContainer = () => {
-      const scrollArea = document.querySelector('[data-scroll-area-id]');
-      if (scrollArea) {
-        const viewport = scrollArea.querySelector('.scroll-area-viewport');
-        if (viewport) {
-          scrollContainerRef.current = viewport as HTMLElement;
-        }
-      }
-    };
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
 
-    // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', findScrollContainer);
-    } else {
-      findScrollContainer();
-    }
+	// Find the scroll container (ScrollArea viewport)
+	useEffect(() => {
+		const findScrollContainer = () => {
+			const scrollArea = document.querySelector(
+				`[data-scroll-area-id="${scrollAreaId}"]`,
+			);
+			if (scrollArea) {
+				const viewport = scrollArea.querySelector(".scroll-area-viewport");
+				if (viewport) {
+					scrollContainerRef.current = viewport as HTMLElement;
+				}
+			}
+		};
 
-    return () => {
-      document.removeEventListener('DOMContentLoaded', findScrollContainer);
-    };
-  }, []);
+		// Wait for DOM to be ready
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", findScrollContainer);
+		} else {
+			findScrollContainer();
+		}
 
-  // Handle horizontal scroll behavior (desktop only)
-  useEffect(() => {
-    if (isMobile || !scrollContainerRef.current) return;
+		return () => {
+			document.removeEventListener("DOMContentLoaded", findScrollContainer);
+		};
+	}, [scrollAreaId]);
 
-    const handleScroll = () => {
-      const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
-      
-      // If we're at the start (scrollLeft === 0)
-      if (scrollLeft === 0) {
-        // Reopen sidebar when back at start
-        if (!isExpanded) {
-          setIsExpanded(true);
-        }
-        // Re-enable scroll-based collapse when at start
-        setCanCollapseByScroll(true);
-      } else {
-        // Only collapse if we're allowed to and the sidebar is expanded
-        if (canCollapseByScroll && isExpanded) {
-          setIsExpanded(false);
-          // Disable further scroll-based collapse until back at start
-          setCanCollapseByScroll(false);
-        }
-      }
-    };
+	// Handle horizontal scroll behavior (desktop only)
+	useEffect(() => {
+		if (isMobile || !scrollContainerRef.current) return;
 
-    const scrollContainer = scrollContainerRef.current;
-    scrollContainer.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll);
-    };
-  }, [isExpanded, isMobile, canCollapseByScroll]);
+		const handleScroll = () => {
+			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
 
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded);
-    // If manually expanding, only re-enable scroll collapse if at start
-    if (!isExpanded) {
-      const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
-      setCanCollapseByScroll(scrollLeft === 0);
-    }
-  };
+			// If we're at the start (scrollLeft === 0)
+			if (scrollLeft === 0) {
+				// Reopen sidebar when back at start
+				if (!isExpanded) {
+					setIsExpanded(true);
+				}
+				// Re-enable scroll-based collapse when at start
+				setCanCollapseByScroll(true);
+			} else {
+				// Only collapse if we're allowed to and the sidebar is expanded
+				if (canCollapseByScroll && isExpanded) {
+					setIsExpanded(false);
+					// Disable further scroll-based collapse until back at start
+					setCanCollapseByScroll(false);
+				}
+			}
+		};
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+		const scrollContainer = scrollContainerRef.current;
+		scrollContainer.addEventListener("scroll", handleScroll);
 
-  if (isMobile) {
-    return (
-      <>
-        {/* Mobile hamburger button */}
-        <button
-          onClick={toggleMobileMenu}
-          className="fixed top-6 right-6 z-50 p-2 bg-blue-500 text-white rounded shadow-lg"
-        >
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
+		return () => {
+			scrollContainer.removeEventListener("scroll", handleScroll);
+		};
+	}, [isExpanded, isMobile, canCollapseByScroll]);
 
-        {/* Mobile full-screen menu */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-40 bg-blue-500 p-6">
-            <div className="text-white text-lg">
-              Mobile Menu Content
-            </div>
-          </div>
-        )}
+	const toggleSidebar = () => {
+		setIsExpanded(!isExpanded);
+		// If manually expanding, only re-enable scroll collapse if at start
+		if (!isExpanded) {
+			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
+			setCanCollapseByScroll(scrollLeft === 0);
+		}
+	};
 
-        {/* Main content */}
-        <div className="w-full">
-          {children}
-        </div>
-      </>
-    );
-  }
+	const toggleMobileMenu = () => {
+		setIsMobileMenuOpen(!isMobileMenuOpen);
+	};
 
-  // Desktop sidebar
-  return (
-    <>
-      {/* Fixed Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-screen bg-green-500 transition-all duration-300 z-30 shadow-lg ${
-          isExpanded ? 'w-[400px]' : 'w-16'
-        }`}
-      >
-        <div className="p-6 text-white h-full">
-          {isExpanded ? (
-            <div>
-              <div className="text-lg font-bold mb-4">Sidebar</div>
-              <div className="text-sm mb-4">Expanded content goes here</div>
-              <div className="text-sm mb-4">This is a test sidebar with green background</div>
-              <button
-                onClick={toggleSidebar}
-                className="mt-4 px-3 py-1 bg-white text-green-500 rounded text-sm hover:bg-gray-100 transition-colors"
-              >
-                Collapse
-              </button>
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center">
-              <div className="writing-mode-vertical text-center">
-                <div className="transform -rotate-90 whitespace-nowrap font-bold">
-                  Sidebar
-                </div>
-                <button
-                  onClick={toggleSidebar}
-                  className="mt-4 px-2 py-1 bg-white text-green-500 rounded text-xs transform -rotate-90 block hover:bg-gray-100 transition-colors"
-                >
-                  Expand
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+	if (isMobile) {
+		return (
+			<>
+				{/* Mobile hamburger button */}
+				<button
+					onClick={toggleMobileMenu}
+					className="fixed top-6 right-6 z-50 rounded bg-blue-500 p-2 text-white shadow-lg"
+				>
+					{isMobileMenuOpen ? "✕" : "☰"}
+				</button>
 
-      {/* Main content with left margin to account for sidebar */}
-      <div 
-        className={`transition-all duration-300 bg-gray-50 min-h-screen ${
-          isExpanded ? 'ml-[400px]' : 'ml-16'
-        }`}
-      >
-        {children}
-      </div>
-    </>
-  );
+				{/* Mobile full-screen menu */}
+				{isMobileMenuOpen && (
+					<div className="fixed inset-0 z-40 bg-blue-500 p-6">
+						<div className="text-lg text-white">Mobile Menu Content</div>
+					</div>
+				)}
+
+				{/* Main content */}
+				<div className="w-full">{children}</div>
+			</>
+		);
+	}
+
+	// Desktop sidebar
+	return (
+		<>
+			{/* Fixed Sidebar */}
+			<div
+				className={`fixed top-0 left-0 z-30 h-screen bg-green-500 shadow-lg transition-all duration-300 ${
+					isExpanded ? "w-[400px]" : "w-16"
+				}`}
+			>
+				<div className="h-full p-6 text-white">
+					{isExpanded ? (
+						<div>
+							<div className="mb-4 text-lg font-bold">Sidebar</div>
+							<div className="mb-4 text-sm">Expanded content goes here</div>
+							<div className="mb-4 text-sm">
+								This is a test sidebar with green background
+							</div>
+							<button
+								onClick={toggleSidebar}
+								className="mt-4 rounded bg-white px-3 py-1 text-sm text-green-500 transition-colors hover:bg-gray-100"
+							>
+								Collapse
+							</button>
+						</div>
+					) : (
+						<div className="flex h-full items-center justify-center">
+							<div className="writing-mode-vertical text-center">
+								<div className="-rotate-90 transform font-bold whitespace-nowrap">
+									Sidebar
+								</div>
+								<button
+									onClick={toggleSidebar}
+									className="mt-4 block -rotate-90 transform rounded bg-white px-2 py-1 text-xs text-green-500 transition-colors hover:bg-gray-100"
+								>
+									Expand
+								</button>
+							</div>
+						</div>
+					)}
+				</div>
+			</div>
+
+			{/* Main content with left margin to account for sidebar */}
+			<div
+				className={`min-h-screen bg-gray-50 transition-all duration-300 ${
+					isExpanded ? "ml-[400px]" : "ml-16"
+				}`}
+			>
+				{children}
+			</div>
+		</>
+	);
 }

@@ -11,6 +11,7 @@ export interface Props {
 	scrollbarStyle?: string;
 	thumbClass?: string;
 	thumbStyle?: string;
+	id?: string;
 }
 
 const {
@@ -25,9 +26,10 @@ const {
 	scrollbarStyle = "",
 	thumbClass = "",
 	thumbStyle = "",
+	id,
 } = Astro.props;
 
-const uniqueId = Math.random().toString(36).substring(2, 9);
+const uniqueId = id || Math.random().toString(36).substring(2, 9);
 ---
 
 <div
