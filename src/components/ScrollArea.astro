@@ -465,22 +465,8 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		});
 	}
 
-	// Initialize scroll areas when the DOM is ready
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", () => {
-			// Small delay to ensure Astro components are fully rendered
-			setTimeout(initScrollAreas, 0);
-		});
-	} else {
-		// If DOM is already loaded, initialize with a small delay
-		setTimeout(initScrollAreas, 0);
-	}
-
-	// Also initialize on Astro page transitions (if using View Transitions)
+	// Initialize scroll areas
+	document.addEventListener("DOMContentLoaded", initScrollAreas);
 	document.addEventListener("astro:page-load", initScrollAreas);
-	
-	// Handle View Transitions API if available
-	if (document.startViewTransition) {
-		document.addEventListener("astro:after-swap", initScrollAreas);
-	}
+	document.addEventListener("astro:after-swap", initScrollAreas);
 </script>
