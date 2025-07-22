@@ -9,10 +9,10 @@ export default function Sidebar({ children, scrollAreaId }: SidebarProps) {
 	const [isExpanded, setIsExpanded] = useState(true);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
-	const [canCollapseByScroll, setCanCollapseByScroll] = useState(true);
-	const scrollContainerRef = useRef<HTMLElement | null>(null);
 
-	// Check if we're on mobile
+	const scrollContainerRef = useRef<HTMLElement | null>(null);
+	const isManualToggleRef = useRef(false);
+
 	useEffect(() => {
 		const checkMobile = () => {
 			setIsMobile(window.innerWidth < 768);
@@ -37,7 +37,6 @@ export default function Sidebar({ children, scrollAreaId }: SidebarProps) {
 			}
 		};
 
-		// Wait for DOM to be ready
 		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", findScrollContainer);
 		} else {
@@ -49,27 +48,22 @@ export default function Sidebar({ children, scrollAreaId }: SidebarProps) {
 		};
 	}, [scrollAreaId]);
 
-	// Handle horizontal scroll behavior (desktop only)
+	// Scroll-based sidebar toggle
 	useEffect(() => {
 		if (isMobile || !scrollContainerRef.current) return;
 
 		const handleScroll = () => {
+			if (isManualToggleRef.current) return;
+
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
 
-			// If we're at the start (scrollLeft === 0)
 			if (scrollLeft === 0) {
-				// Reopen sidebar when back at start
 				if (!isExpanded) {
 					setIsExpanded(true);
 				}
-				// Re-enable scroll-based collapse when at start
-				setCanCollapseByScroll(true);
 			} else {
-				// Only collapse if we're allowed to and the sidebar is expanded
-				if (canCollapseByScroll && isExpanded) {
+				if (isExpanded) {
 					setIsExpanded(false);
-					// Disable further scroll-based collapse until back at start
-					setCanCollapseByScroll(false);
 				}
 			}
 		};
@@ -80,15 +74,25 @@ export default function Sidebar({ children, scrollAreaId }: SidebarProps) {
 		return () => {
 			scrollContainer.removeEventListener("scroll", handleScroll);
 		};
-	}, [isExpanded, isMobile, canCollapseByScroll]);
+	}, [isExpanded, isMobile]);
 
 	const toggleSidebar = () => {
-		setIsExpanded(!isExpanded);
-		// If manually expanding, only re-enable scroll collapse if at start
+		isManualToggleRef.current = true;
+
 		if (!isExpanded) {
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
-			setCanCollapseByScroll(scrollLeft === 0);
+
+			if (scrollLeft !== 0) {
+				scrollContainerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+			}
+			setIsExpanded(true);
+		} else {
+			setIsExpanded(false);
 		}
+
+		setTimeout(() => {
+			isManualToggleRef.current = false;
+		}, 600);
 	};
 
 	const toggleMobileMenu = () => {
