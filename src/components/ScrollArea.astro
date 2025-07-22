@@ -451,29 +451,36 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		}
 	}
 
-	// Initialize scroll areas when the DOM is ready
-	document.addEventListener("DOMContentLoaded", () => {
-		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
-		scrollAreas.forEach((element) => {
-			new ScrollArea(element as HTMLElement);
-		});
-	});
-
-	// Handle dynamically added scroll areas
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initScrollAreas);
-	} else {
-		initScrollAreas();
-	}
+	// Track initialized scroll areas to prevent duplicates
+	const initializedScrollAreas = new WeakSet();
 
 	function initScrollAreas(): void {
 		const scrollAreas = document.querySelectorAll("[data-scroll-area-id]");
 		scrollAreas.forEach((element) => {
-			if (!(element as any).scrollAreaInstance) {
-				(element as any).scrollAreaInstance = new ScrollArea(
-					element as HTMLElement,
-				);
+			// Check if this element has already been initialized
+			if (!initializedScrollAreas.has(element)) {
+				initializedScrollAreas.add(element);
+				new ScrollArea(element as HTMLElement);
 			}
 		});
+	}
+
+	// Initialize scroll areas when the DOM is ready
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", () => {
+			// Small delay to ensure Astro components are fully rendered
+			setTimeout(initScrollAreas, 0);
+		});
+	} else {
+		// If DOM is already loaded, initialize with a small delay
+		setTimeout(initScrollAreas, 0);
+	}
+
+	// Also initialize on Astro page transitions (if using View Transitions)
+	document.addEventListener("astro:page-load", initScrollAreas);
+	
+	// Handle View Transitions API if available
+	if (document.startViewTransition) {
+		document.addEventListener("astro:after-swap", initScrollAreas);
 	}
 </script>
