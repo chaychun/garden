@@ -57,22 +57,32 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
 
-			if (scrollLeft === 0) {
-				if (!isExpanded) {
-					setIsExpanded(true);
-				}
-			} else {
-				if (isExpanded) {
-					setIsExpanded(false);
-				}
+			if (scrollLeft > 0 && isExpanded) {
+				setIsExpanded(false);
+			}
+		};
+
+		const handleWheel = (e: WheelEvent) => {
+			if (isManualToggleRef.current) return;
+
+			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
+
+			if (scrollLeft === 0 && e.deltaX < 0 && !isExpanded) {
+				setIsExpanded(true);
+			}
+
+			if (scrollLeft === 0 && !e.shiftKey && e.deltaY < 0 && !isExpanded) {
+				setIsExpanded(true);
 			}
 		};
 
 		const scrollContainer = scrollContainerRef.current;
 		scrollContainer.addEventListener("scroll", handleScroll);
+		scrollContainer.addEventListener("wheel", handleWheel);
 
 		return () => {
 			scrollContainer.removeEventListener("scroll", handleScroll);
+			scrollContainer.removeEventListener("wheel", handleWheel);
 		};
 	}, [isExpanded, isMobile]);
 
