@@ -178,6 +178,13 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 </style>
 
 <script>
+	import { gsap } from "gsap";
+	import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+	if (typeof window !== "undefined") {
+		gsap.registerPlugin(ScrollToPlugin);
+	}
+
 	class ScrollArea {
 		private element: HTMLElement;
 		private viewport: HTMLElement;
@@ -193,6 +200,8 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		private dragStartPos: { x: number; y: number };
 		private dragStartScroll: { x: number; y: number };
 		private hideTimer: number | null;
+		private smoothScrollTween: gsap.core.Tween | null;
+		private smoothScrollTweenY: gsap.core.Tween | null;
 
 		constructor(element: HTMLElement) {
 			this.element = element;
@@ -219,6 +228,8 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 			this.dragStartPos = { x: 0, y: 0 };
 			this.dragStartScroll = { x: 0, y: 0 };
 			this.hideTimer = null;
+			this.smoothScrollTween = null;
+			this.smoothScrollTweenY = null;
 
 			this.init();
 		}
@@ -232,24 +243,106 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		}
 
 		bindEvents(): void {
-			// Viewport scroll events
 			this.viewport.addEventListener("scroll", () => {
 				this.updateThumbPositions();
 				this.showScrollbars();
 			});
 
-			// Horizontal wheel scrolling
 			if (this.horizontalWheel) {
 				this.viewport.addEventListener("wheel", (e: WheelEvent) => {
 					if (!e.shiftKey && e.deltaY !== 0) {
 						e.preventDefault();
-						this.viewport.scrollLeft += e.deltaY;
-						this.showScrollbars();
+						if (this.smoothScrollTween) {
+							this.smoothScrollTween.kill();
+						}
+						const currentScrollLeft = this.viewport.scrollLeft;
+						const scrollDelta = e.deltaY * 1.5;
+						const targetScrollLeft = Math.max(
+							0,
+							Math.min(
+								this.viewport.scrollWidth - this.viewport.offsetWidth,
+								currentScrollLeft + scrollDelta,
+							),
+						);
+						this.smoothScrollTween = gsap.to(this.viewport, {
+							scrollTo: { x: targetScrollLeft, autoKill: false },
+							duration: 0.6,
+							ease: "power2.out",
+							onUpdate: () => {
+								this.updateThumbPositions();
+								this.showScrollbars();
+							},
+							onComplete: () => {
+								this.smoothScrollTween = null;
+							},
+						});
 					}
 				});
 			}
 
-			// Mouse enter/leave for hover behavior
+			this.viewport.addEventListener("wheel", (e: WheelEvent) => {
+				if (e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0)) {
+					e.preventDefault();
+					if (this.smoothScrollTween) {
+						this.smoothScrollTween.kill();
+					}
+					const scrollDelta = (e.deltaY || e.deltaX) * 1.5;
+					const currentScrollLeft = this.viewport.scrollLeft;
+					const targetScrollLeft = Math.max(
+						0,
+						Math.min(
+							this.viewport.scrollWidth - this.viewport.offsetWidth,
+							currentScrollLeft + scrollDelta,
+						),
+					);
+					this.smoothScrollTween = gsap.to(this.viewport, {
+						scrollTo: { x: targetScrollLeft, autoKill: false },
+						duration: 0.5,
+						ease: "power2.out",
+						onUpdate: () => {
+							this.updateThumbPositions();
+							this.showScrollbars();
+						},
+						onComplete: () => {
+							this.smoothScrollTween = null;
+						},
+					});
+				}
+			});
+
+			this.viewport.addEventListener("wheel", (e: WheelEvent) => {
+				const shouldHandleVertical = !this.horizontalWheel && !e.shiftKey;
+				if (shouldHandleVertical && e.deltaY !== 0) {
+					const wheelDelta = Math.abs(e.deltaY);
+					if (wheelDelta < 4) return;
+					e.preventDefault();
+					if (this.smoothScrollTweenY) {
+						this.smoothScrollTweenY.kill();
+					}
+					const currentScrollTop = this.viewport.scrollTop;
+					const scrollDelta = e.deltaY * 1.5;
+					const targetScrollTop = Math.max(
+						0,
+						Math.min(
+							this.viewport.scrollHeight - this.viewport.offsetHeight,
+							currentScrollTop + scrollDelta,
+						),
+					);
+					this.smoothScrollTweenY = gsap.to(this.viewport, {
+						scrollTo: { y: targetScrollTop, autoKill: false },
+						duration: 0.6,
+						ease: "power2.out",
+						onUpdate: () => {
+							this.updateThumbPositions();
+							this.showScrollbars();
+						},
+						onComplete: () => {
+							this.smoothScrollTweenY = null;
+						},
+					});
+				}
+			});
+
 			this.element.addEventListener("mouseenter", () => {
 				this.showScrollbars();
 			});
@@ -258,7 +351,6 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 				this.hideScrollbars();
 			});
 
-			// Scrollbar interactions
 			if (this.scrollbarY) {
 				this.scrollbarY.addEventListener("pointerdown", (e: PointerEvent) =>
 					this.handleScrollbarPointerDown(e, "y"),
@@ -277,7 +369,6 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 				);
 			}
 
-			// Global pointer events for dragging
 			document.addEventListener("pointermove", (e: PointerEvent) =>
 				this.handlePointerMove(e),
 			);
