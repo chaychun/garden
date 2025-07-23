@@ -250,7 +250,17 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 
 			if (this.horizontalWheel) {
 				this.viewport.addEventListener("wheel", (e: WheelEvent) => {
-					if (!e.shiftKey && e.deltaY !== 0) {
+					const hasHorizontalScroll =
+						this.viewport.scrollWidth > this.viewport.offsetWidth;
+					const hasVerticalScroll =
+						this.viewport.scrollHeight > this.viewport.offsetHeight;
+
+					if (
+						!e.shiftKey &&
+						e.deltaY !== 0 &&
+						hasHorizontalScroll &&
+						!hasVerticalScroll
+					) {
 						e.preventDefault();
 						if (this.smoothScrollTween) {
 							this.smoothScrollTween.kill();
@@ -311,7 +321,15 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 			});
 
 			this.viewport.addEventListener("wheel", (e: WheelEvent) => {
-				const shouldHandleVertical = !this.horizontalWheel && !e.shiftKey;
+				const hasHorizontalScroll =
+					this.viewport.scrollWidth > this.viewport.offsetWidth;
+				const hasVerticalScroll =
+					this.viewport.scrollHeight > this.viewport.offsetHeight;
+				const shouldHandleVertical =
+					!e.shiftKey &&
+					hasVerticalScroll &&
+					!(this.horizontalWheel && hasHorizontalScroll && !hasVerticalScroll);
+
 				if (shouldHandleVertical && e.deltaY !== 0) {
 					const wheelDelta = Math.abs(e.deltaY);
 					if (wheelDelta < 4) return;
