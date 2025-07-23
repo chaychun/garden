@@ -5,6 +5,7 @@ export interface Props {
 	dir?: "ltr" | "rtl";
 	scrollHideDelay?: number;
 	hideScrollbar?: boolean;
+	horizontalWheel?: boolean;
 	viewportClass?: string;
 	viewportStyle?: string;
 	scrollbarClass?: string;
@@ -20,6 +21,7 @@ const {
 	dir = "ltr",
 	scrollHideDelay = 600,
 	hideScrollbar = false,
+	horizontalWheel = false,
 	viewportClass = "",
 	viewportStyle = "",
 	scrollbarClass = "",
@@ -39,6 +41,7 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 	data-scroll-area-id={uniqueId}
 	data-scroll-hide-delay={scrollHideDelay}
 	data-hide-scrollbar={hideScrollbar}
+	data-horizontal-wheel={horizontalWheel}
 >
 	<div
 		class={`scroll-area-viewport ${viewportClass}`}
@@ -184,6 +187,7 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 		private thumbX: HTMLElement | null;
 		private hideDelay: number;
 		private hideScrollbar: boolean;
+		private horizontalWheel: boolean;
 
 		private isDragging: boolean;
 		private dragStartPos: { x: number; y: number };
@@ -209,6 +213,7 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 			) as HTMLElement | null;
 			this.hideDelay = parseInt(element.dataset.scrollHideDelay || "600");
 			this.hideScrollbar = element.dataset.hideScrollbar === "true";
+			this.horizontalWheel = element.dataset.horizontalWheel === "true";
 
 			this.isDragging = false;
 			this.dragStartPos = { x: 0, y: 0 };
@@ -232,6 +237,17 @@ const uniqueId = id || Math.random().toString(36).substring(2, 9);
 				this.updateThumbPositions();
 				this.showScrollbars();
 			});
+
+			// Horizontal wheel scrolling
+			if (this.horizontalWheel) {
+				this.viewport.addEventListener("wheel", (e: WheelEvent) => {
+					if (!e.shiftKey && e.deltaY !== 0) {
+						e.preventDefault();
+						this.viewport.scrollLeft += e.deltaY;
+						this.showScrollbars();
+					}
+				});
+			}
 
 			// Mouse enter/leave for hover behavior
 			this.element.addEventListener("mouseenter", () => {
