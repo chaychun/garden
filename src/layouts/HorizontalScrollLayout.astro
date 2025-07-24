@@ -15,7 +15,9 @@ const { title, scrollAreaId = "main-scroll" } = Astro.props;
 	<div
 		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:h-screen md:flex-row"
 	>
-		<Sidebar client:load scrollAreaId={scrollAreaId} title={title} />
+		<Sidebar client:load scrollAreaId={scrollAreaId} title={title}>
+			<slot name="sidebar" />
+		</Sidebar>
 		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
 			<div
 				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
