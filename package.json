@@ -7,10 +7,9 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"check": "prettier --check .",
-		"format": "prettier --write ."
+		"lint": "eslint",
+		"check": "astro check",
+		"format": "prettier --write"
 	},
 	"dependencies": {
 		"@astrojs/react": "^4.3.0",
