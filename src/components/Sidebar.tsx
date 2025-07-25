@@ -1,3 +1,4 @@
+import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -5,15 +6,27 @@ import { useEffect, useRef, useState } from "react";
 interface SidebarProps {
 	scrollAreaId: string;
 	title: string;
+	desktopContent: React.ReactNode;
+	mobileContent: React.ReactNode;
 }
 
-export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
-	const [isExpanded, setIsExpanded] = useState(true);
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const [isMobile, setIsMobile] = useState(false);
+export default function Sidebar({
+	scrollAreaId,
+	title,
+	desktopContent,
+	mobileContent,
+}: SidebarProps) {
+	const {
+		isExpanded,
+		isMobileMenuOpen,
+		isManualToggle,
+		toggleMobileMenu,
+		setExpanded,
+		setManualToggle,
+	} = useSidebarStore();
 
+	const [isMobile, setIsMobile] = useState(false);
 	const scrollContainerRef = useRef<HTMLElement | null>(null);
-	const isManualToggleRef = useRef(false);
 
 	useEffect(() => {
 		const checkMobile = () => {
@@ -53,26 +66,26 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 		if (isMobile || !scrollContainerRef.current) return;
 
 		const handleScroll = () => {
-			if (isManualToggleRef.current) return;
+			if (isManualToggle) return;
 
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
 
 			if (scrollLeft > 0 && isExpanded) {
-				setIsExpanded(false);
+				setExpanded(false);
 			}
 		};
 
 		const handleWheel = (e: WheelEvent) => {
-			if (isManualToggleRef.current) return;
+			if (isManualToggle) return;
 
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
 
 			if (scrollLeft === 0 && e.deltaX < 0 && !isExpanded) {
-				setIsExpanded(true);
+				setExpanded(true);
 			}
 
 			if (scrollLeft === 0 && !e.shiftKey && e.deltaY < 0 && !isExpanded) {
-				setIsExpanded(true);
+				setExpanded(true);
 			}
 		};
 
@@ -84,10 +97,10 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 			scrollContainer.removeEventListener("scroll", handleScroll);
 			scrollContainer.removeEventListener("wheel", handleWheel);
 		};
-	}, [isExpanded, isMobile]);
+	}, [isExpanded, isMobile, isManualToggle, setExpanded]);
 
-	const toggleSidebar = () => {
-		isManualToggleRef.current = true;
+	const handleToggleSidebar = () => {
+		setManualToggle(true);
 
 		if (!isExpanded) {
 			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
@@ -95,18 +108,14 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 			if (scrollLeft !== 0) {
 				scrollContainerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
 			}
-			setIsExpanded(true);
+			setExpanded(true);
 		} else {
-			setIsExpanded(false);
+			setExpanded(false);
 		}
 
 		setTimeout(() => {
-			isManualToggleRef.current = false;
+			setManualToggle(false);
 		}, 600);
-	};
-
-	const toggleMobileMenu = () => {
-		setIsMobileMenuOpen(!isMobileMenuOpen);
 	};
 
 	const defaultTransition = {
@@ -132,15 +141,7 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 				{isMobileMenuOpen && (
 					<div className="fixed inset-0 z-40">
 						<div className="mx-auto h-full w-full max-w-[528px] bg-blue-500 pt-[72px]">
-							<div className="h-full p-6 text-white">
-								<div className="mb-4 text-lg font-bold">Sidebar</div>
-								<div className="mb-4 text-sm">
-									Mobile menu content goes here
-								</div>
-								<div className="mb-4 text-sm">
-									This is the expanded mobile sidebar
-								</div>
-							</div>
+							{mobileContent}
 						</div>
 					</div>
 				)}
@@ -166,23 +167,10 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 							exit={{ opacity: 0 }}
 							key="expanded"
 						>
-							<div className="flex w-full items-center justify-between p-4">
-								<a href="/" className="text-base-900 text-lg font-semibold">
-									Chayut
-								</a>
-								<a
-									href="/"
-									className="text-base-500 text-sm underline hover:opacity-75"
-								>
-									About
-								</a>
-							</div>
-							<h1 className="text-base-900 font-cabinet p-6 text-4xl font-medium">
-								{title}
-							</h1>
+							{desktopContent}
 							<div className="flex w-full items-center justify-end p-4">
 								<motion.button
-									onClick={toggleSidebar}
+									onClick={handleToggleSidebar}
 									className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
 									aria-label="Toggle menu"
 									initial={{ opacity: 0, x: 40 }}
@@ -204,13 +192,13 @@ export default function Sidebar({ scrollAreaId, title }: SidebarProps) {
 						>
 							<div className="h-4 w-4" />
 							<div
-								onClick={toggleSidebar}
+								onClick={handleToggleSidebar}
 								className="text-vertical text-base-900 font-cabinet cursor-pointer p-6 text-2xl font-medium select-none"
 							>
 								{title}
 							</div>
 							<motion.button
-								onClick={toggleSidebar}
+								onClick={handleToggleSidebar}
 								className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
 								aria-label="Toggle menu"
 								initial={{ opacity: 0, x: -40 }}
