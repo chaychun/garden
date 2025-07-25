@@ -1,6 +1,7 @@
+import { AnimatedMenuIcon } from "@/components/ui/animated-menu-icon";
 import { SlidingNumber } from "@/components/ui/sliding-number";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
-import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -137,7 +138,7 @@ export default function Sidebar({
 						className="flex items-center justify-center"
 						aria-label="Toggle menu"
 					>
-						{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+						<AnimatedMenuIcon isOpen={isMobileMenuOpen} size={24} />
 					</button>
 				</div>
 
