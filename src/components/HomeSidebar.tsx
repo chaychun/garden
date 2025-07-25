@@ -37,25 +37,31 @@ export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
 					About
 				</a>
 			</div>
-			<div className="flex items-center gap-4 p-4">
-				<p className="text-base-300 font-mono text-xs">Filter by Type</p>
+			<div className="flex w-full items-center gap-4 p-4">
+				<p className="text-base-300 max-w-[80px] flex-shrink-0 font-mono text-xs">
+					Filter by Type
+				</p>
 				<motion.ul
-					className="flex flex-col gap-2"
+					className="flex w-[280px] flex-col gap-2"
 					animate={{ y: getFilterListOffset() }}
 					transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 				>
 					{filterOptions.map((filter) => (
 						<li key={filter}>
-							<button
+							<motion.button
 								className={cn(
-									"bg-transparent text-5xl font-semibold",
+									"w-full bg-transparent text-left text-5xl",
 									activeFilter === filter ? "text-base-900" : "text-base-200",
 								)}
+								animate={{
+									fontWeight: activeFilter === filter ? 700 : 300,
+								}}
+								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 								type="button"
 								onClick={() => setActiveFilter(filter)}
 							>
 								{filter}
-							</button>
+							</motion.button>
 						</li>
 					))}
 				</motion.ul>
