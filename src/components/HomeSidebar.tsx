@@ -10,7 +10,13 @@ interface HomeSidebarProps {
 
 type FilterType = "All" | "Interactions" | "Articles";
 
-export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
+const numberOfItems = {
+	All: 10,
+	Interactions: 7,
+	Articles: 3,
+};
+
+export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 	const [activeFilter, setActiveFilter] = useState<FilterType>("All");
 
 	const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
@@ -38,8 +44,8 @@ export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
 				</a>
 			</div>
 			<div className="flex w-full items-center gap-4 p-4">
-				<p className="text-base-300 max-w-[80px] flex-shrink-0 font-mono text-xs">
-					Filter by Type
+				<p className="text-base-300 w-[32px] flex-shrink-0 font-mono text-sm">
+					({numberOfItems[activeFilter]})
 				</p>
 				<motion.ul
 					className="flex w-[280px] flex-col gap-2"
@@ -55,6 +61,7 @@ export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
 								)}
 								animate={{
 									fontWeight: activeFilter === filter ? 700 : 300,
+									fontSize: activeFilter === filter ? "60px" : "48px",
 								}}
 								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 								type="button"
