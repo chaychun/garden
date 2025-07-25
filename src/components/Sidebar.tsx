@@ -132,7 +132,18 @@ export default function Sidebar({
 		return (
 			<>
 				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between px-6 py-4">
-					<h1 className="text-base-900 text-lg font-semibold">Test top bar</h1>
+					<div className="flex items-baseline gap-2">
+						<h1 className="text-base-900 text-2xl font-semibold">
+							{isMobileMenuOpen ? "Chayut" : title}
+						</h1>
+						{!isMobileMenuOpen && number !== undefined && (
+							<span className="text-base-300 flex font-mono text-sm">
+								<span>(</span>
+								<SlidingNumber value={number} />
+								<span>)</span>
+							</span>
+						)}
+					</div>
 					<button
 						onClick={toggleMobileMenu}
 						className="flex items-center justify-center"
