@@ -2,11 +2,13 @@
 import PreviewBlock from "@/components/PreviewBlock.astro";
 import ArticleBlock from "@/components/ArticleBlock.astro";
 import HorizontalScrollLayout from "@/layouts/HorizontalScrollLayout.astro";
-import HomeSidebarContent from "@/components/HomeSidebarContent";
 ---
 
-<HorizontalScrollLayout title="Test page" scrollAreaId="main-scroll">
-	<HomeSidebarContent slot="sidebar" title="Test page" client:load />
+<HorizontalScrollLayout
+	title="Test page"
+	scrollAreaId="main-scroll"
+	sidebar="home"
+>
 	<PreviewBlock
 		title="Test Interaction 1"
 		description="Exercitation nisi esse ut enim. Culpa reprehenderit aute sint elit in tempor veniam labore duis. Voluptate ad ipsum eu laboris laboris amet ad ullamco commodo enim sit."

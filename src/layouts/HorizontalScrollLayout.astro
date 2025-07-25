@@ -1,23 +1,26 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import ScrollArea from "@/components/ScrollArea.astro";
-import Sidebar from "@/components/Sidebar";
+import HomeSidebar from "@/components/HomeSidebar";
 
 interface Props {
 	title: string;
 	scrollAreaId?: string;
+	sidebar: string;
 }
 
-const { title, scrollAreaId = "main-scroll" } = Astro.props;
+const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
 ---
 
 <BaseLayout title={title}>
 	<div
 		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:h-screen md:flex-row"
 	>
-		<Sidebar client:load scrollAreaId={scrollAreaId} title={title}>
-			<slot name="sidebar" />
-		</Sidebar>
+		{
+			sidebar === "home" && (
+				<HomeSidebar client:load scrollAreaId={scrollAreaId} title={title} />
+			)
+		}
 		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
 			<div
 				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"

@@ -6,13 +6,15 @@ import { useEffect, useRef, useState } from "react";
 interface SidebarProps {
 	scrollAreaId: string;
 	title: string;
-	children: React.ReactNode;
+	desktopContent: React.ReactNode;
+	mobileContent: React.ReactNode;
 }
 
 export default function Sidebar({
 	scrollAreaId,
 	title,
-	children,
+	desktopContent,
+	mobileContent,
 }: SidebarProps) {
 	const {
 		isExpanded,
@@ -139,15 +141,7 @@ export default function Sidebar({
 				{isMobileMenuOpen && (
 					<div className="fixed inset-0 z-40">
 						<div className="mx-auto h-full w-full max-w-[528px] bg-blue-500 pt-[72px]">
-							<div className="h-full p-6 text-white">
-								<div className="mb-4 text-lg font-bold">Sidebar</div>
-								<div className="mb-4 text-sm">
-									Mobile menu content goes here
-								</div>
-								<div className="mb-4 text-sm">
-									This is the expanded mobile sidebar
-								</div>
-							</div>
+							{mobileContent}
 						</div>
 					</div>
 				)}
@@ -173,7 +167,7 @@ export default function Sidebar({
 							exit={{ opacity: 0 }}
 							key="expanded"
 						>
-							{children}
+							{desktopContent}
 							<div className="flex w-full items-center justify-end p-4">
 								<motion.button
 									onClick={handleToggleSidebar}
