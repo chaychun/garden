@@ -1,3 +1,4 @@
+import { SlidingNumber } from "@/components/ui/sliding-number";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { cn } from "../lib/utils";
@@ -11,9 +12,9 @@ interface HomeSidebarProps {
 type FilterType = "All" | "Interactions" | "Articles";
 
 const numberOfItems = {
-	All: 10,
-	Interactions: 7,
-	Articles: 3,
+	All: 35,
+	Interactions: 24,
+	Articles: 11,
 };
 
 export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
@@ -44,8 +45,10 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 				</a>
 			</div>
 			<div className="flex w-full items-center gap-4 p-4">
-				<p className="text-base-300 w-[32px] flex-shrink-0 font-mono text-sm">
-					({numberOfItems[activeFilter]})
+				<p className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
+					<span>(</span>
+					<SlidingNumber value={numberOfItems[activeFilter]} />
+					<span>)</span>
 				</p>
 				<motion.ul
 					className="flex w-[280px] flex-col gap-2"
