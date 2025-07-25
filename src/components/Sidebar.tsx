@@ -130,24 +130,54 @@ export default function Sidebar({
 	if (isMobile) {
 		return (
 			<>
-				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between bg-blue-500 px-6 py-4">
-					<h1 className="text-white">Test top bar</h1>
+				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between px-6 py-4">
+					<h1 className="text-base-900 text-lg font-semibold">Test top bar</h1>
 					<button
 						onClick={toggleMobileMenu}
-						className="flex items-center justify-center rounded-md text-white"
+						className="flex items-center justify-center"
 						aria-label="Toggle menu"
 					>
 						{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 					</button>
 				</div>
 
-				{isMobileMenuOpen && (
-					<div className="fixed inset-0 z-40">
-						<div className="mx-auto h-full w-full max-w-[528px] bg-blue-500 pt-[72px]">
-							{mobileContent}
+				<AnimatePresence>
+					{isMobileMenuOpen && (
+						<div className="fixed inset-0 z-40">
+							{/* Radial blur background */}
+							<motion.div
+								className="absolute inset-0 backdrop-blur-xs"
+								style={{
+									background:
+										"radial-gradient(circle at top center, rgba(248, 250, 252, 0.8) 0%, rgba(248, 250, 252, 0.6) 15%, rgba(248, 250, 252, 0.2) 30%, rgba(248, 250, 252, 0.02) 50%, transparent 70%)",
+									transformOrigin: "top center",
+								}}
+								initial={{ scale: 0, opacity: 0.5 }}
+								animate={{ scale: 3, opacity: 1 }}
+								exit={{
+									scale: 0,
+									opacity: 0.5,
+									transition: { ease: "easeIn", duration: 0.3 },
+								}}
+								transition={defaultTransition}
+							/>
+
+							{/* Content container */}
+							<motion.div
+								className="relative mx-auto h-full w-full max-w-[528px] pt-[60px]"
+								initial={{ y: -10, opacity: 0 }}
+								animate={{
+									y: 0,
+									opacity: 1,
+								}}
+								exit={{ y: -10, opacity: 0 }}
+								transition={defaultTransition}
+							>
+								{mobileContent}
+							</motion.div>
 						</div>
-					</div>
-				)}
+					)}
+				</AnimatePresence>
 			</>
 		);
 	}

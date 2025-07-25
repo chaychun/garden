@@ -80,7 +80,7 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 	);
 
 	const mobileContent = (
-		<div className="h-full p-6 text-white">
+		<div className="h-full p-6">
 			<div className="mb-4 text-lg font-bold">Sidebar</div>
 			<div className="mb-4 text-sm">Mobile menu content goes here</div>
 			<div className="mb-4 text-sm">This is the expanded mobile sidebar</div>
