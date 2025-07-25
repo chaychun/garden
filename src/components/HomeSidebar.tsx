@@ -1,3 +1,6 @@
+import { motion } from "motion/react";
+import { useState } from "react";
+import { cn } from "../lib/utils";
 import Sidebar from "./Sidebar";
 
 interface HomeSidebarProps {
@@ -5,7 +8,22 @@ interface HomeSidebarProps {
 	title: string;
 }
 
+type FilterType = "All" | "Interactions" | "Articles";
+
 export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
+	const [activeFilter, setActiveFilter] = useState<FilterType>("All");
+
+	const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
+
+	const getFilterListOffset = () => {
+		const activeIndex = filterOptions.indexOf(activeFilter);
+		const itemHeight = 48; // 5xl
+		const gap = 8;
+		const totalItemHeight = itemHeight + gap;
+		const middleIndex = Math.floor(filterOptions.length / 2);
+		return (middleIndex - activeIndex) * totalItemHeight;
+	};
+
 	const desktopContent = (
 		<>
 			<div className="flex w-full items-center justify-between p-4">
@@ -19,9 +37,29 @@ export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
 					About
 				</a>
 			</div>
-			<h1 className="text-base-900 font-cabinet p-6 text-4xl font-medium">
-				{title}
-			</h1>
+			<div className="flex items-center gap-4 p-4">
+				<p className="text-base-300 font-mono text-xs">Filter by Type</p>
+				<motion.ul
+					className="flex flex-col gap-2"
+					animate={{ y: getFilterListOffset() }}
+					transition={{ type: "spring", duration: 0.5, bounce: 0 }}
+				>
+					{filterOptions.map((filter) => (
+						<li key={filter}>
+							<button
+								className={cn(
+									"bg-transparent text-5xl font-semibold",
+									activeFilter === filter ? "text-base-900" : "text-base-200",
+								)}
+								type="button"
+								onClick={() => setActiveFilter(filter)}
+							>
+								{filter}
+							</button>
+						</li>
+					))}
+				</motion.ul>
+			</div>
 		</>
 	);
 
@@ -36,7 +74,7 @@ export default function HomeSidebar({ scrollAreaId, title }: HomeSidebarProps) {
 	return (
 		<Sidebar
 			scrollAreaId={scrollAreaId}
-			title={title}
+			title={activeFilter}
 			desktopContent={desktopContent}
 			mobileContent={mobileContent}
 		/>
