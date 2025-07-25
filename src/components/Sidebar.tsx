@@ -1,3 +1,4 @@
+import { SlidingNumber } from "@/components/ui/sliding-number";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -8,6 +9,7 @@ interface SidebarProps {
 	title: string;
 	desktopContent: React.ReactNode;
 	mobileContent: React.ReactNode;
+	number?: number;
 }
 
 export default function Sidebar({
@@ -15,6 +17,7 @@ export default function Sidebar({
 	title,
 	desktopContent,
 	mobileContent,
+	number,
 }: SidebarProps) {
 	const {
 		isExpanded,
@@ -193,9 +196,18 @@ export default function Sidebar({
 							<div className="h-4 w-4" />
 							<div
 								onClick={handleToggleSidebar}
-								className="text-vertical text-base-900 font-cabinet cursor-pointer p-6 text-2xl font-medium select-none"
+								className="text-vertical flex cursor-pointer items-baseline gap-2 p-6 select-none"
 							>
-								{title}
+								<span className="text-base-900 text-3xl font-medium">
+									{title}
+								</span>
+								{number !== undefined && (
+									<span className="text-base-300 flex font-mono text-sm">
+										<span>(</span>
+										<SlidingNumber value={number} />
+										<span>)</span>
+									</span>
+								)}
 							</div>
 							<motion.button
 								onClick={handleToggleSidebar}

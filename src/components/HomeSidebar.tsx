@@ -93,6 +93,7 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 			title={activeFilter}
 			desktopContent={desktopContent}
 			mobileContent={mobileContent}
+			number={numberOfItems[activeFilter]}
 		/>
 	);
 }
