@@ -1,4 +1,5 @@
 import { SlidingNumber } from "@/components/ui/sliding-number";
+import { UnderlineLink } from "@/components/ui/underline-link";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { motion } from "motion/react";
 import { useState } from "react";
@@ -39,12 +40,12 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 				<a href="/" className="text-base-900 text-lg font-semibold">
 					Chayut
 				</a>
-				<a
+				<UnderlineLink
 					href="/"
-					className="text-base-500 text-sm underline hover:opacity-75"
+					className="text-base-500 hover:text-base-700 text-sm transition-colors duration-300"
 				>
 					About
-				</a>
+				</UnderlineLink>
 			</div>
 			<div className="flex w-full items-center gap-4 p-4">
 				<p className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
@@ -61,7 +62,7 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 						<li key={filter}>
 							<motion.button
 								className={cn(
-									"w-full bg-transparent text-left text-5xl transition-colors duration-200",
+									"w-full bg-transparent text-left text-5xl transition-colors duration-300",
 									activeFilter === filter
 										? "text-base-900"
 										: "text-base-200 hover:text-base-400",
@@ -90,7 +91,7 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 					<li key={filter}>
 						<motion.button
 							className={cn(
-								"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl transition-colors duration-200",
+								"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl transition-colors duration-300",
 								activeFilter === filter
 									? "text-base-900"
 									: "text-base-500 hover:text-base-700",
@@ -119,12 +120,12 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 				))}
 			</ul>
 			<div className="mt-24 flex flex-col gap-3">
-				<a
+				<UnderlineLink
 					href="/"
-					className="text-base-500 hover:text-base-700 text-5xl font-light transition-colors duration-200 hover:underline"
+					className="text-base-500 hover:text-base-700 w-min text-5xl font-light transition-colors duration-300"
 				>
 					About
-				</a>
+				</UnderlineLink>
 			</div>
 		</div>
 	);
