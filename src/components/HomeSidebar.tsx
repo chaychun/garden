@@ -83,40 +83,37 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 
 	const mobileContent = (
 		<div className="h-full p-6">
-			<div className="flex w-full gap-4">
-				<p className="text-base-500 mt-2 flex w-[60px] flex-shrink-0 font-mono text-xs">
-					Filter by Type
-				</p>
-				<ul className="flex w-[280px] flex-col gap-2">
-					{filterOptions.map((filter) => (
-						<li key={filter}>
-							<motion.button
-								className={cn(
-									"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl",
-									activeFilter === filter ? "text-base-900" : "text-base-500",
-								)}
-								animate={{
-									fontWeight: activeFilter === filter ? 700 : 300,
-								}}
-								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
-								type="button"
-								onClick={() => {
-									setActiveFilter(filter);
-
-									setTimeout(() => {
-										toggleMobileMenu();
-									}, 300);
-								}}
+			<ul className="flex w-[280px] flex-col gap-2">
+				{filterOptions.map((filter) => (
+					<li key={filter}>
+						<motion.button
+							className={cn(
+								"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl",
+								activeFilter === filter ? "text-base-900" : "text-base-500",
+							)}
+							animate={{
+								fontWeight: activeFilter === filter ? 600 : 300,
+							}}
+							transition={{ type: "spring", duration: 0.5, bounce: 0 }}
+							type="button"
+							onClick={() => {
+								setActiveFilter(filter);
+								toggleMobileMenu();
+							}}
+						>
+							<motion.span layoutId={`home-sidebar-title-${filter}`}>
+								{filter}
+							</motion.span>
+							<motion.span
+								className="text-base-500 font-mono text-sm font-normal"
+								layoutId={`home-sidebar-number-${filter}`}
 							>
-								<span>{filter}</span>
-								<span className="text-base-300 font-mono text-sm font-normal">
-									({numberOfItems[filter]})
-								</span>
-							</motion.button>
-						</li>
-					))}
-				</ul>
-			</div>
+								({numberOfItems[filter]})
+							</motion.span>
+						</motion.button>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 
@@ -127,6 +124,8 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 			desktopContent={desktopContent}
 			mobileContent={mobileContent}
 			number={numberOfItems[activeFilter]}
+			mobileTitleLayoutId={`home-sidebar-title-${activeFilter}`}
+			mobileNumberLayoutId={`home-sidebar-number-${activeFilter}`}
 		/>
 	);
 }

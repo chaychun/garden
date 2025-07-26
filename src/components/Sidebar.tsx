@@ -12,6 +12,8 @@ interface SidebarProps {
 	desktopContent: React.ReactNode;
 	mobileContent: React.ReactNode;
 	number?: number;
+	mobileTitleLayoutId?: string;
+	mobileNumberLayoutId?: string;
 }
 
 export default function Sidebar({
@@ -20,6 +22,8 @@ export default function Sidebar({
 	desktopContent,
 	mobileContent,
 	number,
+	mobileTitleLayoutId,
+	mobileNumberLayoutId,
 }: SidebarProps) {
 	const {
 		isExpanded,
@@ -134,15 +138,23 @@ export default function Sidebar({
 			<>
 				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between px-6 py-4">
 					<div className="flex items-baseline gap-2">
-						<h1 className="text-base-900 text-2xl font-semibold">
-							{isMobileMenuOpen ? "Chayut" : title}
-						</h1>
+						{isMobileMenuOpen ? (
+							<h1 className="text-base-900 text-2xl font-semibold">Chayut</h1>
+						) : (
+							<motion.h1
+								className="text-base-900 text-2xl font-semibold"
+								layoutId={mobileTitleLayoutId}
+							>
+								{title}
+							</motion.h1>
+						)}
 						{!isMobileMenuOpen && number !== undefined && (
-							<span className="text-base-300 flex font-mono text-sm">
-								<span>(</span>
-								<SlidingNumber value={number} />
-								<span>)</span>
-							</span>
+							<motion.span
+								className="text-base-300 flex font-mono text-sm"
+								layoutId={mobileNumberLayoutId}
+							>
+								({number})
+							</motion.span>
 						)}
 					</div>
 					<button
