@@ -121,7 +121,7 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 			<div className="mt-24 flex flex-col gap-3">
 				<a
 					href="/"
-					className="text-base-500 hover:text-base-700 transition-color text-5xl font-light duration-200 hover:underline"
+					className="text-base-500 hover:text-base-700 text-5xl font-light transition-colors duration-200 hover:underline"
 				>
 					About
 				</a>
