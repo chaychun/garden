@@ -1,4 +1,5 @@
 import { SlidingNumber } from "@/components/ui/sliding-number";
+import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { cn } from "../lib/utils";
@@ -19,6 +20,7 @@ const numberOfItems = {
 
 export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 	const [activeFilter, setActiveFilter] = useState<FilterType>("All");
+	const { toggleMobileMenu } = useSidebarStore();
 
 	const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
 
@@ -81,9 +83,40 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 
 	const mobileContent = (
 		<div className="h-full p-6">
-			<div className="mb-4 text-lg font-bold">Sidebar</div>
-			<div className="mb-4 text-sm">Mobile menu content goes here</div>
-			<div className="mb-4 text-sm">This is the expanded mobile sidebar</div>
+			<div className="flex w-full gap-4">
+				<p className="text-base-500 mt-2 flex w-[60px] flex-shrink-0 font-mono text-xs">
+					Filter by Type
+				</p>
+				<ul className="flex w-[280px] flex-col gap-2">
+					{filterOptions.map((filter) => (
+						<li key={filter}>
+							<motion.button
+								className={cn(
+									"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl",
+									activeFilter === filter ? "text-base-900" : "text-base-500",
+								)}
+								animate={{
+									fontWeight: activeFilter === filter ? 700 : 300,
+								}}
+								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
+								type="button"
+								onClick={() => {
+									setActiveFilter(filter);
+
+									setTimeout(() => {
+										toggleMobileMenu();
+									}, 300);
+								}}
+							>
+								<span>{filter}</span>
+								<span className="text-base-300 font-mono text-sm font-normal">
+									({numberOfItems[filter]})
+								</span>
+							</motion.button>
+						</li>
+					))}
+				</ul>
+			</div>
 		</div>
 	);
 

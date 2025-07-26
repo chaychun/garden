@@ -162,7 +162,7 @@ export default function Sidebar({
 								className="absolute inset-0"
 								style={{
 									background:
-										"radial-gradient(circle at top center, rgba(248, 250, 252, 0.8) 0%, rgba(248, 250, 252, 0.6) 15%, rgba(248, 250, 252, 0.2) 30%, rgba(248, 250, 252, 0.02) 50%, transparent 70%)",
+										"radial-gradient(circle at top center, rgba(248, 250, 252, 0.8) 0%, rgba(248, 250, 252, 0.6) 30%, rgba(248, 250, 252, 0.2) 50%, rgba(248, 250, 252, 0.02) 70%, transparent 85%)",
 									transformOrigin: "top center",
 								}}
 								initial={{ scale: 0, opacity: 0.5 }}
