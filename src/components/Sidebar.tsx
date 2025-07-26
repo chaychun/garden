@@ -186,7 +186,10 @@ export default function Sidebar({
 
 				<AnimatePresence>
 					{isMobileMenuOpen && (
-						<div className="fixed inset-0 z-40">
+						<div 
+							className="fixed inset-0 z-40"
+							onClick={toggleMobileMenu}
+						>
 							{/* Radial background */}
 							<motion.div
 								className="absolute inset-0"
@@ -230,6 +233,7 @@ export default function Sidebar({
 								}}
 								exit={{ y: -10, opacity: 0 }}
 								transition={defaultTransition}
+								onClick={(e) => e.stopPropagation()}
 							>
 								{mobileContent}
 							</motion.div>
