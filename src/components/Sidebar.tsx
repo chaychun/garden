@@ -1,4 +1,5 @@
 import { AnimatedMenuIcon } from "@/components/ui/animated-menu-icon";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { SlidingNumber } from "@/components/ui/sliding-number";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -156,9 +157,9 @@ export default function Sidebar({
 				<AnimatePresence>
 					{isMobileMenuOpen && (
 						<div className="fixed inset-0 z-40">
-							{/* Radial blur background */}
+							{/* Radial background */}
 							<motion.div
-								className="absolute inset-0 backdrop-blur-xs"
+								className="absolute inset-0"
 								style={{
 									background:
 										"radial-gradient(circle at top center, rgba(248, 250, 252, 0.8) 0%, rgba(248, 250, 252, 0.6) 15%, rgba(248, 250, 252, 0.2) 30%, rgba(248, 250, 252, 0.02) 50%, transparent 70%)",
@@ -169,6 +170,21 @@ export default function Sidebar({
 								exit={{
 									scale: 0,
 									opacity: 0.5,
+									transition: { ease: "easeIn", duration: 0.3 },
+								}}
+								transition={defaultTransition}
+							/>
+
+							{/* Progressive blur overlay */}
+							<ProgressiveBlur
+								direction="top"
+								blurLayers={10}
+								blurIntensity={1}
+								className="absolute inset-x-0 top-0 h-[125vh]"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{
+									opacity: 0,
 									transition: { ease: "easeIn", duration: 0.3 },
 								}}
 								transition={defaultTransition}
