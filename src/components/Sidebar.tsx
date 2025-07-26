@@ -203,6 +203,7 @@ export default function Sidebar({
 									transition: { ease: "easeIn", duration: 0.3 },
 								}}
 								transition={defaultTransition}
+								onClick={toggleMobileMenu}
 							/>
 
 							{/* Progressive blur overlay */}
@@ -218,6 +219,7 @@ export default function Sidebar({
 									transition: { ease: "easeIn", duration: 0.3 },
 								}}
 								transition={defaultTransition}
+								onClick={toggleMobileMenu}
 							/>
 
 							{/* Content container */}
@@ -230,6 +232,7 @@ export default function Sidebar({
 								}}
 								exit={{ y: -10, opacity: 0 }}
 								transition={defaultTransition}
+								onClick={(e) => e.stopPropagation()}
 							>
 								{mobileContent}
 							</motion.div>
