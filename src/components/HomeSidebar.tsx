@@ -61,8 +61,10 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 						<li key={filter}>
 							<motion.button
 								className={cn(
-									"w-full bg-transparent text-left text-5xl",
-									activeFilter === filter ? "text-base-900" : "text-base-200",
+									"w-full bg-transparent text-left text-5xl transition-colors duration-200",
+									activeFilter === filter
+										? "text-base-900"
+										: "text-base-200 hover:text-base-400",
 								)}
 								animate={{
 									fontWeight: activeFilter === filter ? 700 : 300,
@@ -88,8 +90,10 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 					<li key={filter}>
 						<motion.button
 							className={cn(
-								"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl",
-								activeFilter === filter ? "text-base-900" : "text-base-500",
+								"flex w-full items-baseline gap-3 bg-transparent text-left text-5xl transition-colors duration-200",
+								activeFilter === filter
+									? "text-base-900"
+									: "text-base-500 hover:text-base-700",
 							)}
 							animate={{
 								fontWeight: activeFilter === filter ? 600 : 300,
@@ -114,6 +118,14 @@ export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
 					</li>
 				))}
 			</ul>
+			<div className="mt-24 flex flex-col gap-3">
+				<a
+					href="/"
+					className="text-base-500 hover:text-base-700 transition-color text-5xl font-light duration-200 hover:underline"
+				>
+					About
+				</a>
+			</div>
 		</div>
 	);
 
