@@ -1,0 +1,55 @@
+---
+import NewPageLayout from "@/layouts/NewPageLayout.astro";
+import PreviewBlock from "@/components/PreviewBlock.astro";
+import ArticleBlock from "@/components/ArticleBlock.astro";
+---
+
+<NewPageLayout
+	title="New Page"
+	scrollAreaId="main-scroll"
+>
+	<!-- Welcome Card with Link to Test Preview -->
+	<a href="/test-preview-block" class="block transition-transform duration-200 hover:scale-[1.02]">
+		<PreviewBlock
+			title="Welcome to New Page"
+			description="This is a new page with a custom sidebar layout. Click to explore the test preview layout page and see how different components work together."
+			date="Jan 25, 2024"
+			bgImage="https://picsum.photos/800/600?random=10"
+			previewImage="https://picsum.photos/400/300?random=11"
+			position="top"
+			layout="portrait"
+			tags={["New", "Layout"]}
+		/>
+	</a>
+	
+	<!-- Content Card -->
+	<ArticleBlock
+		title="Exploring New Layouts"
+		description="This page demonstrates a new sidebar layout with minimal placeholder content. The sidebar includes navigation options and links to other pages in the application. The layout maintains the same horizontal scrolling behavior as the original design while providing a fresh navigation experience."
+		date="Jan 25, 2024"
+		link="/"
+		position="top"
+	/>
+	
+	<!-- Feature Card -->
+	<PreviewBlock
+		title="Custom Sidebar Features"
+		description="The new sidebar includes Overview, Features, and About sections with animated transitions and responsive design. Each section has its own content count and smooth animations."
+		date="Jan 25, 2024"
+		bgImage="https://picsum.photos/800/600?random=12"
+		previewImage="https://picsum.photos/400/300?random=13"
+		position="bottom"
+		layout="portrait"
+		tags={["Sidebar", "Animation"]}
+	/>
+	
+	<!-- About Card -->
+	<ArticleBlock
+		title="About This Layout"
+		description="This layout showcases how to create custom sidebar components while maintaining consistency with the existing design system. The sidebar includes links to the test preview page and demonstrates the flexibility of the layout system."
+		date="Jan 25, 2024"
+		link="/"
+		previewImage="https://picsum.photos/400/300?random=14"
+		position="bottom"
+	/>
+</NewPageLayout>
