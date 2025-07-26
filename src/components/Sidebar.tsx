@@ -138,24 +138,42 @@ export default function Sidebar({
 			<>
 				<div className="relative z-50 mx-auto flex w-full max-w-[528px] items-center justify-between px-6 py-4">
 					<div className="flex items-baseline gap-2">
-						{isMobileMenuOpen ? (
-							<h1 className="text-base-900 text-2xl font-semibold">Chayut</h1>
-						) : (
-							<motion.h1
-								className="text-base-900 text-2xl font-semibold"
-								layoutId={mobileTitleLayoutId}
-							>
-								{title}
-							</motion.h1>
-						)}
-						{!isMobileMenuOpen && number !== undefined && (
-							<motion.span
-								className="text-base-300 flex font-mono text-sm"
-								layoutId={mobileNumberLayoutId}
-							>
-								({number})
-							</motion.span>
-						)}
+						<AnimatePresence mode="popLayout">
+							{isMobileMenuOpen ? (
+								<motion.h1
+									key="mobile-title-open"
+									className="text-base-900 text-2xl font-semibold"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+								>
+									Chayut
+								</motion.h1>
+							) : (
+								<motion.h1
+									key="mobile-title-closed"
+									className="text-base-900 text-2xl font-semibold"
+									layoutId={mobileTitleLayoutId}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+								>
+									{title}
+								</motion.h1>
+							)}
+
+							{!isMobileMenuOpen && number !== undefined && (
+								<motion.span
+									className="text-base-300 flex font-mono text-sm"
+									layoutId={mobileNumberLayoutId}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+								>
+									({number})
+								</motion.span>
+							)}
+						</AnimatePresence>
 					</div>
 					<button
 						onClick={toggleMobileMenu}
