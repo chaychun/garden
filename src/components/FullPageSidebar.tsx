@@ -37,7 +37,7 @@ export default function FullPageSidebar({
 						onClick={handleBackClick}
 						className="text-base-500 hover:text-base-700 group flex cursor-pointer items-center gap-2 text-sm"
 					>
-						<span className="transition-transform duration-300 group-hover:-translate-x-1">
+						<span className="transition-transform duration-500 group-hover:-translate-x-[3px]">
 							<ArrowLeft size={18} />
 						</span>
 						<span>Back</span>
