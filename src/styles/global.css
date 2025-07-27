@@ -40,5 +40,6 @@ html {
 
 html.mobile-menu-open {
 	overflow: hidden;
+	overscroll-behavior: contain;
 	scrollbar-gutter: stable;
 }
