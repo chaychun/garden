@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import ScrollArea from "@/components/ScrollArea.astro";
 import HomeSidebar from "@/components/HomeSidebar";
+import HomeMobileTopBar from "@/components/HomeMobileTopBar";
 
 interface Props {
 	title: string;
@@ -18,7 +19,18 @@ const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
 	>
 		{
 			sidebar === "home" && (
-				<HomeSidebar client:load scrollAreaId={scrollAreaId} title={title} />
+				<>
+					<div class="hidden md:block">
+						<HomeSidebar
+							client:visible
+							scrollAreaId={scrollAreaId}
+							title={title}
+						/>
+					</div>
+					<div class="block md:hidden">
+						<HomeMobileTopBar client:visible />
+					</div>
+				</>
 			)
 		}
 		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
