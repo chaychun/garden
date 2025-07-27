@@ -186,10 +186,15 @@ export default function Sidebar({
 
 				<AnimatePresence>
 					{isMobileMenuOpen && (
-						<div className="fixed inset-0 z-40">
+						<div
+							className="fixed inset-0 z-40"
+							onClick={(e) => {
+								toggleMobileMenu();
+							}}
+						>
 							{/* Radial background */}
 							<motion.div
-								className="absolute inset-0"
+								className="pointer-events-none absolute inset-0"
 								style={{
 									background:
 										"radial-gradient(circle at top center, rgba(246, 246, 245, 0.8) 0%, rgba(246, 246, 245, 0.6) 30%, rgba(246, 246, 245, 0.2) 50%, rgba(246, 246, 245, 0.02) 70%, transparent 85%)",
@@ -210,7 +215,7 @@ export default function Sidebar({
 								direction="top"
 								blurLayers={10}
 								blurIntensity={1}
-								className="absolute inset-x-0 top-0 h-[125vh]"
+								className="pointer-events-none absolute inset-x-0 top-0 h-[125vh]"
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
 								exit={{
@@ -222,7 +227,7 @@ export default function Sidebar({
 
 							{/* Content container */}
 							<motion.div
-								className="relative mx-auto h-full w-full max-w-[528px] pt-[60px]"
+								className="relative mx-auto w-full max-w-[528px] pt-[60px]"
 								initial={{ y: -10, opacity: 0 }}
 								animate={{
 									y: 0,
@@ -230,6 +235,7 @@ export default function Sidebar({
 								}}
 								exit={{ y: -10, opacity: 0 }}
 								transition={defaultTransition}
+								onClick={(e) => e.stopPropagation()}
 							>
 								{mobileContent}
 							</motion.div>
