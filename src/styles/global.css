@@ -33,3 +33,13 @@
 	writing-mode: horizontal-tb;
 	text-orientation: mixed;
 }
+
+html {
+	scrollbar-gutter: auto;
+}
+
+html.mobile-menu-open {
+	overflow: hidden;
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
+}

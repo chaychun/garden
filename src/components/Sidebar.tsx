@@ -24,14 +24,11 @@ export default function Sidebar({
 
 	useEffect(() => {
 		const findScrollContainer = () => {
-			const scrollArea = document.querySelector(
+			const scrollContainer = document.querySelector(
 				`[data-scroll-area-id="${scrollAreaId}"]`,
 			);
-			if (scrollArea) {
-				const viewport = scrollArea.querySelector(".scroll-area-viewport");
-				if (viewport) {
-					scrollContainerRef.current = viewport as HTMLElement;
-				}
+			if (scrollContainer) {
+				scrollContainerRef.current = scrollContainer as HTMLElement;
 			}
 		};
 
@@ -111,7 +108,7 @@ export default function Sidebar({
 	return (
 		<MotionConfig transition={defaultTransition}>
 			<motion.div
-				className="bg-base-50 flex h-dvh flex-col justify-between overflow-hidden"
+				className="bg-base-50 flex h-full flex-col justify-between overflow-hidden"
 				initial={{ width: 400 }}
 				animate={{
 					width: isExpanded ? 400 : 64,

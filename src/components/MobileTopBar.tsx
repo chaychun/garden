@@ -2,6 +2,7 @@ import { AnimatedMenuIcon } from "@/components/ui/animated-menu-icon";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { AnimatePresence, motion } from "motion/react";
+import { useEffect } from "react";
 
 interface MobileTopBarProps {
 	title: string;
@@ -19,6 +20,18 @@ export default function MobileTopBar({
 	children,
 }: MobileTopBarProps) {
 	const { isMobileMenuOpen, toggleMobileMenu } = useSidebarStore();
+
+	useEffect(() => {
+		if (isMobileMenuOpen) {
+			document.documentElement.classList.add("mobile-menu-open");
+		} else {
+			document.documentElement.classList.remove("mobile-menu-open");
+		}
+
+		return () => {
+			document.documentElement.classList.remove("mobile-menu-open");
+		};
+	}, [isMobileMenuOpen]);
 
 	const defaultTransition = {
 		type: "spring" as const,
