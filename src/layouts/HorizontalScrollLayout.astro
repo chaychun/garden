@@ -14,7 +14,7 @@ const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
 
 <BaseLayout title={title}>
 	<div
-		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:h-screen md:flex-row"
+		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:flex-row"
 	>
 		{
 			sidebar === "home" && (
@@ -23,7 +23,7 @@ const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
 		}
 		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
 			<div
-				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-screen md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
+				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-dvh md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
 			>
 				<slot />
 			</div>
