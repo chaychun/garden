@@ -1,0 +1,58 @@
+---
+import PreviewBlock from "@/components/PreviewBlock.astro";
+import ArticleBlock from "@/components/ArticleBlock.astro";
+import HorizontalScrollLayout from "@/layouts/HorizontalScrollLayout.astro";
+---
+
+<HorizontalScrollLayout
+	title="Full Page Example"
+	scrollAreaId="full-page-scroll"
+	sidebar="full-page"
+>
+	<PreviewBlock
+		title="Interactive Gallery"
+		description="A comprehensive showcase of interactive elements and animations. This full-page experience demonstrates the power of modern web technologies in creating engaging user experiences."
+		date="Jan 25, 2024"
+		bgImage="https://picsum.photos/800/600?random=10"
+		previewImage="https://picsum.photos/400/300?random=11"
+		position="top"
+		layout="landscape"
+		tags={["React", "Motion", "GSAP"]}
+	/>
+	<ArticleBlock
+		title="The Art of Digital Storytelling"
+		description="In the digital age, storytelling has evolved beyond traditional mediums. Interactive experiences allow creators to craft narratives that respond to user input, creating personalized journeys that resonate deeply with audiences. This approach combines the best of visual design, user experience, and technological innovation."
+		date="Jan 28, 2024"
+		link="/"
+		position="top"
+	/>
+	<PreviewBlock
+		title="Data Visualization Hub"
+		description="An interactive dashboard showcasing real-time data visualization with smooth animations and intuitive controls. Users can explore complex datasets through an intuitive interface that makes information accessible and engaging."
+		date="Jan 30, 2024"
+		bgImage="https://picsum.photos/800/600?random=12"
+		previewImage="https://picsum.photos/400/300?random=13"
+		position="bottom"
+		layout="portrait"
+		tags={["D3.js", "React", "TypeScript"]}
+	/>
+	<ArticleBlock
+		title="Building for the Future"
+		description="As we look toward the future of web development, the importance of creating experiences that are both beautiful and functional becomes increasingly clear. The best digital products don't just solve problems—they delight users and create moments of wonder that inspire continued engagement."
+		date="Feb 2, 2024"
+		link="/"
+		previewImage="https://picsum.photos/400/300?random=14"
+		position="bottom"
+	/>
+	<PreviewBlock
+		title="3D Web Experience"
+		description="Pushing the boundaries of web technology with immersive 3D experiences that run directly in the browser. This project demonstrates the potential of WebGL and modern graphics APIs to create stunning visual experiences."
+		date="Feb 5, 2024"
+		bgImage="https://picsum.photos/800/600?random=15"
+		previewImage="https://picsum.photos/400/300?random=16"
+		position="top"
+		layout="landscape"
+		tags={["Three.js", "WebGL", "React"]}
+	/>
+</HorizontalScrollLayout>
+

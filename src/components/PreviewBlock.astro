@@ -11,6 +11,7 @@ interface Props {
 	position?: "top" | "bottom";
 	layout?: "landscape" | "portrait";
 	tags?: string[];
+	link?: string;
 }
 
 const {
@@ -22,49 +23,98 @@ const {
 	position = "top",
 	layout = "portrait",
 	tags,
+	link,
 } = Astro.props;
 ---
 
-<Block
-	class:list={[
-		"flex flex-col gap-4 p-6 md:justify-between",
-		"mb-12 md:mb-0",
-		position === "bottom" && "md:flex-col-reverse",
-	]}
->
-	<div
-		class:list={[
-			"group relative flex w-full items-center justify-center",
-			layout === "portrait" && "aspect-4/5",
-			layout === "landscape" && "aspect-5/4",
-		]}
-		style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
-	>
-		{
-			tags && tags.length > 0 && (
-				<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
-					{tags.map((tag) => (
-						<Badge text={tag} />
-					))}
+{
+	link ? (
+		<a
+			href={link}
+			class="block transition-transform duration-300 hover:scale-[1.02]"
+		>
+			<Block
+				class:list={[
+					"flex flex-col gap-4 p-6 md:justify-between",
+					"mb-12 md:mb-0",
+					position === "bottom" && "md:flex-col-reverse",
+				]}
+			>
+				<div
+					class:list={[
+						"group relative flex w-full items-center justify-center",
+						layout === "portrait" && "aspect-4/5",
+						layout === "landscape" && "aspect-5/4",
+					]}
+					style={{
+						backgroundImage: `url(${bgImage})`,
+						backgroundSize: "cover",
+					}}
+				>
+					{tags && tags.length > 0 && (
+						<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
+							{tags.map((tag) => (
+								<Badge text={tag} />
+							))}
+						</div>
+					)}
+					<img
+						src={previewImage}
+						alt="Preview"
+						class="h-auto w-[80%]"
+						loading="lazy"
+					/>
 				</div>
-			)
-		}
-		<img
-			src={previewImage}
-			alt="Preview"
-			class="h-auto w-[80%]"
-			loading="lazy"
-		/>
-	</div>
-	<div class="flex flex-col gap-1 md:w-[480px]">
-		<p class="font-switzer text-base-300 text-sm">
-			{date}
-		</p>
-		<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
-			{title}
-		</h2>
-		<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
-			{description}
-		</p>
-	</div>
-</Block>
+				<div class="flex flex-col gap-1 md:w-[480px]">
+					<p class="font-switzer text-base-300 text-sm">{date}</p>
+					<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
+						{title}
+					</h2>
+					<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
+						{description}
+					</p>
+				</div>
+			</Block>
+		</a>
+	) : (
+		<Block
+			class:list={[
+				"flex flex-col gap-4 p-6 md:justify-between",
+				"mb-12 md:mb-0",
+				position === "bottom" && "md:flex-col-reverse",
+			]}
+		>
+			<div
+				class:list={[
+					"group relative flex w-full items-center justify-center",
+					layout === "portrait" && "aspect-4/5",
+					layout === "landscape" && "aspect-5/4",
+				]}
+				style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
+			>
+				{tags && tags.length > 0 && (
+					<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
+						{tags.map((tag) => (
+							<Badge text={tag} />
+						))}
+					</div>
+				)}
+				<img
+					src={previewImage}
+					alt="Preview"
+					class="h-auto w-[80%]"
+					loading="lazy"
+				/>
+			</div>
+			<div class="flex flex-col gap-1 md:w-[480px]">
+				<p class="font-switzer text-base-300 text-sm">{date}</p>
+				<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
+					{title}
+				</h2>
+				<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
+					{description}
+				</p>
+			</div>
+		</Block>
+	)
+}
