@@ -1,0 +1,55 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import FullPageSidebar from "@/components/FullPageSidebar";
+import FullContentArea from "@/components/FullContentArea";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<BaseLayout title={title}>
+	<div
+		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:flex-row"
+	>
+		<FullPageSidebar
+			client:load
+			scrollAreaId="full-page-content"
+			title={title}
+		/>
+		<FullContentArea client:load>
+			<slot>
+				<div class="mx-auto max-w-2xl p-8 text-center">
+					<h1 class="mb-4 text-4xl font-bold text-gray-800">
+						Full Page Content
+					</h1>
+					<p class="text-lg leading-relaxed text-gray-600">
+						This is a full page layout with a content container. If you're
+						seeing this, your content fails to load or is empty.
+					</p>
+					<div
+						class="mt-8 rounded-lg border border-white/20 bg-white/50 p-6 backdrop-blur-sm"
+					>
+						<p class="text-sm text-gray-500">
+							Replace this content with your full page interaction components.
+						</p>
+					</div>
+				</div>
+			</slot>
+		</FullContentArea>
+	</div>
+
+	<style>
+		body {
+			overflow: hidden;
+			position: fixed;
+			width: 100%;
+			height: 100%;
+		}
+		html {
+			overflow: hidden;
+		}
+	</style>
+</BaseLayout>
