@@ -1,56 +1,46 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import ScrollArea from "@/components/ScrollArea.astro";
 import HomeSidebar from "@/components/HomeSidebar";
 import HomeMobileTopBar from "@/components/HomeMobileTopBar";
 
 interface Props {
 	title: string;
-	scrollAreaId?: string;
 	sidebar: string;
+	scrollAreaId?: string;
 }
 
-const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
+const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div
-		class="bg-base-50 flex h-dvh w-screen flex-col overflow-hidden md:flex-row"
-	>
+	<div class="bg-base-50 min-h-screen">
 		{
 			sidebar === "home" && (
 				<>
-					<div class="hidden md:block">
-						<HomeSidebar
-							client:visible
-							scrollAreaId={scrollAreaId}
-							title={title}
-						/>
-					</div>
-					<div class="block md:hidden">
+					<div class="fixed top-0 right-0 left-0 z-40 block md:hidden">
 						<HomeMobileTopBar client:visible />
 					</div>
 				</>
 			)
 		}
-		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
+		<div class="w-full pt-[64px] md:pt-0">
 			<div
-				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-dvh md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"
+				class="md:flex md:h-dvh md:overflow-x-auto md:overflow-y-hidden"
+				data-scroll-area-id={scrollAreaId}
 			>
-				<slot />
+				{
+					sidebar === "home" && (
+						<div class="hidden md:sticky md:left-0 md:z-30 md:block md:flex-shrink-0">
+							<HomeSidebar client:visible scrollAreaId={scrollAreaId} />
+						</div>
+					)
+				}
+				<div
+					class="mx-auto flex max-w-[528px] flex-col md:max-w-none md:flex-row"
+				>
+					<slot />
+				</div>
 			</div>
-		</ScrollArea>
+		</div>
 	</div>
-
-	<style>
-		body {
-			overflow: hidden;
-			position: fixed;
-			width: 100%;
-			height: 100%;
-		}
-		html {
-			overflow: hidden;
-		}
-	</style>
 </BaseLayout>

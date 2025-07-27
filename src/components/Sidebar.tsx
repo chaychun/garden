@@ -24,14 +24,11 @@ export default function Sidebar({
 
 	useEffect(() => {
 		const findScrollContainer = () => {
-			const scrollArea = document.querySelector(
+			const scrollContainer = document.querySelector(
 				`[data-scroll-area-id="${scrollAreaId}"]`,
 			);
-			if (scrollArea) {
-				const viewport = scrollArea.querySelector(".scroll-area-viewport");
-				if (viewport) {
-					scrollContainerRef.current = viewport as HTMLElement;
-				}
+			if (scrollContainer) {
+				scrollContainerRef.current = scrollContainer as HTMLElement;
 			}
 		};
 

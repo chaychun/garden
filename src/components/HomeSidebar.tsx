@@ -6,8 +6,7 @@ import { cn } from "../lib/utils";
 import Sidebar from "./Sidebar";
 
 interface HomeSidebarProps {
-	scrollAreaId: string;
-	title: string;
+	scrollAreaId?: string;
 }
 
 type FilterType = "All" | "Interactions" | "Articles";
@@ -18,7 +17,9 @@ const numberOfItems = {
 	Articles: 11,
 };
 
-export default function HomeSidebar({ scrollAreaId }: HomeSidebarProps) {
+export default function HomeSidebar({
+	scrollAreaId = "main-scroll",
+}: HomeSidebarProps) {
 	const [activeFilter, setActiveFilter] = useState<FilterType>("All");
 
 	const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
