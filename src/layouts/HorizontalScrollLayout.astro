@@ -2,7 +2,6 @@
 import BaseLayout from "./BaseLayout.astro";
 import ScrollArea from "@/components/ScrollArea.astro";
 import HomeSidebar from "@/components/HomeSidebar";
-import FullPageSidebar from "@/components/FullPageSidebar";
 
 interface Props {
 	title: string;
@@ -22,15 +21,7 @@ const { title, scrollAreaId = "main-scroll", sidebar } = Astro.props;
 				<HomeSidebar client:load scrollAreaId={scrollAreaId} title={title} />
 			)
 		}
-		{
-			sidebar === "full-page" && (
-				<FullPageSidebar
-					client:load
-					scrollAreaId={scrollAreaId}
-					title={title}
-				/>
-			)
-		}
+
 		<ScrollArea class="h-full flex-1" id={scrollAreaId} horizontalWheel>
 			<div
 				class="mx-auto flex w-full max-w-[528px] flex-col overflow-y-auto md:h-dvh md:w-max md:max-w-none md:flex-row md:overflow-x-auto md:overflow-y-hidden"

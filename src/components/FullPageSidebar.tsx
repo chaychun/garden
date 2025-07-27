@@ -1,48 +1,60 @@
-import { UnderlineLink } from "@/components/ui/underline-link";
-import { useSidebarStore } from "@/lib/stores/sidebarStore";
+import { navigate } from "astro:transitions/client";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import Sidebar from "./Sidebar";
+import MetadataTable from "./ui/metadata-table";
 
 interface FullPageSidebarProps {
 	scrollAreaId: string;
 	title: string;
+	description: string;
+	createdDate: string;
+	lastUpdatedDate: string;
+	technologies: string[];
 }
 
 export default function FullPageSidebar({
 	scrollAreaId,
 	title,
+	description,
+	createdDate,
+	lastUpdatedDate,
+	technologies,
 }: FullPageSidebarProps) {
-	const { toggleMobileMenu } = useSidebarStore();
+	const handleBackClick = () => {
+		if (window.history.length > 1) {
+			window.history.back();
+		} else {
+			navigate("/test-preview-block");
+		}
+	};
 
 	const desktopContent = (
-		<>
-			<div className="flex w-full items-center justify-between p-4">
-				<a href="/" className="text-base-900 text-lg font-semibold">
-					Back to Home
-				</a>
-				<UnderlineLink
-					href="/"
-					className="text-base-500 hover:text-base-700 text-sm transition-colors duration-300"
-				>
-					Home
-				</UnderlineLink>
+		<div className="flex flex-1 flex-col justify-between gap-2">
+			<div className="flex flex-col gap-16">
+				<div className="flex w-full items-center justify-between p-4">
+					<button
+						onClick={handleBackClick}
+						className="text-base-500 hover:text-base-700 group flex cursor-pointer items-center gap-2 text-sm"
+					>
+						<span className="transition-transform duration-300 group-hover:-translate-x-1">
+							<ArrowLeft size={18} />
+						</span>
+						<span>Back</span>
+					</button>
+				</div>
+				<div className="flex w-full flex-col gap-2 p-4">
+					<h1 className="text-base-900 font-cabinet text-4xl">{title}</h1>
+					<p className="text-base-500 text-sm">{description}</p>
+				</div>
 			</div>
-			<div className="flex w-full items-center gap-4 p-4">
-				<p className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
-					<span>(</span>
-					<span>1</span>
-					<span>)</span>
-				</p>
-				<motion.div
-					className="flex w-[280px] flex-col gap-2"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ type: "spring", duration: 0.5, bounce: 0 }}
-				>
-					<div className="text-base-900 text-5xl font-light">{title}</div>
-				</motion.div>
-			</div>
-		</>
+			<MetadataTable
+				className="px-6"
+				createdDate={createdDate}
+				lastUpdatedDate={lastUpdatedDate}
+				technologies={technologies}
+			/>
+		</div>
 	);
 
 	const mobileContent = (
@@ -58,12 +70,12 @@ export default function FullPageSidebar({
 				</motion.div>
 			</div>
 			<div className="mt-24 flex flex-col gap-3">
-				<UnderlineLink
-					href="/"
+				<button
+					onClick={handleBackClick}
 					className="text-base-500 hover:text-base-700 w-min text-5xl font-light transition-colors duration-300"
 				>
 					Back to Home
-				</UnderlineLink>
+				</button>
 			</div>
 		</div>
 	);
