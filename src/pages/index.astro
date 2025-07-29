@@ -1,76 +1,48 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import ArticleBlock from "@/components/blocks/ArticleBlock.astro";
+import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
+import HorizontalScrollLayout from "@/layouts/HorizontalScrollLayout.astro";
 ---
 
-<BaseLayout>
-	<div class="min-h-screen space-y-8 p-8">
-		<h1 class="font-sans text-8xl font-bold text-gray-900">
-			Switzer Font Test
-		</h1>
+<HorizontalScrollLayout
+	title="Test page"
+	sidebar="home"
+	scrollAreaId="main-scroll"
+>
+	<PreviewBlock
+		title="Test Interaction 1"
+		description="Exercitation nisi esse ut enim. Culpa reprehenderit aute sint elit in tempor veniam labore duis. Voluptate ad ipsum eu laboris laboris amet ad ullamco commodo enim sit."
+		date="Jan 12, 2024"
+		bgImage="https://picsum.photos/800/600?random=1"
+		previewImage="https://picsum.photos/400/300?random=2"
+		position="top"
+		layout="portrait"
+		tags={["React", "Motion"]}
+	/>
+	<ArticleBlock
+		title="Creativity arise from restrictions, not despite of them"
+		description="Voluptate eiusmod ad irure ullamco est aliquip magna nulla irure commodo do. Culpa et dolore proident laboris eu ipsum Lorem et dolore veniam. Magna Lorem nulla consequat incididunt sint labore exercitation magna ad. Esse Lorem aliqua eu laboris commodo quis. Aliquip irure ea aliquip occaecat ullamco excepteur dolore ullamco ad labore. Quis occaecat aliquip cupidatat proident cupidatat do est do magna aliqua magna laborum quis eu. Consequat consequat dolor incididunt esse anim deserunt nostrud ut sint minim."
+		date="Jan 15, 2024"
+		link="/"
+		position="top"
+	/>
+	<PreviewBlock
+		title="Test Interaction 2"
+		description="This is a test description for the preview block component to demonstrate how it looks and functions."
+		date="Jan 18, 2024"
+		bgImage="https://picsum.photos/800/600?random=3"
+		previewImage="https://picsum.photos/400/300?random=4"
+		position="bottom"
+		layout="portrait"
+		tags={["Astro", "GSAP"]}
+	/>
 
-		<h2
-			class="text-6xl font-bold text-gray-800"
-			style="font-family: var(--font-cabinet);"
-		>
-			Cabinet Font Test
-		</h2>
-
-		<p class="font-sans text-2xl text-gray-600">
-			This text uses Switzer (default sans font)
-		</p>
-
-		<p class="text-2xl text-gray-600" style="font-family: var(--font-cabinet);">
-			This text uses Cabinet Grotesk
-		</p>
-
-		<!-- Navigation to view transition test pages -->
-		<div class="mt-12 rounded-xl bg-white p-8 shadow-lg">
-			<h3 class="mb-6 text-3xl font-bold text-gray-800">
-				View Transitions Test
-			</h3>
-			<div class="flex gap-4">
-				<a
-					href="/page1"
-					class="inline-block rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
-				>
-					Go to Page 1
-				</a>
-				<a
-					href="/page2"
-					class="inline-block rounded-lg bg-green-600 px-6 py-3 text-white transition-colors hover:bg-green-700"
-				>
-					Go to Page 2
-				</a>
-				<a
-					href="/test-preview-block"
-					class="inline-block rounded-lg bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
-				>
-					Test Preview Block
-				</a>
-			</div>
-			<p class="mt-4 text-gray-600">
-				Navigate between these pages to test Astro view transitions with morph
-				animations and persistent video elements.
-			</p>
-		</div>
-
-		<!-- Scroll Area Component Demo -->
-		<div class="mt-8 rounded-xl bg-white p-8 shadow-lg">
-			<h3 class="mb-6 text-3xl font-bold text-gray-800">
-				Scroll Area Component
-			</h3>
-			<div class="flex gap-4">
-				<a
-					href="/scroll-demo"
-					class="inline-block rounded-lg bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
-				>
-					View Scroll Area Demo
-				</a>
-			</div>
-			<p class="mt-4 text-gray-600">
-				Check out the new accessible scroll wrapper component with custom
-				scrollbars, hover behavior, and RTL support.
-			</p>
-		</div>
-	</div>
-</BaseLayout>
+	<ArticleBlock
+		title="The best way to predict the future is to invent it"
+		description="Dolor in irure tempor labore dolore cillum culpa magna minim duis cupidatat amet nisi ullamco. Pariatur ipsum cupidatat aliquip. Nulla amet enim culpa consectetur est ut magna minim veniam sunt nisi elit Lorem sit. Dolor id velit culpa do occaecat Lorem eiusmod enim ea minim consectetur deserunt ut eu."
+		date="Jan 20, 2024"
+		link="/"
+		previewImage="https://picsum.photos/400/300?random=5"
+		position="bottom"
+	/>
+</HorizontalScrollLayout>
