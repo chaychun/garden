@@ -6,6 +6,8 @@ import { defineConfig, fontProviders } from "astro/config";
 
 import vtbot from "astro-vtbot";
 
+import mdx from "@astrojs/mdx";
+
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
@@ -15,6 +17,7 @@ export default defineConfig({
 			},
 		}),
 		vtbot(),
+		mdx(),
 	],
 
 	vite: {
