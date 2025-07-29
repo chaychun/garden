@@ -16,72 +16,66 @@ A lightweight, accessible scroll wrapper component for Astro that provides custo
 
 ```astro
 ---
-import ScrollArea from '../components/ScrollArea.astro';
+import ScrollArea from "../components/ScrollArea.astro";
 ---
 
-<ScrollArea class="h-64 border rounded">
-  <div class="p-4">
-    <!-- Your content here -->
-  </div>
+<ScrollArea class="h-64 rounded border">
+	<div class="p-4">
+		<!-- Your content here -->
+	</div>
 </ScrollArea>
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `class` | `string` | `''` | CSS classes for the scroll area container |
-| `style` | `string` | `''` | Inline styles for the scroll area container |
-| `dir` | `'ltr' \| 'rtl'` | `'ltr'` | Text direction |
-| `scrollHideDelay` | `number` | `600` | Delay in milliseconds before hiding scrollbars |
-| `hideScrollbar` | `boolean` | `false` | Whether to hide scrollbars completely |
-| `viewportClass` | `string` | `''` | CSS classes for the viewport element |
-| `viewportStyle` | `string` | `''` | Inline styles for the viewport element |
-| `scrollbarClass` | `string` | `''` | CSS classes for scrollbar elements |
-| `scrollbarStyle` | `string` | `''` | Inline styles for scrollbar elements |
-| `thumbClass` | `string` | `''` | CSS classes for thumb elements |
-| `thumbStyle` | `string` | `''` | Inline styles for thumb elements |
+| Prop              | Type             | Default | Description                                    |
+| ----------------- | ---------------- | ------- | ---------------------------------------------- |
+| `class`           | `string`         | `''`    | CSS classes for the scroll area container      |
+| `style`           | `string`         | `''`    | Inline styles for the scroll area container    |
+| `dir`             | `'ltr' \| 'rtl'` | `'ltr'` | Text direction                                 |
+| `scrollHideDelay` | `number`         | `600`   | Delay in milliseconds before hiding scrollbars |
+| `hideScrollbar`   | `boolean`        | `false` | Whether to hide scrollbars completely          |
+| `viewportClass`   | `string`         | `''`    | CSS classes for the viewport element           |
+| `viewportStyle`   | `string`         | `''`    | Inline styles for the viewport element         |
+| `scrollbarClass`  | `string`         | `''`    | CSS classes for scrollbar elements             |
+| `scrollbarStyle`  | `string`         | `''`    | Inline styles for scrollbar elements           |
+| `thumbClass`      | `string`         | `''`    | CSS classes for thumb elements                 |
+| `thumbStyle`      | `string`         | `''`    | Inline styles for thumb elements               |
 
 ## Examples
 
 ### Custom Styled Scrollbars
 
 ```astro
-<ScrollArea 
-  class="h-64 border rounded"
-  scrollbarClass="bg-blue-200 rounded-full"
-  thumbClass="bg-blue-600 rounded-full"
-  scrollHideDelay={800}
+<ScrollArea
+	class="h-64 rounded border"
+	scrollbarClass="bg-blue-200 rounded-full"
+	thumbClass="bg-blue-600 rounded-full"
+	scrollHideDelay={800}
 >
-  <div class="p-4">
-    <!-- Content -->
-  </div>
+	<div class="p-4">
+		<!-- Content -->
+	</div>
 </ScrollArea>
 ```
 
 ### RTL Support
 
 ```astro
-<ScrollArea 
-  class="h-64"
-  dir="rtl"
->
-  <div class="p-4">
-    <!-- RTL content -->
-  </div>
+<ScrollArea class="h-64" dir="rtl">
+	<div class="p-4">
+		<!-- RTL content -->
+	</div>
 </ScrollArea>
 ```
 
 ### Hidden Scrollbars
 
 ```astro
-<ScrollArea 
-  class="h-64"
-  hideScrollbar={true}
->
-  <div class="p-4">
-    <!-- Content with invisible scrollbar -->
-  </div>
+<ScrollArea class="h-64" hideScrollbar={true}>
+	<div class="p-4">
+		<!-- Content with invisible scrollbar -->
+	</div>
 </ScrollArea>
 ```
 
@@ -89,12 +83,12 @@ import ScrollArea from '../components/ScrollArea.astro';
 
 ```astro
 <ScrollArea class="h-32">
-  <div class="flex space-x-4" style="width: max-content;">
-    <div class="min-w-48 p-4 bg-gray-100">Card 1</div>
-    <div class="min-w-48 p-4 bg-gray-100">Card 2</div>
-    <div class="min-w-48 p-4 bg-gray-100">Card 3</div>
-    <!-- More cards... -->
-  </div>
+	<div class="flex space-x-4" style="width: max-content;">
+		<div class="min-w-48 bg-gray-100 p-4">Card 1</div>
+		<div class="min-w-48 bg-gray-100 p-4">Card 2</div>
+		<div class="min-w-48 bg-gray-100 p-4">Card 3</div>
+		<!-- More cards... -->
+	</div>
 </ScrollArea>
 ```
 

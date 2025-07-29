@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
@@ -55,18 +55,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 		</div>
 
 		<!-- Scroll Area Component Demo -->
-		<div class="mt-8 p-8 bg-white rounded-xl shadow-lg">
-			<h3 class="text-3xl font-bold text-gray-800 mb-6">Scroll Area Component</h3>
+		<div class="mt-8 rounded-xl bg-white p-8 shadow-lg">
+			<h3 class="mb-6 text-3xl font-bold text-gray-800">
+				Scroll Area Component
+			</h3>
 			<div class="flex gap-4">
-				<a 
-					href="/scroll-demo" 
-					class="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+				<a
+					href="/scroll-demo"
+					class="inline-block rounded-lg bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
 				>
 					View Scroll Area Demo
 				</a>
 			</div>
 			<p class="mt-4 text-gray-600">
-				Check out the new accessible scroll wrapper component with custom scrollbars, hover behavior, and RTL support.
+				Check out the new accessible scroll wrapper component with custom
+				scrollbars, hover behavior, and RTL support.
 			</p>
 		</div>
 	</div>

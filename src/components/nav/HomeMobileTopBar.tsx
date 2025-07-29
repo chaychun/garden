@@ -1,8 +1,8 @@
 import { UnderlineLink } from "@/components/ui/underline-link";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
+import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { cn } from "../lib/utils";
 import MobileTopBar from "./MobileTopBar";
 
 type FilterType = "All" | "Interactions" | "Articles";
