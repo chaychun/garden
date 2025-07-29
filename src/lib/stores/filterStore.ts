@@ -60,7 +60,14 @@ const urlStorageApi = {
 	setItem: (key: string, value: string): void => {
 		try {
 			const data = JSON.parse(value);
-			const activeFilter = data.state?.activeFilter;
+			const activeFilter = data.state?.activeFilter as FilterType | undefined;
+
+			if (!activeFilter || typeof activeFilter !== "string") {
+				console.warn(
+					`Invalid activeFilter value: ${activeFilter}. Expected a string.`,
+				);
+				return;
+			}
 
 			const searchParams = getSearchParams();
 			const urlValue = activeFilter.toLowerCase();
