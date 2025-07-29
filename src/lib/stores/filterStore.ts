@@ -29,31 +29,53 @@ const updateSearchParams = (searchParams: URLSearchParams) => {
 	);
 };
 
-const getSearchParam = (key: string) => {
-	const searchParams = getSearchParams();
-	return searchParams.get(key);
-};
+const urlStorageApi = {
+	getItem: (key: string): string | null => {
+		const searchParams = getSearchParams();
+		const filterParam = searchParams.get(key);
 
-const updateSearchParam = (key: string, value: string) => {
-	const searchParams = getSearchParams();
-	if (value === "All") {
+		if (!filterParam) {
+			return null;
+		}
+
+		let activeFilter: FilterType;
+		if (filterParam === "interactions") {
+			activeFilter = "Interactions";
+		} else if (filterParam === "articles") {
+			activeFilter = "Articles";
+		} else if (filterParam === "all") {
+			activeFilter = "All";
+		} else {
+			console.warn(
+				`Invalid filter value "${filterParam}" in URL. Falling back to "All".`,
+			);
+			activeFilter = "All";
+
+			searchParams.set(key, "all");
+			updateSearchParams(searchParams);
+		}
+
+		return JSON.stringify({ activeFilter });
+	},
+	setItem: (key: string, value: string): void => {
+		try {
+			const data = JSON.parse(value);
+			const activeFilter = data.state?.activeFilter;
+
+			const searchParams = getSearchParams();
+			const urlValue = activeFilter.toLowerCase();
+
+			searchParams.set(key, urlValue);
+			updateSearchParams(searchParams);
+		} catch (error) {
+			console.error("Error parsing stored value:", error);
+		}
+	},
+	removeItem: (key: string): void => {
+		const searchParams = getSearchParams();
 		searchParams.delete(key);
-	} else {
-		searchParams.set(key, value);
-	}
-	updateSearchParams(searchParams);
-};
-
-const removeSearchParam = (key: string) => {
-	const searchParams = getSearchParams();
-	searchParams.delete(key);
-	updateSearchParams(searchParams);
-};
-
-const searchParamsStorage = {
-	getItem: (key: string) => getSearchParam(key),
-	setItem: (key: string, value: string) => updateSearchParam(key, value),
-	removeItem: (key: string) => removeSearchParam(key),
+		updateSearchParams(searchParams);
+	},
 };
 
 export const useFilterStore = create<FilterState>()(
@@ -67,8 +89,7 @@ export const useFilterStore = create<FilterState>()(
 		}),
 		{
 			name: "filter",
-			storage: createJSONStorage(() => searchParamsStorage),
-			partialize: (state) => ({ activeFilter: state.activeFilter }),
+			storage: createJSONStorage(() => urlStorageApi),
 		},
 	),
 );
