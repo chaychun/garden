@@ -21,6 +21,7 @@ export default function Sidebar({
 		useSidebarStore();
 
 	const scrollContainerRef = useRef<HTMLElement | null>(null);
+	const sidebarRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const findScrollContainer = () => {
@@ -80,6 +81,33 @@ export default function Sidebar({
 		};
 	}, [isExpanded, isManualToggle, setExpanded]);
 
+	useEffect(() => {
+		if (!isExpanded || isManualToggle) return;
+
+		const handleClickOutside = (event: MouseEvent) => {
+			if (!sidebarRef.current) return;
+
+			const target = event.target as Element;
+			const isClickInsideSidebar = sidebarRef.current.contains(target);
+
+			if (isClickInsideSidebar) return;
+
+			const isInteractiveElement = target.closest(
+				"a, button, [role='button'], [tabindex], input, select, textarea, [onclick]",
+			);
+
+			if (isInteractiveElement) return;
+
+			setExpanded(false);
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [isExpanded, isManualToggle, setExpanded]);
+
 	const handleToggleSidebar = () => {
 		setManualToggle(true);
 
@@ -108,6 +136,7 @@ export default function Sidebar({
 	return (
 		<MotionConfig transition={defaultTransition}>
 			<motion.div
+				ref={sidebarRef}
 				className="bg-base-50 flex h-full flex-col justify-between overflow-hidden"
 				initial={{ width: 400 }}
 				animate={{
