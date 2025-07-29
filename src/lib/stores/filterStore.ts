@@ -1,3 +1,4 @@
+import { navigate } from "astro:transitions/client";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -20,13 +21,16 @@ const getSearchParams = () => {
 	return new URL(window.location.href).searchParams;
 };
 
-const updateSearchParams = (searchParams: URLSearchParams) => {
-	if (typeof window === "undefined") return;
-	window.history.replaceState(
-		{},
-		"",
-		`${window.location.pathname}?${searchParams.toString()}`,
-	);
+const navigateWithUpdatedParams = (key: string, value?: string) => {
+	const searchParams = getSearchParams();
+	if (value) {
+		searchParams.set(key, value);
+	} else {
+		searchParams.delete(key);
+	}
+	navigate(window.location.pathname + "?" + searchParams.toString(), {
+		history: "replace",
+	});
 };
 
 const urlStorageApi = {
@@ -51,8 +55,7 @@ const urlStorageApi = {
 			);
 			activeFilter = "All";
 
-			searchParams.set(key, "all");
-			updateSearchParams(searchParams);
+			navigateWithUpdatedParams(key, "all");
 		}
 
 		return JSON.stringify({
@@ -72,19 +75,14 @@ const urlStorageApi = {
 				return;
 			}
 
-			const searchParams = getSearchParams();
 			const urlValue = activeFilter.toLowerCase();
-
-			searchParams.set(key, urlValue);
-			updateSearchParams(searchParams);
+			navigateWithUpdatedParams(key, urlValue);
 		} catch (error) {
 			console.error("Error parsing stored value:", error);
 		}
 	},
 	removeItem: (key: string): void => {
-		const searchParams = getSearchParams();
-		searchParams.delete(key);
-		updateSearchParams(searchParams);
+		navigateWithUpdatedParams(key);
 	},
 };
 

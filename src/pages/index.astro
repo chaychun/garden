@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import ArticleBlock from "@/components/blocks/ArticleBlock.astro";
 import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
 import HorizontalScrollLayout from "@/layouts/HorizontalScrollLayout.astro";
@@ -7,10 +9,16 @@ import { getCollection } from "astro:content";
 const interactions = await getCollection("interactions");
 const articles = await getCollection("articles");
 
-const allItems = [
-	...interactions.map((item) => ({ ...item, type: "interaction" })),
-	...articles.map((item) => ({ ...item, type: "article" })),
-].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const allItems = [...interactions, ...articles].sort(
+	(a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const filterParam = Astro.url.searchParams.get("filter") || "all";
+
+let filteredItems = allItems;
+if (filterParam !== "all") {
+	filteredItems = allItems.filter((item) => item.collection === filterParam);
+}
 ---
 
 <HorizontalScrollLayout
@@ -19,14 +27,14 @@ const allItems = [
 	scrollAreaId="main-scroll"
 >
 	{
-		allItems.map((item) => {
+		filteredItems.map((item) => {
 			const formattedDate = item.data.date.toLocaleDateString("en-US", {
 				year: "numeric",
 				month: "short",
 				day: "numeric",
 			});
 
-			if (item.type === "interaction") {
+			if (item.collection === "interactions") {
 				return (
 					<PreviewBlock
 						{...item.data}

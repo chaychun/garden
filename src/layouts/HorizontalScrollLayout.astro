@@ -18,7 +18,10 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 			sidebar === "home" && (
 				<>
 					<div class="fixed top-0 right-0 left-0 z-40 block md:hidden">
-						<HomeMobileTopBar client:visible />
+						<HomeMobileTopBar
+							client:visible
+							transition:persist="home-mobile-topbar"
+						/>
 					</div>
 				</>
 			)
@@ -32,7 +35,11 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 				{
 					sidebar === "home" && (
 						<div class="hidden md:sticky md:left-0 md:z-30 md:block md:flex-shrink-0">
-							<HomeSidebar client:visible scrollAreaId={scrollAreaId} />
+							<HomeSidebar
+								client:visible
+								scrollAreaId={scrollAreaId}
+								transition:persist="home-sidebar"
+							/>
 						</div>
 					)
 				}
