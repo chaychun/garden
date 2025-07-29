@@ -51,6 +51,7 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 			} from "@/lib/scroll-smoothing";
 
 			let currentCleanup: (() => void) | null = null;
+			let resizeTimeout: number | null = null;
 
 			function setupScrollSmoothing() {
 				if (currentCleanup) {
@@ -68,7 +69,13 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 			}
 
 			function handleResize() {
-				setupScrollSmoothing();
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
+				}
+				resizeTimeout = window.setTimeout(() => {
+					setupScrollSmoothing();
+					resizeTimeout = null;
+				}, 150);
 			}
 
 			if (document.readyState === "loading") {
@@ -85,6 +92,9 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 				if (currentCleanup) {
 					currentCleanup();
 					currentCleanup = null;
+				}
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
 				}
 			});
 		</script>

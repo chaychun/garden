@@ -3,6 +3,24 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollToPlugin);
 
+function clampScrollValue(current: number, delta: number, max: number): number {
+	return Math.max(0, Math.min(max, current + delta));
+}
+
+function createSmoothScrollTween(
+	target: HTMLElement | Window,
+	scrollTo: { x?: number; y?: number },
+	duration: number = 0.6,
+	onComplete?: () => void,
+): gsap.core.Tween {
+	return gsap.to(target, {
+		scrollTo: { ...scrollTo, autoKill: false },
+		duration,
+		ease: "power2.out",
+		onComplete,
+	});
+}
+
 export function setupHorizontalScrollSmoothing(containerSelector: string) {
 	const scrollContainer = document.querySelector(
 		containerSelector,
@@ -12,67 +30,45 @@ export function setupHorizontalScrollSmoothing(containerSelector: string) {
 	let smoothScrollTween: gsap.core.Tween | null = null;
 
 	const handleWheel = (e: WheelEvent) => {
-		if (e.shiftKey) return;
-
-		e.preventDefault();
-
 		const hasHorizontalScroll =
 			scrollContainer.scrollWidth > scrollContainer.offsetWidth;
 		const hasVerticalScroll =
 			scrollContainer.scrollHeight > scrollContainer.offsetHeight;
 
-		if (
+		const isShiftWheel = e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0);
+		const isNormalWheel =
 			!e.shiftKey &&
 			e.deltaY !== 0 &&
 			hasHorizontalScroll &&
-			!hasVerticalScroll
-		) {
-			if (smoothScrollTween) {
-				smoothScrollTween.kill();
-			}
-			const currentScrollLeft = scrollContainer.scrollLeft;
-			const scrollDelta = e.deltaY * 1.5;
-			const targetScrollLeft = Math.max(
-				0,
-				Math.min(
-					scrollContainer.scrollWidth - scrollContainer.offsetWidth,
-					currentScrollLeft + scrollDelta,
-				),
-			);
-			smoothScrollTween = gsap.to(scrollContainer, {
-				scrollTo: { x: targetScrollLeft, autoKill: false },
-				duration: 0.6,
-				ease: "power2.out",
-				onComplete: () => {
-					smoothScrollTween = null;
-				},
-			});
-		}
-	};
+			!hasVerticalScroll;
 
-	const handleShiftWheel = (e: WheelEvent) => {
-		if (e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0)) {
+		if (isShiftWheel || isNormalWheel) {
 			e.preventDefault();
+
 			if (smoothScrollTween) {
 				smoothScrollTween.kill();
 			}
-			const scrollDelta = (e.deltaY || e.deltaX) * 1.5;
+
+			const scrollDelta = isShiftWheel
+				? (e.deltaY || e.deltaX) * 1.5
+				: e.deltaY * 1.5;
 			const currentScrollLeft = scrollContainer.scrollLeft;
-			const targetScrollLeft = Math.max(
-				0,
-				Math.min(
-					scrollContainer.scrollWidth - scrollContainer.offsetWidth,
-					currentScrollLeft + scrollDelta,
-				),
+			const maxScrollLeft =
+				scrollContainer.scrollWidth - scrollContainer.offsetWidth;
+			const targetScrollLeft = clampScrollValue(
+				currentScrollLeft,
+				scrollDelta,
+				maxScrollLeft,
 			);
-			smoothScrollTween = gsap.to(scrollContainer, {
-				scrollTo: { x: targetScrollLeft, autoKill: false },
-				duration: 0.5,
-				ease: "power2.out",
-				onComplete: () => {
+
+			smoothScrollTween = createSmoothScrollTween(
+				scrollContainer,
+				{ x: targetScrollLeft },
+				0.6,
+				() => {
 					smoothScrollTween = null;
 				},
-			});
+			);
 		}
 	};
 
@@ -80,13 +76,8 @@ export function setupHorizontalScrollSmoothing(containerSelector: string) {
 		passive: false,
 	});
 
-	scrollContainer.addEventListener("wheel", handleShiftWheel, {
-		passive: false,
-	});
-
 	return () => {
 		scrollContainer.removeEventListener("wheel", handleWheel);
-		scrollContainer.removeEventListener("wheel", handleShiftWheel);
 		if (smoothScrollTween) {
 			smoothScrollTween.kill();
 		}
@@ -106,22 +97,22 @@ export function setupVerticalScrollSmoothing() {
 		const currentScrollTop =
 			window.pageYOffset || document.documentElement.scrollTop;
 		const scrollDelta = e.deltaY * 1.5;
-		const targetScrollTop = Math.max(
-			0,
-			Math.min(
-				document.documentElement.scrollHeight - window.innerHeight,
-				currentScrollTop + scrollDelta,
-			),
+		const maxScrollTop =
+			document.documentElement.scrollHeight - window.innerHeight;
+		const targetScrollTop = clampScrollValue(
+			currentScrollTop,
+			scrollDelta,
+			maxScrollTop,
 		);
 
-		smoothScrollTween = gsap.to(window, {
-			scrollTo: { y: targetScrollTop, autoKill: false },
-			duration: 0.6,
-			ease: "power2.out",
-			onComplete: () => {
+		smoothScrollTween = createSmoothScrollTween(
+			window,
+			{ y: targetScrollTop },
+			0.6,
+			() => {
 				smoothScrollTween = null;
 			},
-		});
+		);
 	};
 
 	document.addEventListener("wheel", handleWheel, {
