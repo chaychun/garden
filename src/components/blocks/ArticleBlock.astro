@@ -9,6 +9,7 @@ interface Props {
 	growthStage?: "Seedling" | "Budding" | "Evergreen";
 	previewImage?: string;
 	position?: "top" | "bottom";
+	[key: string]: any;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
 	growthStage = "Seedling",
 	previewImage,
 	position = "top",
+	...rest
 } = Astro.props;
 ---
 
@@ -29,6 +31,7 @@ const {
 		position === "top" && "md:justify-start",
 		position === "bottom" && "md:justify-end",
 	]}
+	{...rest}
 >
 	<h2 class="font-cabinet text-base-900 text-4xl leading-none font-medium">
 		{title}

@@ -1,4 +1,3 @@
-import { navigate } from "astro:transitions/client";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -21,16 +20,28 @@ const getSearchParams = () => {
 	return new URL(window.location.href).searchParams;
 };
 
-const navigateWithUpdatedParams = (key: string, value?: string) => {
+const updateUrlWithParams = (key: string, value?: string) => {
+	if (typeof window === "undefined") return;
+
 	const searchParams = getSearchParams();
 	if (value) {
 		searchParams.set(key, value);
 	} else {
 		searchParams.delete(key);
 	}
-	navigate(window.location.pathname + "?" + searchParams.toString(), {
-		history: "replace",
+
+	const newUrl = window.location.pathname + "?" + searchParams.toString();
+	window.history.replaceState({}, "", newUrl);
+};
+
+const dispatchFilterChangeEvent = (filter: FilterType) => {
+	if (typeof window === "undefined") return;
+
+	const urlValue = filter === "All" ? "all" : filter.toLowerCase();
+	const event = new CustomEvent("filter-changed", {
+		detail: { filter: urlValue },
 	});
+	document.dispatchEvent(event);
 };
 
 const urlStorageApi = {
@@ -55,7 +66,7 @@ const urlStorageApi = {
 			);
 			activeFilter = "All";
 
-			navigateWithUpdatedParams(key, "all");
+			updateUrlWithParams(key, "all");
 		}
 
 		return JSON.stringify({
@@ -76,13 +87,14 @@ const urlStorageApi = {
 			}
 
 			const urlValue = activeFilter.toLowerCase();
-			navigateWithUpdatedParams(key, urlValue);
+			updateUrlWithParams(key, urlValue);
+			dispatchFilterChangeEvent(activeFilter);
 		} catch (error) {
 			console.error("Error parsing stored value:", error);
 		}
 	},
 	removeItem: (key: string): void => {
-		navigateWithUpdatedParams(key);
+		updateUrlWithParams(key);
 	},
 };
 

@@ -12,13 +12,6 @@ const articles = await getCollection("articles");
 const allItems = [...interactions, ...articles].sort(
 	(a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
-
-const filterParam = Astro.url.searchParams.get("filter") || "all";
-
-let filteredItems = allItems;
-if (filterParam !== "all") {
-	filteredItems = allItems.filter((item) => item.collection === filterParam);
-}
 ---
 
 <HorizontalScrollLayout
@@ -27,7 +20,7 @@ if (filterParam !== "all") {
 	scrollAreaId="main-scroll"
 >
 	{
-		filteredItems.map((item) => {
+		allItems.map((item) => {
 			const formattedDate = item.data.date.toLocaleDateString("en-US", {
 				year: "numeric",
 				month: "short",
@@ -41,6 +34,7 @@ if (filterParam !== "all") {
 						date={formattedDate}
 						bgImage={"bgImage" in item.data ? item.data.bgImage || "" : ""}
 						previewImage={item.data.previewImage ?? ""}
+						data-collection="interactions"
 					/>
 				);
 			} else {
@@ -49,9 +43,44 @@ if (filterParam !== "all") {
 						{...item.data}
 						date={formattedDate}
 						link={`/articles/${item.id}/`}
+						data-collection="articles"
 					/>
 				);
 			}
 		})
 	}
 </HorizontalScrollLayout>
+
+<script>
+	function initializeFiltering() {
+		function applyFilter(filter: string) {
+			const allBlocks = document.querySelectorAll("[data-collection]");
+
+			allBlocks.forEach((block) => {
+				const blockCollection = block.getAttribute("data-collection");
+
+				if (filter === "all" || filter === blockCollection) {
+					block.classList.remove("hidden");
+				} else {
+					block.classList.add("hidden");
+				}
+			});
+		}
+
+		function handleFilterChange(event: CustomEvent<{ filter: string }>) {
+			applyFilter(event.detail.filter);
+		}
+
+		const urlParams = new URLSearchParams(window.location.search);
+		const initialFilter = urlParams.get("filter") || "all";
+		applyFilter(initialFilter);
+
+		document.addEventListener(
+			"filter-changed",
+			handleFilterChange as EventListener,
+		);
+	}
+
+	document.addEventListener("astro:page-load", initializeFiltering);
+	document.addEventListener("DOMContentLoaded", initializeFiltering);
+</script>

@@ -11,6 +11,7 @@ interface Props {
 	position?: "top" | "bottom";
 	layout?: "landscape" | "portrait";
 	tags?: string[];
+	[key: string]: any;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
 	position = "top",
 	layout = "portrait",
 	tags,
+	...rest
 } = Astro.props;
 ---
 
@@ -31,6 +33,7 @@ const {
 		"mb-12 md:mb-0",
 		position === "bottom" && "md:flex-col-reverse",
 	]}
+	{...rest}
 >
 	<div
 		class:list={[
