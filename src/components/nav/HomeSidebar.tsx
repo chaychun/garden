@@ -1,8 +1,8 @@
 import { SlidingNumber } from "@/components/ui/sliding-number";
 import { UnderlineLink } from "@/components/ui/underline-link";
+import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { cn } from "../lib/utils";
 import Sidebar from "./Sidebar";
 
 interface HomeSidebarProps {
