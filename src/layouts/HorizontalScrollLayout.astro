@@ -43,121 +43,182 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<script>
-		import { gsap } from "gsap";
-		import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+		<script>
+			import { gsap } from "gsap";
+			import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-		gsap.registerPlugin(ScrollToPlugin);
+			gsap.registerPlugin(ScrollToPlugin);
 
-		function setupHorizontalScrollSmoothing() {
-			const scrollContainer = document.querySelector(
-				"#scroll-container",
-			) as HTMLElement;
+			let currentCleanup: (() => void) | null = null;
 
-			if (!scrollContainer) return;
+			function setupScrollSmoothing() {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
 
-			let smoothScrollTween: gsap.core.Tween | null = null;
-
-			const handleWheel = (e: WheelEvent) => {
+				const scrollContainer = document.querySelector(
+					"#scroll-container",
+				) as HTMLElement;
 				const isDesktop = window.innerWidth >= 768;
 
-				if (!isDesktop || e.shiftKey) return;
+				if (isDesktop) {
+					currentCleanup = setupDesktopHorizontalScroll(scrollContainer);
+				} else {
+					currentCleanup = setupMobileVerticalScroll();
+				}
+			}
 
-				e.preventDefault();
+			function setupDesktopHorizontalScroll(scrollContainer: HTMLElement) {
+				if (!scrollContainer) return () => {};
 
-				const hasHorizontalScroll =
-					scrollContainer.scrollWidth > scrollContainer.offsetWidth;
-				const hasVerticalScroll =
-					scrollContainer.scrollHeight > scrollContainer.offsetHeight;
+				let smoothScrollTween: gsap.core.Tween | null = null;
 
-				if (
-					!e.shiftKey &&
-					e.deltaY !== 0 &&
-					hasHorizontalScroll &&
-					!hasVerticalScroll
-				) {
+				const handleWheel = (e: WheelEvent) => {
+					if (e.shiftKey) return;
+
+					e.preventDefault();
+
+					const hasHorizontalScroll =
+						scrollContainer.scrollWidth > scrollContainer.offsetWidth;
+					const hasVerticalScroll =
+						scrollContainer.scrollHeight > scrollContainer.offsetHeight;
+
+					if (
+						!e.shiftKey &&
+						e.deltaY !== 0 &&
+						hasHorizontalScroll &&
+						!hasVerticalScroll
+					) {
+						if (smoothScrollTween) {
+							smoothScrollTween.kill();
+						}
+						const currentScrollLeft = scrollContainer.scrollLeft;
+						const scrollDelta = e.deltaY * 1.5;
+						const targetScrollLeft = Math.max(
+							0,
+							Math.min(
+								scrollContainer.scrollWidth - scrollContainer.offsetWidth,
+								currentScrollLeft + scrollDelta,
+							),
+						);
+						smoothScrollTween = gsap.to(scrollContainer, {
+							scrollTo: { x: targetScrollLeft, autoKill: false },
+							duration: 0.6,
+							ease: "power2.out",
+							onComplete: () => {
+								smoothScrollTween = null;
+							},
+						});
+					}
+				};
+
+				const handleShiftWheel = (e: WheelEvent) => {
+					if (e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0)) {
+						e.preventDefault();
+						if (smoothScrollTween) {
+							smoothScrollTween.kill();
+						}
+						const scrollDelta = (e.deltaY || e.deltaX) * 1.5;
+						const currentScrollLeft = scrollContainer.scrollLeft;
+						const targetScrollLeft = Math.max(
+							0,
+							Math.min(
+								scrollContainer.scrollWidth - scrollContainer.offsetWidth,
+								currentScrollLeft + scrollDelta,
+							),
+						);
+						smoothScrollTween = gsap.to(scrollContainer, {
+							scrollTo: { x: targetScrollLeft, autoKill: false },
+							duration: 0.5,
+							ease: "power2.out",
+							onComplete: () => {
+								smoothScrollTween = null;
+							},
+						});
+					}
+				};
+
+				scrollContainer.addEventListener("wheel", handleWheel, {
+					passive: false,
+				});
+
+				scrollContainer.addEventListener("wheel", handleShiftWheel, {
+					passive: false,
+				});
+
+				return () => {
+					scrollContainer.removeEventListener("wheel", handleWheel);
+					scrollContainer.removeEventListener("wheel", handleShiftWheel);
 					if (smoothScrollTween) {
 						smoothScrollTween.kill();
 					}
-					const currentScrollLeft = scrollContainer.scrollLeft;
+				};
+			}
+
+			function setupMobileVerticalScroll() {
+				let smoothScrollTween: gsap.core.Tween | null = null;
+
+				const handleWheel = (e: WheelEvent) => {
+					e.preventDefault();
+
+					if (smoothScrollTween) {
+						smoothScrollTween.kill();
+					}
+
+					const currentScrollTop =
+						window.pageYOffset || document.documentElement.scrollTop;
 					const scrollDelta = e.deltaY * 1.5;
-					const targetScrollLeft = Math.max(
+					const targetScrollTop = Math.max(
 						0,
 						Math.min(
-							scrollContainer.scrollWidth - scrollContainer.offsetWidth,
-							currentScrollLeft + scrollDelta,
+							document.documentElement.scrollHeight - window.innerHeight,
+							currentScrollTop + scrollDelta,
 						),
 					);
-					smoothScrollTween = gsap.to(scrollContainer, {
-						scrollTo: { x: targetScrollLeft, autoKill: false },
+
+					smoothScrollTween = gsap.to(window, {
+						scrollTo: { y: targetScrollTop, autoKill: false },
 						duration: 0.6,
 						ease: "power2.out",
 						onComplete: () => {
 							smoothScrollTween = null;
 						},
 					});
-				}
-			};
+				};
 
-			const handleShiftWheel = (e: WheelEvent) => {
-				if (e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0)) {
-					e.preventDefault();
+				document.addEventListener("wheel", handleWheel, {
+					passive: false,
+				});
+
+				return () => {
+					document.removeEventListener("wheel", handleWheel);
 					if (smoothScrollTween) {
 						smoothScrollTween.kill();
 					}
-					const scrollDelta = (e.deltaY || e.deltaX) * 1.5;
-					const currentScrollLeft = scrollContainer.scrollLeft;
-					const targetScrollLeft = Math.max(
-						0,
-						Math.min(
-							scrollContainer.scrollWidth - scrollContainer.offsetWidth,
-							currentScrollLeft + scrollDelta,
-						),
-					);
-					smoothScrollTween = gsap.to(scrollContainer, {
-						scrollTo: { x: targetScrollLeft, autoKill: false },
-						duration: 0.5,
-						ease: "power2.out",
-						onComplete: () => {
-							smoothScrollTween = null;
-						},
-					});
+				};
+			}
+
+			function handleResize() {
+				setupScrollSmoothing();
+			}
+
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", setupScrollSmoothing);
+			} else {
+				setupScrollSmoothing();
+			}
+
+			document.addEventListener("astro:page-load", setupScrollSmoothing);
+			window.addEventListener("resize", handleResize);
+
+			window.addEventListener("beforeunload", () => {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
 				}
-			};
-
-			scrollContainer.addEventListener("wheel", handleWheel, {
-				passive: false,
 			});
-
-			scrollContainer.addEventListener("wheel", handleShiftWheel, {
-				passive: false,
-			});
-
-			return () => {
-				scrollContainer.removeEventListener("wheel", handleWheel);
-				scrollContainer.removeEventListener("wheel", handleShiftWheel);
-				if (smoothScrollTween) {
-					smoothScrollTween.kill();
-				}
-			};
-		}
-
-		// For faster loading on real page reload
-		if (document.readyState === "loading") {
-			document.addEventListener(
-				"DOMContentLoaded",
-				setupHorizontalScrollSmoothing,
-			);
-		} else {
-			setupHorizontalScrollSmoothing();
-		}
-
-		// For subsequent loads on SPA navigation
-		document.addEventListener(
-			"astro:page-load",
-			setupHorizontalScrollSmoothing,
-		);
-	</script>
+		</script>
+	</div>
 </BaseLayout>
