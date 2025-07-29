@@ -39,11 +39,11 @@ export default function HomeSidebar({
 				</UnderlineLink>
 			</div>
 			<div className="flex w-full items-center gap-4 p-4">
-				<p className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
+				<div className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
 					<span>(</span>
 					<SlidingNumber value={getFilterCount(activeFilter)} />
 					<span>)</span>
-				</p>
+				</div>
 				<motion.ul
 					className="flex w-[280px] flex-col gap-2"
 					animate={{ y: getFilterListOffset() }}
