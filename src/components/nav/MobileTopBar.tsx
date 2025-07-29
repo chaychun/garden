@@ -56,7 +56,7 @@ export default function MobileTopBar({
 							</motion.h1>
 						) : (
 							<motion.h1
-								key="mobile-title-closed"
+								key={`mobile-title-closed-${title}`}
 								className="text-base-900 text-2xl font-semibold"
 								layoutId={mobileTitleLayoutId}
 								initial={{ opacity: 0 }}
@@ -69,6 +69,7 @@ export default function MobileTopBar({
 
 						{!isMobileMenuOpen && number !== undefined && (
 							<motion.span
+								key={`mobile-number-${title}-${number}`}
 								className="text-base-300 flex font-mono text-sm"
 								layoutId={mobileNumberLayoutId}
 								initial={{ opacity: 0 }}
