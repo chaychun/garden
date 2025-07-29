@@ -26,6 +26,7 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 		<div class="w-full pt-[64px] md:pt-0">
 			<div
 				class="md:flex md:h-dvh md:overflow-x-auto md:overflow-y-hidden"
+				id="scroll-container"
 				data-scroll-area-id={scrollAreaId}
 			>
 				{
@@ -42,5 +43,60 @@ const { title, sidebar, scrollAreaId = "main-scroll" } = Astro.props;
 				</div>
 			</div>
 		</div>
+
+		<script>
+			import {
+				setupHorizontalScrollSmoothing,
+				setupVerticalScrollSmoothing,
+			} from "@/lib/scroll-smoothing";
+
+			let currentCleanup: (() => void) | null = null;
+			let resizeTimeout: number | null = null;
+
+			function setupScrollSmoothing() {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
+
+				const isDesktop = window.innerWidth >= 768;
+
+				if (isDesktop) {
+					currentCleanup = setupHorizontalScrollSmoothing("#scroll-container");
+				} else {
+					currentCleanup = setupVerticalScrollSmoothing();
+				}
+			}
+
+			function handleResize() {
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
+				}
+				resizeTimeout = window.setTimeout(() => {
+					setupScrollSmoothing();
+					resizeTimeout = null;
+				}, 150);
+			}
+
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", setupScrollSmoothing);
+			} else {
+				setupScrollSmoothing();
+			}
+
+			document.addEventListener("astro:page-load", setupScrollSmoothing);
+
+			window.addEventListener("resize", handleResize);
+
+			window.addEventListener("beforeunload", () => {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
+				}
+			});
+		</script>
 	</div>
 </BaseLayout>
