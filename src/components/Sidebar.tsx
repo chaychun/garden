@@ -114,68 +114,70 @@ export default function Sidebar({
 					width: isExpanded ? 400 : 64,
 				}}
 			>
-				<AnimatePresence mode="popLayout">
-					{isExpanded ? (
-						<motion.div
-							className="flex h-full w-[400px] flex-col justify-between"
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							exit={{ opacity: 0 }}
-							key="expanded"
-						>
-							{desktopContent}
-							<div className="flex w-full items-center justify-end p-4">
+				<div className="relative h-full w-full overflow-hidden">
+					<AnimatePresence mode="popLayout">
+						{isExpanded ? (
+							<motion.div
+								className="absolute inset-0 flex h-full w-[400px] flex-col justify-between"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								key="expanded"
+							>
+								{desktopContent}
+								<div className="flex w-full items-center justify-end p-4">
+									<motion.button
+										onClick={handleToggleSidebar}
+										className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
+										aria-label="Toggle menu"
+										initial={{ opacity: 0, x: 40 }}
+										animate={{ opacity: 1, x: 0 }}
+										exit={{ opacity: 0, x: 40 }}
+										whileHover={{ x: -3 }}
+									>
+										<ArrowLeft size={20} />
+									</motion.button>
+								</div>
+							</motion.div>
+						) : (
+							<motion.div
+								className="absolute inset-0 flex h-full w-16 flex-col items-center justify-between p-4"
+								initial={{ opacity: 0, x: -40 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: -40 }}
+								key="collapsed"
+							>
+								<div className="h-4 w-4" />
+								<div
+									onClick={handleToggleSidebar}
+									className="text-vertical flex cursor-pointer items-baseline gap-2 p-6 select-none"
+								>
+									<span className="text-base-900 text-3xl font-medium">
+										{title}
+									</span>
+									{number !== undefined && (
+										<span className="text-base-300 flex font-mono text-sm">
+											<span>(</span>
+											<SlidingNumber value={number} />
+											<span>)</span>
+										</span>
+									)}
+								</div>
 								<motion.button
 									onClick={handleToggleSidebar}
 									className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
 									aria-label="Toggle menu"
-									initial={{ opacity: 0, x: 40 }}
+									initial={{ opacity: 0, x: -40 }}
 									animate={{ opacity: 1, x: 0 }}
-									exit={{ opacity: 0, x: 40 }}
-									whileHover={{ x: -3 }}
+									exit={{ opacity: 0, x: -40 }}
+									whileHover={{ x: 3 }}
 								>
-									<ArrowLeft size={20} />
+									<ArrowRight size={20} />
 								</motion.button>
-							</div>
-						</motion.div>
-					) : (
-						<motion.div
-							className="flex h-full w-16 flex-col items-center justify-between p-4"
-							initial={{ opacity: 0, x: -40 }}
-							animate={{ opacity: 1, x: 0 }}
-							exit={{ opacity: 0, x: -40 }}
-							key="collapsed"
-						>
-							<div className="h-4 w-4" />
-							<div
-								onClick={handleToggleSidebar}
-								className="text-vertical flex cursor-pointer items-baseline gap-2 p-6 select-none"
-							>
-								<span className="text-base-900 text-3xl font-medium">
-									{title}
-								</span>
-								{number !== undefined && (
-									<span className="text-base-300 flex font-mono text-sm">
-										<span>(</span>
-										<SlidingNumber value={number} />
-										<span>)</span>
-									</span>
-								)}
-							</div>
-							<motion.button
-								onClick={handleToggleSidebar}
-								className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
-								aria-label="Toggle menu"
-								initial={{ opacity: 0, x: -40 }}
-								animate={{ opacity: 1, x: 0 }}
-								exit={{ opacity: 0, x: -40 }}
-								whileHover={{ x: 3 }}
-							>
-								<ArrowRight size={20} />
-							</motion.button>
-						</motion.div>
-					)}
-				</AnimatePresence>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</div>
 			</motion.div>
 		</MotionConfig>
 	);
