@@ -55,7 +55,10 @@ const urlStorageApi = {
 			updateSearchParams(searchParams);
 		}
 
-		return JSON.stringify({ activeFilter });
+		return JSON.stringify({
+			state: { activeFilter },
+			version: 0,
+		});
 	},
 	setItem: (key: string, value: string): void => {
 		try {
