@@ -52,6 +52,8 @@ const allItems = [...interactions, ...articles].sort(
 </HorizontalScrollLayout>
 
 <script>
+	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
+
 	function initializeFiltering() {
 		function applyFilter(filter: string) {
 			const allBlocks = document.querySelectorAll("[data-collection]");
@@ -72,8 +74,16 @@ const allItems = [...interactions, ...articles].sort(
 		}
 
 		const urlParams = new URLSearchParams(window.location.search);
-		const initialFilter = urlParams.get("filter") || "all";
-		applyFilter(initialFilter);
+		const initialFilterParam = urlParams.get("filter") || "all";
+		applyFilter(initialFilterParam);
+
+		const mapping: Record<string, string> = {
+			all: "All",
+			interactions: "Interactions",
+			articles: "Articles",
+		};
+		const storeFilter = (mapping[initialFilterParam] ?? "All") as FilterType;
+		useFilterStore.getState().setActiveFilter(storeFilter);
 
 		document.addEventListener(
 			"filter-changed",
