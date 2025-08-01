@@ -20,13 +20,28 @@ const getSearchParams = () => {
 	return new URL(window.location.href).searchParams;
 };
 
-const updateSearchParams = (searchParams: URLSearchParams) => {
+const updateUrlWithParams = (key: string, value?: string) => {
 	if (typeof window === "undefined") return;
-	window.history.replaceState(
-		{},
-		"",
-		`${window.location.pathname}?${searchParams.toString()}`,
-	);
+
+	const searchParams = getSearchParams();
+	if (value) {
+		searchParams.set(key, value);
+	} else {
+		searchParams.delete(key);
+	}
+
+	const newUrl = window.location.pathname + "?" + searchParams.toString();
+	window.history.replaceState({}, "", newUrl);
+};
+
+const dispatchFilterChangeEvent = (filter: FilterType) => {
+	if (typeof window === "undefined") return;
+
+	const urlValue = filter === "All" ? "all" : filter.toLowerCase();
+	const event = new CustomEvent("filter-changed", {
+		detail: { filter: urlValue },
+	});
+	document.dispatchEvent(event);
 };
 
 const urlStorageApi = {
@@ -51,8 +66,7 @@ const urlStorageApi = {
 			);
 			activeFilter = "All";
 
-			searchParams.set(key, "all");
-			updateSearchParams(searchParams);
+			updateUrlWithParams(key, "all");
 		}
 
 		return JSON.stringify({
@@ -72,19 +86,15 @@ const urlStorageApi = {
 				return;
 			}
 
-			const searchParams = getSearchParams();
 			const urlValue = activeFilter.toLowerCase();
-
-			searchParams.set(key, urlValue);
-			updateSearchParams(searchParams);
+			updateUrlWithParams(key, urlValue);
+			dispatchFilterChangeEvent(activeFilter);
 		} catch (error) {
 			console.error("Error parsing stored value:", error);
 		}
 	},
 	removeItem: (key: string): void => {
-		const searchParams = getSearchParams();
-		searchParams.delete(key);
-		updateSearchParams(searchParams);
+		updateUrlWithParams(key);
 	},
 };
 

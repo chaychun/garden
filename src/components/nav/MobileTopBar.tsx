@@ -21,6 +21,7 @@ export default function MobileTopBar({
 }: MobileTopBarProps) {
 	const { isMobileMenuOpen, toggleMobileMenu } = useSidebarStore();
 
+	// For styling top scroll container
 	useEffect(() => {
 		if (isMobileMenuOpen) {
 			document.documentElement.classList.add("mobile-menu-open");

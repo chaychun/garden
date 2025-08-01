@@ -24,34 +24,12 @@ export default function Sidebar({
 	const sidebarRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
-		const findScrollContainer = () => {
-			const scrollContainer = document.querySelector(
-				`[data-scroll-area-id="${scrollAreaId}"]`,
-			);
-			if (scrollContainer) {
-				scrollContainerRef.current = scrollContainer as HTMLElement;
-			}
-		};
-
-		if (document.readyState === "loading") {
-			document.addEventListener("DOMContentLoaded", findScrollContainer);
-		} else {
-			findScrollContainer();
-		}
-
-		return () => {
-			document.removeEventListener("DOMContentLoaded", findScrollContainer);
-		};
-	}, [scrollAreaId]);
-
-	useEffect(() => {
-		if (!scrollContainerRef.current) return;
+		let currentContainer: HTMLElement | null = null;
 
 		const handleScroll = () => {
 			if (isManualToggle) return;
 
-			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
-
+			const scrollLeft = currentContainer?.scrollLeft || 0;
 			if (scrollLeft > 0 && isExpanded) {
 				setExpanded(false);
 			}
@@ -60,7 +38,7 @@ export default function Sidebar({
 		const handleWheel = (e: WheelEvent) => {
 			if (isManualToggle) return;
 
-			const scrollLeft = scrollContainerRef.current?.scrollLeft || 0;
+			const scrollLeft = currentContainer?.scrollLeft || 0;
 
 			if (scrollLeft === 0 && e.deltaX < 0 && !isExpanded) {
 				setExpanded(true);
@@ -71,15 +49,41 @@ export default function Sidebar({
 			}
 		};
 
-		const scrollContainer = scrollContainerRef.current;
-		scrollContainer.addEventListener("scroll", handleScroll);
-		scrollContainer.addEventListener("wheel", handleWheel);
+		const attachListeners = () => {
+			const newContainer = document.querySelector(
+				`[data-scroll-area-id="${scrollAreaId}"]`,
+			) as HTMLElement | null;
+
+			if (newContainer === currentContainer) return;
+
+			if (currentContainer) {
+				currentContainer.removeEventListener("scroll", handleScroll);
+				currentContainer.removeEventListener("wheel", handleWheel);
+			}
+
+			currentContainer = newContainer;
+			scrollContainerRef.current = newContainer;
+
+			if (newContainer) {
+				newContainer.addEventListener("scroll", handleScroll);
+				newContainer.addEventListener("wheel", handleWheel);
+			}
+		};
+
+		// Attach on mount
+		attachListeners();
+
+		// Re-attach on client-side navigation
+		document.addEventListener("astro:page-load", attachListeners);
 
 		return () => {
-			scrollContainer.removeEventListener("scroll", handleScroll);
-			scrollContainer.removeEventListener("wheel", handleWheel);
+			if (currentContainer) {
+				currentContainer.removeEventListener("scroll", handleScroll);
+				currentContainer.removeEventListener("wheel", handleWheel);
+			}
+			document.removeEventListener("astro:page-load", attachListeners);
 		};
-	}, [isExpanded, isManualToggle, setExpanded]);
+	}, [scrollAreaId, isExpanded, isManualToggle, setExpanded]);
 
 	useEffect(() => {
 		if (!isExpanded || isManualToggle) return;
