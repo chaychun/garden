@@ -8,6 +8,8 @@ import vtbot from "astro-vtbot";
 
 import mdx from "@astrojs/mdx";
 
+import vercel from "@astrojs/vercel";
+
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
@@ -62,4 +64,6 @@ export default defineConfig({
 			},
 		],
 	},
+
+	adapter: vercel(),
 });
