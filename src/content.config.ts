@@ -28,7 +28,7 @@ const interactions = defineCollection({
 		coverImage: z.string().optional(),
 		previewImage: z.string().optional(),
 		bgImage: z.string().optional(),
-		layout: z.enum(["portrait", "landscape"]).default("portrait"),
+		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
 		position: z.enum(["top", "bottom"]).default("top"),
 	}),
 });

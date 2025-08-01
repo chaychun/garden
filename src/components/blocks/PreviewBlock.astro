@@ -9,7 +9,7 @@ interface Props {
 	bgImage: string;
 	previewImage: string;
 	position?: "top" | "bottom";
-	layout?: "landscape" | "portrait";
+	orientation?: "landscape" | "portrait";
 	tags?: string[];
 	[key: string]: any;
 }
@@ -21,7 +21,7 @@ const {
 	bgImage,
 	previewImage,
 	position = "top",
-	layout = "portrait",
+	orientation = "portrait",
 	tags,
 	...rest
 } = Astro.props;
@@ -38,8 +38,8 @@ const {
 	<div
 		class:list={[
 			"group relative flex w-full items-center justify-center",
-			layout === "portrait" && "aspect-4/5",
-			layout === "landscape" && "aspect-5/4",
+			orientation === "portrait" && "aspect-4/5",
+			orientation === "landscape" && "aspect-5/4",
 		]}
 		style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
 	>
