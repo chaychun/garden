@@ -1,5 +1,6 @@
 import { SlidingNumber } from "@/components/ui/sliding-number";
 import { UnderlineLink } from "@/components/ui/underline-link";
+import { filterCounts } from "@/lib/content-counts";
 import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
@@ -14,7 +15,7 @@ const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
 export default function HomeSidebar({
 	scrollAreaId = "main-scroll",
 }: HomeSidebarProps) {
-	const { activeFilter, setActiveFilter, getFilterCount } = useFilterStore();
+	const { activeFilter, setActiveFilter } = useFilterStore();
 
 	const getFilterListOffset = () => {
 		const activeIndex = filterOptions.indexOf(activeFilter);
@@ -41,7 +42,7 @@ export default function HomeSidebar({
 			<div className="flex w-full items-center gap-4 p-4">
 				<div className="text-base-300 flex w-[32px] flex-shrink-0 items-center font-mono text-sm">
 					<span>(</span>
-					<SlidingNumber value={getFilterCount(activeFilter)} />
+					<SlidingNumber value={filterCounts[activeFilter]} />
 					<span>)</span>
 				</div>
 				<motion.ul
@@ -80,7 +81,7 @@ export default function HomeSidebar({
 			scrollAreaId={scrollAreaId}
 			title={activeFilter}
 			desktopContent={desktopContent}
-			number={getFilterCount(activeFilter)}
+			number={filterCounts[activeFilter]}
 		/>
 	);
 }

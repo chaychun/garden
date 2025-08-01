@@ -1,4 +1,5 @@
 import { UnderlineLink } from "@/components/ui/underline-link";
+import { filterCounts } from "@/lib/content-counts";
 import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
 import { useSidebarStore } from "@/lib/stores/sidebarStore";
 import { cn } from "@/lib/utils";
@@ -8,7 +9,8 @@ import MobileTopBar from "./MobileTopBar";
 const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
 
 export default function HomeMobileTopBar() {
-	const { activeFilter, setActiveFilter, getFilterCount } = useFilterStore();
+	const { activeFilter, setActiveFilter } = useFilterStore();
+
 	const { toggleMobileMenu } = useSidebarStore();
 
 	const mobileContent = (
@@ -40,7 +42,7 @@ export default function HomeMobileTopBar() {
 								className="text-base-500 font-mono text-sm font-normal"
 								layoutId={`home-sidebar-number-${filter}`}
 							>
-								({getFilterCount(filter)})
+								({filterCounts[filter]})
 							</motion.span>
 						</motion.button>
 					</li>
@@ -60,7 +62,7 @@ export default function HomeMobileTopBar() {
 	return (
 		<MobileTopBar
 			title={activeFilter}
-			number={getFilterCount(activeFilter)}
+			number={filterCounts[activeFilter]}
 			mobileTitleLayoutId={`home-sidebar-title-${activeFilter}`}
 			mobileNumberLayoutId={`home-sidebar-number-${activeFilter}`}
 		>

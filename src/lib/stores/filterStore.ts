@@ -3,16 +3,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 export type FilterType = "All" | "Interactions" | "Articles";
 
-const numberOfItems = {
-	All: 35,
-	Interactions: 24,
-	Articles: 11,
-};
-
 interface FilterState {
 	activeFilter: FilterType;
 	setActiveFilter: (filter: FilterType) => void;
-	getFilterCount: (filter: FilterType) => number;
 }
 
 const getSearchParams = () => {
@@ -105,7 +98,6 @@ export const useFilterStore = create<FilterState>()(
 			setActiveFilter: (filter: FilterType) => {
 				set({ activeFilter: filter });
 			},
-			getFilterCount: (filter: FilterType) => numberOfItems[filter],
 		}),
 		{
 			name: "filter",
