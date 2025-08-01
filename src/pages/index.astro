@@ -35,6 +35,7 @@ const allItems = [...interactions, ...articles].sort(
 						bgImage={"bgImage" in item.data ? item.data.bgImage || "" : ""}
 						previewImage={item.data.previewImage ?? ""}
 						data-collection="interactions"
+						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
 					/>
 				);
 			} else {
@@ -44,6 +45,7 @@ const allItems = [...interactions, ...articles].sort(
 						date={formattedDate}
 						link={`/articles/${item.id}/`}
 						data-collection="articles"
+						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
 					/>
 				);
 			}
@@ -53,36 +55,86 @@ const allItems = [...interactions, ...articles].sort(
 
 <script>
 	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
+	import { animate, stagger } from "motion";
+
+	function setBlockVisibility(filter: string) {
+		const allBlocks = document.querySelectorAll("[data-collection]");
+		const visibleBlocks: HTMLElement[] = [];
+
+		allBlocks.forEach((block) => {
+			const blockCollection = block.getAttribute("data-collection");
+
+			if (filter === "all" || filter === blockCollection) {
+				block.classList.remove("hidden");
+				(block as HTMLElement).style.visibility = "visible";
+				visibleBlocks.push(block as HTMLElement);
+			} else {
+				block.classList.add("hidden");
+			}
+		});
+
+		return visibleBlocks;
+	}
+
+	function animateBlocks(blocks: Element[]) {
+		if (blocks.length === 0) return;
+		const animation = animate(
+			blocks,
+			{
+				opacity: [0, 1],
+				y: [10, 0],
+			},
+			{
+				duration: 0.3,
+				ease: "easeOut",
+				delay: stagger(0.08),
+			},
+		);
+	}
+
+	async function animateFilterChange(filter: string) {
+		const allBlocks = document.querySelectorAll("[data-collection]");
+
+		const exitAnimation = animate(
+			allBlocks,
+			{
+				opacity: [1, 0],
+				y: [0, 10],
+			},
+			{
+				duration: 0.2,
+				ease: "easeOut",
+				delay: stagger(0.05),
+			},
+		);
+
+		await exitAnimation.finished;
+
+		const visibleBlocks = setBlockVisibility(filter);
+		animateBlocks(visibleBlocks);
+	}
+
+	function handleFilterChange(event: CustomEvent<{ filter: string }>) {
+		animateFilterChange(event.detail.filter);
+	}
+
+	function animateInitialLoad(filter: string) {
+		const visibleBlocks = setBlockVisibility(filter);
+		animateBlocks(visibleBlocks);
+	}
 
 	function initializeFiltering() {
-		function applyFilter(filter: string) {
-			const allBlocks = document.querySelectorAll("[data-collection]");
-
-			allBlocks.forEach((block) => {
-				const blockCollection = block.getAttribute("data-collection");
-
-				if (filter === "all" || filter === blockCollection) {
-					block.classList.remove("hidden");
-				} else {
-					block.classList.add("hidden");
-				}
-			});
-		}
-
-		function handleFilterChange(event: CustomEvent<{ filter: string }>) {
-			applyFilter(event.detail.filter);
-		}
-
 		const urlParams = new URLSearchParams(window.location.search);
 		const initialFilterParam = urlParams.get("filter") || "all";
-		applyFilter(initialFilterParam);
 
-		const mapping: Record<string, string> = {
-			all: "All",
-			interactions: "Interactions",
-			articles: "Articles",
-		};
-		const storeFilter = (mapping[initialFilterParam] ?? "All") as FilterType;
+		animateInitialLoad(initialFilterParam);
+
+		const storeFilter = (
+			initialFilterParam === "all"
+				? "All"
+				: initialFilterParam.charAt(0).toUpperCase() +
+					initialFilterParam.slice(1)
+		) as FilterType;
 		useFilterStore.getState().setActiveFilter(storeFilter);
 
 		document.addEventListener(
@@ -91,6 +143,13 @@ const allItems = [...interactions, ...articles].sort(
 		);
 	}
 
+	function cleanup() {
+		document.removeEventListener(
+			"filter-changed",
+			handleFilterChange as EventListener,
+		);
+	}
+
 	document.addEventListener("astro:page-load", initializeFiltering);
-	document.addEventListener("DOMContentLoaded", initializeFiltering);
+	document.addEventListener("astro:before-swap", cleanup);
 </script>
