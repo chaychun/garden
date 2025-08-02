@@ -1,6 +1,7 @@
 ---
 import InteractionSidebar from "@/components/nav/InteractionSidebar";
 import BaseLayout from "./BaseLayout.astro";
+import InfoDrawer from "@/components/nav/InfoDrawer";
 
 interface Props {
 	title: string;
@@ -15,8 +16,8 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 ---
 
 <BaseLayout title={title}>
-	<div class="bg-base-50 min-h-screen">
-		<div class="flex h-dvh">
+	<div class="bg-base-50 flex h-dvh">
+		<div class="hidden min-[824px]:block">
 			<InteractionSidebar
 				client:load
 				title={title}
@@ -27,16 +28,30 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 			>
 				<slot />
 			</InteractionSidebar>
+		</div>
+		<div
+			id="content-area"
+			class="flex w-full flex-1 flex-col overflow-hidden pl-0 transition-all duration-400 min-[824px]:overflow-auto"
+		>
 			<div
-				id="content-area"
-				class="flex flex-1 flex-col pl-0 transition-all duration-400"
+				class="bg-base-100 flex h-full items-center justify-center p-0 min-[824px]:p-4"
 			>
-				<div class="bg-base-100 flex h-full items-center justify-center">
-					<div class="text-base-500 text-center">
-						<h2 class="mb-2 text-2xl font-medium">Interactive Content Area</h2>
-						<p class="text-sm">Interactive components will be rendered here</p>
-					</div>
+				<div class="text-base-500 w-full text-center">
+					<h2 class="mb-2 text-2xl font-medium">Interactive Content Area</h2>
+					<p class="text-sm">Interactive components will be rendered here</p>
 				</div>
+			</div>
+			<div class="block min-[824px]:hidden">
+				<InfoDrawer
+					client:load
+					title={title}
+					description={description}
+					createdDate={createdDate}
+					lastUpdatedDate={lastUpdatedDate}
+					technologies={technologies}
+				>
+					<slot />
+				</InfoDrawer>
 			</div>
 		</div>
 	</div>
@@ -51,6 +66,13 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 		const contentArea = document.getElementById("content-area");
 		if (!contentArea) return;
 
+		// Only apply padding on desktop (custom 824px and up)
+		const isDesktop = window.matchMedia("(min-width: 824px)").matches;
+		if (!isDesktop) {
+			contentArea.classList.remove("p-4");
+			return;
+		}
+
 		try {
 			const isExpanded = useSidebarStore.getState().isExpanded;
 			contentArea.classList.toggle("p-4", isExpanded);
@@ -62,6 +84,7 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 	function init() {
 		updateContentPadding();
 		unsubscribe = useSidebarStore.subscribe(updateContentPadding);
+		window.addEventListener("resize", updateContentPadding);
 	}
 
 	function cleanup() {
@@ -69,6 +92,7 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 			unsubscribe();
 			unsubscribe = undefined;
 		}
+		window.removeEventListener("resize", updateContentPadding);
 	}
 
 	document.addEventListener("astro:page-load", () => {
