@@ -17,8 +17,9 @@ const articles = defineCollection({
 
 const interactions = defineCollection({
 	loader: glob({
-		pattern: "**/*.{md,mdx}",
-		base: "./src/contents/interactions",
+		pattern: "*/*.{md,mdx}",
+		base: "./src/interactions",
+		generateId: ({ entry }) => entry.split("/")[0],
 	}),
 	schema: z.object({
 		title: z.string(),
