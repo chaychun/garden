@@ -1,7 +1,5 @@
 const articleModules = import.meta.glob("../contents/articles/**/*.{md,mdx}");
-const interactionModules = import.meta.glob(
-	"../contents/interactions/**/*.{md,mdx}",
-);
+const interactionModules = import.meta.glob("../interactions/*/*.{md,mdx}");
 
 export const articleCount = Object.keys(articleModules).length;
 export const interactionCount = Object.keys(interactionModules).length;
