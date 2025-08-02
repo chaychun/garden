@@ -23,7 +23,8 @@ const interactions = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
-		date: z.coerce.date(),
+		createdDate: z.coerce.date(),
+		lastUpdatedDate: z.coerce.date(),
 		tags: z.string().array().optional(),
 		coverImage: z.string().optional(),
 		previewImage: z.string().optional(),
