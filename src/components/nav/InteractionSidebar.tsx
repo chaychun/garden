@@ -1,4 +1,5 @@
 import MetadataTable from "@/components/ui/metadata-table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft } from "lucide-react";
 import Sidebar from "./Sidebar";
 
@@ -22,36 +23,40 @@ export default function InteractionSidebar({
 	children,
 }: InteractionSidebarProps) {
 	const desktopContent = (
-		<div className="flex h-full flex-1 flex-col justify-between gap-2">
-			<div className="flex flex-col gap-16">
-				<div className="flex w-full items-center justify-between p-4">
-					<button
-						onClick={() => history.back()}
-						className="text-base-500 hover:text-base-700 group flex cursor-pointer items-center gap-2 text-sm"
-					>
-						<span className="transition-transform duration-500 group-hover:-translate-x-[3px]">
-							<ArrowLeft size={18} />
-						</span>
-						<span>Back</span>
-					</button>
-				</div>
-				<div className="flex w-full flex-col gap-2 p-4">
-					<h1 className="text-base-900 font-cabinet text-4xl">{title}</h1>
-					<p className="text-base-500 text-sm">{description}</p>
-				</div>
-				{children && (
-					<div className="flex w-full flex-col gap-4 p-4">
-						<div className="text-base-500 text-sm">{children}</div>
-					</div>
-				)}
+		<>
+			<div className="flex w-full items-center justify-between p-4">
+				<button
+					onClick={() => history.back()}
+					className="text-base-500 hover:text-base-700 group flex cursor-pointer items-center gap-2 text-sm"
+				>
+					<span className="transition-transform duration-500 group-hover:-translate-x-[3px]">
+						<ArrowLeft size={18} />
+					</span>
+					<span>Back</span>
+				</button>
 			</div>
-			<MetadataTable
-				className="px-6"
-				createdDate={createdDate}
-				lastUpdatedDate={lastUpdatedDate}
-				technologies={technologies}
-			/>
-		</div>
+			<ScrollArea className="flex h-full flex-1 flex-col overflow-y-auto">
+				<div className="flex flex-col">
+					<div className="flex w-full flex-col gap-2 p-6">
+						<h1 className="text-base-900 font-cabinet text-4xl font-medium">
+							{title}
+						</h1>
+						<p className="text-base-500 font-mono">{description}</p>
+					</div>
+					{children && (
+						<div className="text-base-700 flex w-full flex-col gap-4 p-6 text-sm">
+							{children}
+						</div>
+					)}
+				</div>
+				<MetadataTable
+					className="px-6"
+					createdDate={createdDate}
+					lastUpdatedDate={lastUpdatedDate}
+					technologies={technologies}
+				/>
+			</ScrollArea>
+		</>
 	);
 
 	return (
