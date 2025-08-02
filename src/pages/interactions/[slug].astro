@@ -1,5 +1,6 @@
 ---
 import InteractionLayout from "@/layouts/InteractionLayout.astro";
+import type { AstroInstance } from "astro";
 import { getCollection, render } from "astro:content";
 
 export const getStaticPaths = async () => {
@@ -12,14 +13,14 @@ export const getStaticPaths = async () => {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const interactiveModules = import.meta.glob<{ default: unknown }>(
+const interactiveModules = import.meta.glob<AstroInstance>(
 	"../../interactions/*/interactive.astro",
 	{ eager: true },
 );
 const key = `../../interactions/${entry.id}/interactive.astro`;
-let ComponentToRender: any = null;
+let ComponentToRender: AstroInstance["default"] | null = null;
 if (key in interactiveModules) {
-	ComponentToRender = (interactiveModules[key] as any).default;
+	ComponentToRender = interactiveModules[key].default;
 }
 ---
 
