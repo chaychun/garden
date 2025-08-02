@@ -84,6 +84,12 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 	}
 
 	function init() {
+		try {
+			useSidebarStore.getState().setExpanded(true);
+		} catch (error) {
+			console.warn("Failed to force open sidebar on interaction page:", error);
+		}
+
 		updateContentPadding();
 		unsubscribe = useSidebarStore.subscribe(updateContentPadding);
 		window.addEventListener("resize", updateContentPadding);
