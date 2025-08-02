@@ -1,9 +1,8 @@
 ---
 import InteractionLayout from "@/layouts/InteractionLayout.astro";
-import type { GetStaticPaths } from "astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
 	const interactions = await getCollection("interactions");
 	return interactions.map((interaction) => ({
 		params: { id: interaction.id },
@@ -15,6 +14,16 @@ const { interaction } = Astro.props as {
 	interaction: CollectionEntry<"interactions">;
 };
 const { Content } = await render(interaction);
+
+const interactiveModules = import.meta.glob<{ default: unknown }>(
+	"../../interactions/*/index.astro",
+	{ eager: true },
+);
+const componentPath = `../../interactions/${interaction.id}/index.astro`;
+let ComponentToRender: any = null;
+if (componentPath in interactiveModules) {
+	ComponentToRender = (interactiveModules[componentPath] as any).default;
+}
 ---
 
 <InteractionLayout
@@ -24,5 +33,6 @@ const { Content } = await render(interaction);
 	lastUpdatedDate={interaction.data.lastUpdatedDate.toISOString()}
 	technologies={interaction.data.tags || []}
 >
+	{ComponentToRender && <ComponentToRender slot="interactive" />}
 	<Content />
 </InteractionLayout>
