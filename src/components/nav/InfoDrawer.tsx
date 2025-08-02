@@ -84,7 +84,7 @@ const InfoDrawer = ({
 						{isOpen && (
 							<motion.div
 								key="drawer-content"
-								className="flex max-h-[calc(100dvh-32px)] flex-col"
+								className="max-h-[calc(100dvh-32px)] overflow-y-auto"
 								layout
 								initial={{ opacity: 0, y: 16 }}
 								animate={{
@@ -94,7 +94,7 @@ const InfoDrawer = ({
 								}}
 								exit={{ opacity: 0, y: 16, transition: { duration: 0.1 } }}
 							>
-								<div className="flex-1 overflow-y-auto px-6 pt-6 pb-0">
+								<div className="h-full px-6 pt-6 pb-0">
 									<motion.h1
 										key="title"
 										className="text-base-900 font-cabinet mt-4 text-3xl font-medium"
