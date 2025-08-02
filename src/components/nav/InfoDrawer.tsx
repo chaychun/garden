@@ -25,6 +25,13 @@ const InfoDrawer = ({
 	const [showDetails, setShowDetails] = useState(false);
 	const drawerRef = useRef<HTMLDivElement>(null);
 
+	const toggleDrawer = () => {
+		if (isOpen) {
+			setShowDetails(false);
+		}
+		setIsOpen(!isOpen);
+	};
+
 	useEffect(() => {
 		if (!isOpen) return;
 		function handleKeyDown(event: KeyboardEvent) {
@@ -74,6 +81,7 @@ const InfoDrawer = ({
 				role={isOpen ? "dialog" : undefined}
 				aria-modal={isOpen ? "true" : undefined}
 				data-info-drawer
+				id="info-drawer"
 			>
 				<motion.div
 					key="drawer-content"
@@ -161,12 +169,7 @@ const InfoDrawer = ({
 						aria-expanded={isOpen}
 						aria-controls="info-drawer"
 						className="text-base-900 absolute right-0 bottom-0 flex h-14 w-14 cursor-pointer items-center justify-center"
-						onClick={() => {
-							if (isOpen) {
-								setShowDetails(false);
-							}
-							setIsOpen(!isOpen);
-						}}
+						onClick={toggleDrawer}
 						whileTap={{ scale: 0.9 }}
 						layout
 					>
