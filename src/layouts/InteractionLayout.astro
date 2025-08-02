@@ -1,0 +1,80 @@
+---
+import InteractionSidebar from "@/components/nav/InteractionSidebar";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	createdDate: string;
+	lastUpdatedDate: string;
+	technologies: string[];
+}
+
+const { title, description, createdDate, lastUpdatedDate, technologies } =
+	Astro.props;
+---
+
+<BaseLayout title={title}>
+	<div class="bg-base-50 min-h-screen">
+		<div class="flex h-dvh">
+			<InteractionSidebar
+				client:load
+				title={title}
+				description={description}
+				createdDate={createdDate}
+				lastUpdatedDate={lastUpdatedDate}
+				technologies={technologies}
+			>
+				<slot />
+			</InteractionSidebar>
+			<div
+				id="content-area"
+				class="flex flex-1 flex-col pl-0 transition-all duration-400"
+			>
+				<div class="bg-base-100 flex h-full items-center justify-center">
+					<div class="text-base-500 text-center">
+						<h2 class="mb-2 text-2xl font-medium">Interactive Content Area</h2>
+						<p class="text-sm">Interactive components will be rendered here</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	import { useSidebarStore } from "@/lib/stores/sidebarStore";
+
+	let unsubscribe: (() => void) | undefined;
+
+	function updateContentPadding() {
+		const contentArea = document.getElementById("content-area");
+		if (!contentArea) return;
+
+		try {
+			const isExpanded = useSidebarStore.getState().isExpanded;
+			contentArea.classList.toggle("p-4", isExpanded);
+		} catch (error) {
+			console.warn("Failed to update content padding:", error);
+		}
+	}
+
+	function init() {
+		updateContentPadding();
+		unsubscribe = useSidebarStore.subscribe(updateContentPadding);
+	}
+
+	function cleanup() {
+		if (unsubscribe) {
+			unsubscribe();
+			unsubscribe = undefined;
+		}
+	}
+
+	document.addEventListener("astro:page-load", () => {
+		cleanup();
+		init();
+	});
+
+	document.addEventListener("DOMContentLoaded", init);
+</script>
