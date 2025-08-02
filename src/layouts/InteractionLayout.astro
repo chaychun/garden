@@ -45,19 +45,36 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 <script>
 	import { useSidebarStore } from "@/lib/stores/sidebarStore";
 
+	let unsubscribe: (() => void) | undefined;
+
 	function updateContentPadding() {
 		const contentArea = document.getElementById("content-area");
 		if (!contentArea) return;
 
-		const isExpanded = useSidebarStore.getState().isExpanded;
-		contentArea.classList.toggle("p-4", isExpanded);
+		try {
+			const isExpanded = useSidebarStore.getState().isExpanded;
+			contentArea.classList.toggle("p-4", isExpanded);
+		} catch (error) {
+			console.warn("Failed to update content padding:", error);
+		}
 	}
 
 	function init() {
 		updateContentPadding();
-		useSidebarStore.subscribe(updateContentPadding);
+		unsubscribe = useSidebarStore.subscribe(updateContentPadding);
 	}
 
-	document.addEventListener("astro:page-load", init);
+	function cleanup() {
+		if (unsubscribe) {
+			unsubscribe();
+			unsubscribe = undefined;
+		}
+	}
+
+	document.addEventListener("astro:page-load", () => {
+		cleanup();
+		init();
+	});
+
 	document.addEventListener("DOMContentLoaded", init);
 </script>
