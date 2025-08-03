@@ -11,9 +11,9 @@ const articles = await getCollection("articles");
 
 const allItems = [...interactions, ...articles].sort((a, b) => {
 	const aDate =
-		a.collection === "interactions" ? a.data.createdDate : a.data.date;
+		a.collection === "interactions" ? a.data.lastUpdatedDate : a.data.date;
 	const bDate =
-		b.collection === "interactions" ? b.data.createdDate : b.data.date;
+		b.collection === "interactions" ? b.data.lastUpdatedDate : b.data.date;
 	return bDate.getTime() - aDate.getTime();
 });
 ---
@@ -27,7 +27,7 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 		allItems.map((item) => {
 			const itemDate =
 				item.collection === "interactions"
-					? item.data.createdDate
+					? item.data.lastUpdatedDate
 					: item.data.date;
 			const formattedDate = itemDate.toLocaleDateString("en-US", {
 				year: "numeric",
@@ -42,7 +42,7 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 						id={item.id}
 						date={formattedDate}
 						bgImage={"bgImage" in item.data ? item.data.bgImage || "" : ""}
-						previewImage={item.data.previewImage ?? ""}
+						previewVideo={item.data.previewVideo ?? ""}
 						data-collection="interactions"
 						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
 					/>
