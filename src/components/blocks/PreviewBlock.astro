@@ -7,7 +7,7 @@ interface Props {
 	description: string;
 	date: string;
 	bgImage: string;
-	previewImage: string;
+	previewVideo: string;
 	position?: "top" | "bottom";
 	orientation?: "landscape" | "portrait";
 	tags?: string[];
@@ -20,7 +20,7 @@ const {
 	description,
 	date,
 	bgImage,
-	previewImage,
+	previewVideo,
 	position = "top",
 	orientation = "portrait",
 	tags,
@@ -58,12 +58,13 @@ const {
 					</div>
 				)
 			}
-			<img
-				src={previewImage}
-				alt="Preview"
-				class="h-auto w-[80%]"
-				loading="lazy"
-			/>
+			<video
+				src={previewVideo}
+				class="h-auto w-[90%]"
+				loop
+				muted
+				autoplay
+				playsinline></video>
 		</div>
 	</a>
 	<div class="flex flex-col gap-1 md:w-[480px]">
