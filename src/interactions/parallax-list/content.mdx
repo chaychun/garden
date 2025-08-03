@@ -1,0 +1,15 @@
+---
+title: "Parallax List Selection"
+description: "Using mouse movement to control the position of the list and the image, instead of using scroll."
+createdDate: 2025-06-22
+lastUpdatedDate: 2025-08-03
+bgImage: "https://picsum.photos/800/600?random=1"
+previewImage: "https://picsum.photos/400/300?random=2"
+position: "top"
+orientation: "portrait"
+tags: ["GSAP", "React"]
+---
+
+This interaction is best seen on desktop. It is inspired by the [work page](https://by-kin.com/work) of Kin studio's site. You can use the pointer to navigate the list. When hovered, we see a transition of title overlay, the subtitle text fades in, and the corresponding image appears on the right side.
+
+This is achieved by translating the list and image container depending on the mouse y-position. We then track the active item and changes the UI states accordingly. The animation is made smooth with GSAP.

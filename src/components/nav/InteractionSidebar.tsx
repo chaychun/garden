@@ -50,7 +50,7 @@ export default function InteractionSidebar({
 					)}
 				</div>
 				<MetadataTable
-					className="px-6"
+					className="mt-12 px-6"
 					createdDate={createdDate}
 					lastUpdatedDate={lastUpdatedDate}
 					technologies={technologies}

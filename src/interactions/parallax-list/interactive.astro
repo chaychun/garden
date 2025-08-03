@@ -1,0 +1,66 @@
+---
+import ParallaxList from "./list.tsx";
+
+// Import all images statically to handle internally
+import bbvaImg from "./assets/bbva.jpg";
+import cedrusImg from "./assets/cedrus-residential.jpg";
+import iccSydneyImg from "./assets/icc-sydney.jpg";
+import johnCrankoImg from "./assets/john-cranko-school.jpg";
+import maerskImg from "./assets/maersk-tower.jpg";
+import mannIslandImg from "./assets/mann-island.jpg";
+import museoBarrocoImg from "./assets/museo-internacional-del-barroco.jpg";
+import pi59Img from "./assets/pi59.jpg";
+import royalLibraryImg from "./assets/royal-danish-library.jpg";
+import vulkanImg from "./assets/vulkan-oslo.jpg";
+
+const works = [
+	{ title: "BBVA Headquarters", description: "Madrid, Spain", image: bbvaImg },
+	{
+		title: "Cedrus Residential",
+		description: "Tehran, Iran",
+		image: cedrusImg,
+	},
+	{
+		title: "International Convention Centre",
+		description: "Sydney, Australia",
+		image: iccSydneyImg,
+	},
+	{
+		title: "John Cranko School",
+		description: "Stuttgart, Germany",
+		image: johnCrankoImg,
+	},
+	{
+		title: "Maersk Tower",
+		description: "Copenhagen, Denmark",
+		image: maerskImg,
+	},
+	{
+		title: "Mann Island Buildings",
+		description: "Liverpool, UK",
+		image: mannIslandImg,
+	},
+	{
+		title: "Museo Internacional del Barroco",
+		description: "Puebla, Mexico",
+		image: museoBarrocoImg,
+	},
+	{ title: "PI59", description: "Amsterdam, Netherlands", image: pi59Img },
+	{
+		title: "Royal Danish Library",
+		description: "Copenhagen, Denmark",
+		image: royalLibraryImg,
+	},
+	{ title: "Vulkan Building", description: "Oslo, Norway", image: vulkanImg },
+];
+---
+
+<div class="bg-base-900 @container h-screen w-full overflow-hidden">
+	<ParallaxList works={works} client:load />
+</div>
+
+<style>
+	body {
+		overflow: hidden !important;
+	}
+</style>
