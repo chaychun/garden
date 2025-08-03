@@ -129,7 +129,7 @@ const InfoDrawer = ({
 												}}
 												exit={{ opacity: 0, transition: { duration: 0.2 } }}
 											>
-												<div className="text-base-700 flex flex-col gap-4 text-sm">
+												<div className="text-base-700 [&_a]:text-base-500 flex flex-col gap-4 text-sm [&_a]:underline">
 													{children}
 												</div>
 												<div className="mt-6 mb-4">

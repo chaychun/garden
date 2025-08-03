@@ -44,7 +44,7 @@ export default function InteractionSidebar({
 						<p className="text-base-500 font-mono">{description}</p>
 					</div>
 					{children && (
-						<div className="text-base-700 flex w-full flex-col gap-4 p-6 text-sm">
+						<div className="text-base-700 [&_a]:text-base-500 flex w-full flex-col gap-4 p-6 text-sm [&_a]:underline">
 							{children}
 						</div>
 					)}
