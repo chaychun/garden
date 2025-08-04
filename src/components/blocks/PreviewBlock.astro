@@ -9,7 +9,7 @@ interface Props {
 	bgImage: string;
 	previewVideo: string;
 	position?: "top" | "bottom";
-	orientation?: "landscape" | "portrait";
+	orientation?: "portrait" | "landscape";
 	tags?: string[];
 	id: string;
 	[key: string]: any;
@@ -28,27 +28,36 @@ const {
 	...rest
 } = Astro.props;
 
-async function getAssetUrl(path: string): Promise<string> {
+const assetModules = import.meta.glob(
+	"/src/**/*.{jpg,jpeg,png,gif,webp,mp4,webm,mov}",
+	{
+		eager: true,
+	},
+) as Record<string, { default: { src: string } }>;
+
+function getAssetUrl(path: string): string {
 	if (path.startsWith("https://") || path.startsWith("http://")) {
 		return path;
 	}
 
 	let importPath = path;
 	if (path.startsWith("/src/")) {
-		importPath = path.slice(1);
+		importPath = path;
+	} else if (!path.startsWith("/")) {
+		importPath = `/src/${path}`;
 	}
 
-	try {
-		const module = await import(importPath);
+	const module = assetModules[importPath];
+	if (module) {
 		return module.default.src;
-	} catch (error) {
-		console.warn(`Failed to import asset: ${path}`, error);
-		return path;
 	}
+
+	console.warn(`Asset not found: ${path}`);
+	return path;
 }
 
-const bgImageUrl = await getAssetUrl(bgImage);
-const previewVideoUrl = await getAssetUrl(previewVideo);
+const bgImageUrl = getAssetUrl(bgImage);
+const previewVideoUrl = getAssetUrl(previewVideo);
 ---
 
 <Block
