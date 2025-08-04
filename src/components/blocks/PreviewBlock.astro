@@ -1,6 +1,7 @@
 ---
 import Badge from "@/components/Badge.astro";
 import Block from "@/components/blocks/Block.astro";
+import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
 
 interface Props {
 	title: string;
@@ -27,6 +28,9 @@ const {
 	id,
 	...rest
 } = Astro.props;
+
+const bgImageUrl = getCldImageUrl({ src: bgImage, width: 600 });
+const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 ---
 
 <Block
@@ -45,7 +49,7 @@ const {
 				orientation === "landscape" && "aspect-5/4",
 			]}
 			style={{
-				backgroundImage: `url(${bgImage})`,
+				backgroundImage: `url(${bgImageUrl})`,
 				backgroundSize: "cover",
 			}}
 		>
@@ -59,21 +63,21 @@ const {
 				)
 			}
 			<video
-				src={previewVideo}
-				class="h-auto w-[90%]"
+				src={previewVideoUrl}
 				loop
 				muted
 				autoplay
-				playsinline></video>
+				playsinline
+				class="h-auto w-[90%]"></video>
+		</div>
+		<div class="flex flex-col gap-1 md:w-[480px]">
+			<p class="font-switzer text-base-300 text-sm">{date}</p>
+			<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
+				{title}
+			</h2>
+			<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
+				{description}
+			</p>
 		</div>
 	</a>
-	<div class="flex flex-col gap-1 md:w-[480px]">
-		<p class="font-switzer text-base-300 text-sm">{date}</p>
-		<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
-			{title}
-		</h2>
-		<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
-			{description}
-		</p>
-	</div>
 </Block>
