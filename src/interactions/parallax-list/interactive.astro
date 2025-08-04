@@ -1,57 +1,61 @@
 ---
+import { getCldImageUrl } from "astro-cloudinary/helpers";
 import ParallaxList from "./list.tsx";
 
-// Import all images statically to handle internally
-import bbvaImg from "./assets/bbva.jpg";
-import cedrusImg from "./assets/cedrus-residential.jpg";
-import iccSydneyImg from "./assets/icc-sydney.jpg";
-import johnCrankoImg from "./assets/john-cranko-school.jpg";
-import maerskImg from "./assets/maersk-tower.jpg";
-import mannIslandImg from "./assets/mann-island.jpg";
-import museoBarrocoImg from "./assets/museo-internacional-del-barroco.jpg";
-import pi59Img from "./assets/pi59.jpg";
-import royalLibraryImg from "./assets/royal-danish-library.jpg";
-import vulkanImg from "./assets/vulkan-oslo.jpg";
-
 const works = [
-	{ title: "BBVA Headquarters", description: "Madrid, Spain", image: bbvaImg },
+	{
+		title: "BBVA Headquarters",
+		description: "Madrid, Spain",
+		image: getCldImageUrl({ src: "bbva_mkmupf", width: 900 }),
+	},
 	{
 		title: "Cedrus Residential",
 		description: "Tehran, Iran",
-		image: cedrusImg,
+		image: getCldImageUrl({ src: "cedrus-residential_rdpmyb", width: 900 }),
 	},
 	{
 		title: "International Convention Centre",
 		description: "Sydney, Australia",
-		image: iccSydneyImg,
+		image: getCldImageUrl({ src: "icc-sydney_daohjj", width: 900 }),
 	},
 	{
 		title: "John Cranko School",
 		description: "Stuttgart, Germany",
-		image: johnCrankoImg,
+		image: getCldImageUrl({ src: "john-cranko-school_xi8wyq", width: 900 }),
 	},
 	{
 		title: "Maersk Tower",
 		description: "Copenhagen, Denmark",
-		image: maerskImg,
+		image: getCldImageUrl({ src: "maersk-tower_s5iugf", width: 900 }),
 	},
 	{
 		title: "Mann Island Buildings",
 		description: "Liverpool, UK",
-		image: mannIslandImg,
+		image: getCldImageUrl({ src: "mann-island_qp6iia", width: 900 }),
 	},
 	{
 		title: "Museo Internacional del Barroco",
 		description: "Puebla, Mexico",
-		image: museoBarrocoImg,
+		image: getCldImageUrl({
+			src: "museo-internacional-del-barroco_tnqgu6",
+			width: 900,
+		}),
 	},
-	{ title: "PI59", description: "Amsterdam, Netherlands", image: pi59Img },
+	{
+		title: "PI59",
+		description: "Amsterdam, Netherlands",
+		image: getCldImageUrl({ src: "pi59_asuzt7", width: 900 }),
+	},
 	{
 		title: "Royal Danish Library",
 		description: "Copenhagen, Denmark",
-		image: royalLibraryImg,
+		image: getCldImageUrl({ src: "royal-danish-library_p6rhwh", width: 900 }),
 	},
-	{ title: "Vulkan Building", description: "Oslo, Norway", image: vulkanImg },
+	{
+		title: "Vulkan Building",
+		description: "Oslo, Norway",
+		image: getCldImageUrl({ src: "vulkan-oslo_j532cm", width: 900 }),
+	},
 ];
 ---
 

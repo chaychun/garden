@@ -1,5 +1,6 @@
 ---
 import Block from "@/components/blocks/Block.astro";
+import { CldImage } from "astro-cloudinary";
 
 interface Props {
 	title: string;
@@ -7,7 +8,7 @@ interface Props {
 	date: string;
 	link: string;
 	growthStage?: "Seedling" | "Budding" | "Evergreen";
-	previewImage?: string;
+	coverImage?: string;
 	position?: "top" | "bottom";
 	[key: string]: any;
 }
@@ -18,7 +19,7 @@ const {
 	date,
 	link,
 	growthStage = "Seedling",
-	previewImage,
+	coverImage,
 	position = "top",
 	...rest
 } = Astro.props;
@@ -47,8 +48,14 @@ const {
 	<hr class="border-base-200 mt-1" />
 
 	{
-		previewImage && (
-			<img src={previewImage} alt={title} class="mt-4 h-auto w-full" />
+		coverImage && (
+			<CldImage
+				src={coverImage}
+				alt={title}
+				class="mt-4 h-auto w-full"
+				width={600}
+				height={600}
+			/>
 		)
 	}
 	<p class="text-base-500 mt-4 leading-tight font-light">

@@ -6,11 +6,7 @@ import { useRef, useState } from "react";
 interface Work {
 	title: string;
 	description: string;
-	image: {
-		src: string;
-		width: number;
-		height: number;
-	};
+	image: string;
 }
 
 // GSAP should only be registered on the client to avoid SSR errors
@@ -176,7 +172,7 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 			{works[activeIndex] && (
 				<img
 					ref={imageRef}
-					src={works[activeIndex].image.src}
+					src={works[activeIndex].image}
 					alt={works[activeIndex].title}
 					className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw] object-cover select-none"
 				/>
