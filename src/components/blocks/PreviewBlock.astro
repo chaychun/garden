@@ -27,6 +27,28 @@ const {
 	id,
 	...rest
 } = Astro.props;
+
+async function getAssetUrl(path: string): Promise<string> {
+	if (path.startsWith("https://") || path.startsWith("http://")) {
+		return path;
+	}
+
+	let importPath = path;
+	if (path.startsWith("/src/")) {
+		importPath = path.slice(1);
+	}
+
+	try {
+		const module = await import(importPath);
+		return module.default.src;
+	} catch (error) {
+		console.warn(`Failed to import asset: ${path}`, error);
+		return path;
+	}
+}
+
+const bgImageUrl = await getAssetUrl(bgImage);
+const previewVideoUrl = await getAssetUrl(previewVideo);
 ---
 
 <Block
@@ -45,7 +67,7 @@ const {
 				orientation === "landscape" && "aspect-5/4",
 			]}
 			style={{
-				backgroundImage: `url(${bgImage})`,
+				backgroundImage: `url(${bgImageUrl})`,
 				backgroundSize: "cover",
 			}}
 		>
@@ -59,7 +81,7 @@ const {
 				)
 			}
 			<video
-				src={previewVideo}
+				src={previewVideoUrl}
 				class="h-auto w-[90%]"
 				loop
 				muted
