@@ -1,41 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import Stack from "./Stack.tsx";
-
-import ananFull from "./images/anan-full.jpg";
-import anan from "./images/anan.png";
 ---
 
-<div class="@container relative h-full w-full overflow-hidden bg-[#603B20]">
-	<Image
-		src={ananFull}
-		alt="Anan"
-		class="absolute inset-0 hidden h-full object-cover object-left md:block"
-	/>
-	<Image
-		src={anan}
-		alt="Anan"
-		class="absolute inset-0 h-full object-cover object-center md:hidden"
-	/>
-
-	<div class="relative h-full max-w-[700px]">
-		<span
-			class="clamp-[text,7xl,9xl,@375px,@700px] font-tenor absolute top-0 left-1/2 -translate-x-1/2 text-[#FEF9FD] uppercase"
-		>
-			DOSSIER
-		</span>
-		<span
-			class="font-tenor clamp-[text,6xl,8xl,@375px,@700px] absolute bottom-18 left-1/2 w-full -translate-x-1/2 text-center text-[#F2A943]"
-		>
-			From the Kitchen of
-		</span>
-		<span
-			class="clamp-[text,7xl,8xl,@375px,@700px] absolute bottom-6 left-1/2 -translate-x-1/2 text-center font-extrabold text-[#DDD7DD] uppercase"
-		>
-			Anan
-			<br />
-			Saelee
-		</span>
-	</div>
+<div class="@container relative h-full w-full overflow-hidden">
 	<Stack client:only="react" />
 </div>
