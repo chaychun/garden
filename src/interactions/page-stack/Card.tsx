@@ -14,6 +14,7 @@ interface CardProps {
 	onRequestOpen?: () => void;
 	transitionDelay?: number;
 	isActive?: boolean;
+	index: number;
 }
 
 const Card = ({
@@ -29,6 +30,7 @@ const Card = ({
 	onRequestOpen,
 	transitionDelay = 0,
 	isActive = false,
+	index,
 }: CardProps) => {
 	const isHorizontal = orientation === "horizontal";
 
@@ -83,7 +85,7 @@ const Card = ({
 			}}
 			ref={scope}
 			className={cn(
-				"absolute inset-0 overflow-x-auto overflow-y-hidden transition-colors duration-300 ease-in-out",
+				"group absolute inset-0 overflow-x-auto overflow-y-hidden transition-colors duration-300 ease-in-out",
 				!isHorizontal
 					? "bg-base-100"
 					: isActive
@@ -100,7 +102,16 @@ const Card = ({
 				...(!isHorizontal && isDraggable ? { touchAction: "none" } : {}),
 			}}
 			{...dragProps}
-		/>
+		>
+			<span
+				className={cn(
+					"border-base-300/30 text-base-500 group-hover:bg-base-300/30 absolute border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none group-hover:border-transparent",
+					isHorizontal ? "top-4 left-4" : "top-4 left-1/2 -translate-x-1/2",
+				)}
+			>
+				Page {index + 1}
+			</span>
+		</motion.section>
 	);
 };
 

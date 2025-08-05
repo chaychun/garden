@@ -44,7 +44,7 @@ const Stack = () => {
 			activeIndex,
 			numCards,
 			containerBounds.width,
-			5,
+			6,
 			2,
 			Array.from({ length: numCards }, () => 600),
 		);
@@ -135,6 +135,7 @@ const Stack = () => {
 					{Array.from({ length: numCards }, (_, index) => (
 						<Card
 							key={index}
+							index={index}
 							pos={baseStackPositions[index] + currentDynamicOffsets[index]}
 							orientation={orientation}
 							onMouseEnter={() => setPeekedIndex(index)}
