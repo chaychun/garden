@@ -33,9 +33,7 @@ const StackControls = ({
 						? "bg-base-50 text-base-900 active:bg-base-100 flex h-14 w-14 cursor-pointer items-center justify-center"
 						: "inline-block cursor-pointer border bg-transparent p-2 font-mono text-[10px] transition-colors duration-300 select-none",
 					!isMobile &&
-						(isMobile && activeIndex >= 0
-							? "border-base-300/30 text-base-500 hover:bg-base-300/30 hover:border-transparent"
-							: "border-white/30 text-white hover:border-transparent hover:bg-white/30"),
+						"border-white/30 text-white hover:border-transparent hover:bg-white/30",
 				)}
 			>
 				<Plus
@@ -54,9 +52,7 @@ const StackControls = ({
 						? "bg-base-50 text-base-900 border-base-200 active:bg-base-100 flex h-14 w-14 cursor-pointer items-center justify-center border-t-2 disabled:cursor-not-allowed disabled:opacity-50"
 						: "inline-block cursor-pointer border bg-transparent p-2 font-mono text-[10px] transition-colors duration-300 select-none disabled:cursor-not-allowed disabled:opacity-50",
 					!isMobile &&
-						(isMobile && activeIndex >= 0
-							? "border-base-300/30 text-base-500 hover:bg-base-300/30 hover:border-transparent"
-							: "border-white/30 text-white hover:border-transparent hover:bg-white/30"),
+						"border-white/30 text-white hover:border-transparent hover:bg-white/30",
 				)}
 			>
 				<Minus
