@@ -83,7 +83,10 @@ const Stack = () => {
 		const handleClick = (event: Event) => {
 			const target = event.target as HTMLElement | null;
 
-			if (!stackRef.current?.contains(target)) {
+			if (
+				!stackRef.current?.contains(target) &&
+				!target?.closest("[data-info-drawer]")
+			) {
 				handleClickOutside(event);
 			}
 		};
