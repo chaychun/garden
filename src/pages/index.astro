@@ -16,10 +16,17 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 		b.collection === "interactions" ? b.data.lastUpdatedDate : b.data.date;
 	return bDate.getTime() - aDate.getTime();
 });
+
+const urlParams = new URLSearchParams(
+	import.meta.env.SSR ? "" : window.location.search,
+);
+const initialFilterParam = urlParams.get("filter") || "all";
+const filterName =
+	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
 ---
 
 <HorizontalScrollLayout
-	title="Test page"
+	title={`${filterName} | Chayut`}
 	sidebar="home"
 	scrollAreaId="main-scroll"
 >
@@ -65,6 +72,11 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 <script>
 	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
 	import { animate, stagger } from "motion";
+
+	function updateTitle(filter: string) {
+		const filterName = filter.charAt(0).toUpperCase() + filter.slice(1);
+		document.title = `${filterName} | Chayut`;
+	}
 
 	function setBlockVisibility(filter: string) {
 		const allBlocks = document.querySelectorAll("[data-collection]");
@@ -124,7 +136,9 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 	}
 
 	function handleFilterChange(event: CustomEvent<{ filter: string }>) {
-		animateFilterChange(event.detail.filter);
+		const filter = event.detail.filter;
+		updateTitle(filter);
+		animateFilterChange(filter);
 	}
 
 	function animateInitialLoad(filter: string) {
@@ -136,6 +150,7 @@ const allItems = [...interactions, ...articles].sort((a, b) => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const initialFilterParam = urlParams.get("filter") || "all";
 
+		updateTitle(initialFilterParam);
 		animateInitialLoad(initialFilterParam);
 
 		const storeFilter = (
