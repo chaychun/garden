@@ -105,8 +105,10 @@ const Card = ({
 		>
 			<span
 				className={cn(
-					"border-base-300/30 text-base-500 group-hover:bg-base-300/30 absolute border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none group-hover:border-transparent",
-					isHorizontal ? "top-4 left-4" : "top-4 left-1/2 -translate-x-1/2",
+					"border-base-300/30 text-base-500 absolute px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none",
+					isHorizontal
+						? "group-hover:bg-base-300/30 top-4 left-4 border group-hover:border-transparent"
+						: "top-7 left-1/2 -translate-x-1/2 text-xs",
 				)}
 			>
 				Page {index + 1}

@@ -133,6 +133,19 @@ const Stack = () => {
 
 	return (
 		<div ref={containerRef} className="bg-base-900 relative h-full w-full">
+			<div className="absolute top-4 left-4 z-1000">
+				<span
+					className={cn(
+						"inline-block border px-3 py-1 font-mono text-[10px] transition-colors duration-600 select-none",
+						isMobile && activeIndex >= 0
+							? "border-base-300/30 text-base-500"
+							: "border-white/30 text-white",
+					)}
+				>
+					{numCards} pages
+				</span>
+			</div>
+
 			<div ref={stackRef}>
 				<AnimatePresence>
 					{Array.from({ length: numCards }, (_, index) => (
