@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
-import { Minus, Plus } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
 import Card from "./Card";
+import StackControls from "./StackControls";
 import { getStackPeekOffsets, getStackPositions } from "./positions";
 
 const Stack = () => {
@@ -11,7 +11,6 @@ const Stack = () => {
 	const [peekedIndex, setPeekedIndex] = useState<number | null>(null);
 	const [numCards, setNumCards] = useState(4);
 	const stackRef = useRef<HTMLDivElement>(null);
-	const controlsRef = useRef<HTMLDivElement>(null);
 	const [containerRef, containerBounds] = useMeasure();
 
 	const isMobile = containerBounds.width < 768;
@@ -69,10 +68,6 @@ const Stack = () => {
 	const handleClickOutside = (event: Event) => {
 		const target = event.target as HTMLElement | null;
 		if (target && target.closest("[data-info-drawer]")) {
-			return;
-		}
-
-		if (target && controlsRef.current?.contains(target)) {
 			return;
 		}
 
@@ -172,24 +167,13 @@ const Stack = () => {
 				</AnimatePresence>
 			</div>
 
-			<div
-				ref={controlsRef}
-				className="absolute bottom-4 left-4 z-1000 flex flex-col"
-			>
-				<button
-					onClick={addCard}
-					className="bg-base-50 text-base-900 flex h-14 w-14 cursor-pointer items-center justify-center"
-				>
-					<Plus className="text-base-500 h-7 w-7" strokeWidth={1} />
-				</button>
-				<button
-					onClick={removeCard}
-					disabled={numCards <= 0}
-					className="bg-base-50 text-base-900 border-base-200 flex h-14 w-14 cursor-pointer items-center justify-center border-t-2 disabled:cursor-not-allowed disabled:opacity-50"
-				>
-					<Minus className="text-base-500 h-7 w-7" strokeWidth={1} />
-				</button>
-			</div>
+			<StackControls
+				isMobile={isMobile}
+				activeIndex={activeIndex}
+				numCards={numCards}
+				onAddCard={addCard}
+				onRemoveCard={removeCard}
+			/>
 		</div>
 	);
 };
