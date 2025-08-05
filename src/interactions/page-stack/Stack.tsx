@@ -1,33 +1,17 @@
 import { cn } from "@/lib/utils";
+import { Minus, Plus } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
-import { useOnClickOutside } from "usehooks-ts";
 import Card from "./Card";
 import { getStackPeekOffsets, getStackPositions } from "./positions";
-
-const cards = [
-	{
-		width: 500,
-		backgroundClass: "bg-base-100",
-		content: <div></div>,
-	},
-	{
-		width: 500,
-		backgroundClass: "bg-base-100",
-		content: <div></div>,
-	},
-	{
-		width: 400,
-		backgroundClass: "bg-base-100",
-		content: <div></div>,
-	},
-];
 
 const Stack = () => {
 	const [activeIndex, setActiveIndex] = useState(-1);
 	const [peekedIndex, setPeekedIndex] = useState<number | null>(null);
+	const [numCards, setNumCards] = useState(4);
 	const stackRef = useRef<HTMLDivElement>(null);
+	const controlsRef = useRef<HTMLDivElement>(null);
 	const [containerRef, containerBounds] = useMeasure();
 
 	const isMobile = containerBounds.width < 768;
@@ -39,7 +23,7 @@ const Stack = () => {
 			const offscreenPos = containerBounds.height + 100;
 			const peekPos = containerBounds.height - peekHeight;
 
-			return cards.map((_, index) => {
+			return Array.from({ length: numCards }, (_, index) => {
 				if (activeIndex === -1) {
 					return index === 0 ? peekPos : offscreenPos;
 				}
@@ -58,19 +42,25 @@ const Stack = () => {
 
 		return getStackPositions(
 			activeIndex,
-			cards.length,
+			numCards,
 			containerBounds.width,
 			5,
 			2,
-			cards.map((card) => card.width),
+			Array.from({ length: numCards }, () => 600),
 		);
-	}, [isMobile, activeIndex, containerBounds.width, containerBounds.height]);
+	}, [
+		isMobile,
+		activeIndex,
+		containerBounds.width,
+		containerBounds.height,
+		numCards,
+	]);
 
 	const currentDynamicOffsets = useMemo(() => {
-		if (isMobile) return new Array(cards.length).fill(0);
+		if (isMobile) return new Array(numCards).fill(0);
 
-		return getStackPeekOffsets(peekedIndex, activeIndex, cards.length);
-	}, [isMobile, peekedIndex, activeIndex]);
+		return getStackPeekOffsets(peekedIndex, activeIndex, numCards);
+	}, [isMobile, peekedIndex, activeIndex, numCards]);
 
 	const orientation: "horizontal" | "vertical" = isMobile
 		? "vertical"
@@ -82,13 +72,25 @@ const Stack = () => {
 			return;
 		}
 
+		if (target && controlsRef.current?.contains(target)) {
+			return;
+		}
+
 		setActiveIndex(-1);
 	};
 
-	useOnClickOutside(
-		stackRef as React.RefObject<HTMLElement>,
-		handleClickOutside,
-	);
+	useEffect(() => {
+		const handleClick = (event: Event) => {
+			const target = event.target as HTMLElement | null;
+
+			if (!stackRef.current?.contains(target)) {
+				handleClickOutside(event);
+			}
+		};
+
+		document.addEventListener("click", handleClick);
+		return () => document.removeEventListener("click", handleClick);
+	}, []);
 
 	const handleCardClick = (index: number) => {
 		if (isMobile) {
@@ -105,45 +107,71 @@ const Stack = () => {
 	};
 
 	const requestOpen = () => {
-		setActiveIndex((prev) => Math.min(prev + 1, cards.length - 1));
+		setActiveIndex((prev) => Math.min(prev + 1, numCards - 1));
+	};
+
+	const addCard = () => {
+		setNumCards((prev) => prev + 1);
+		setActiveIndex(numCards);
+	};
+
+	const removeCard = () => {
+		if (numCards > 0) {
+			setNumCards((prev) => prev - 1);
+			setActiveIndex((prev) => {
+				const newNumCards = numCards - 1;
+				if (prev >= newNumCards) {
+					return Math.max(0, newNumCards - 1);
+				}
+				return prev;
+			});
+		}
 	};
 
 	return (
-		<div ref={containerRef} className="bg-base-900 h-full w-full">
+		<div ref={containerRef} className="bg-base-900 relative h-full w-full">
 			<div ref={stackRef}>
 				<AnimatePresence>
-					{cards.map((card, index) => {
-						return (
-							<Card
-								key={index}
-								pos={baseStackPositions[index] + currentDynamicOffsets[index]}
-								orientation={orientation}
-								onMouseEnter={() => setPeekedIndex(index)}
-								onMouseLeave={() => setPeekedIndex(null)}
-								onClick={() => handleCardClick(index)}
-								isDraggable={
-									isMobile &&
-									(index === activeIndex || index === activeIndex + 1)
-								}
-								onRequestClose={
-									index === activeIndex ? requestClose : undefined
-								}
-								onRequestOpen={
-									index === activeIndex + 1 ? requestOpen : undefined
-								}
-								className={cn(
-									card.backgroundClass,
-									index !== activeIndex && "cursor-alias",
-								)}
-								transitionDelay={
-									index === activeIndex + 2 && isMobile ? 0.3 : 0
-								}
-							>
-								{card.content}
-							</Card>
-						);
-					})}
+					{Array.from({ length: numCards }, (_, index) => (
+						<Card
+							key={index}
+							pos={baseStackPositions[index] + currentDynamicOffsets[index]}
+							orientation={orientation}
+							onMouseEnter={() => setPeekedIndex(index)}
+							onMouseLeave={() => setPeekedIndex(null)}
+							onClick={() => handleCardClick(index)}
+							isDraggable={
+								isMobile && (index === activeIndex || index === activeIndex + 1)
+							}
+							onRequestClose={index === activeIndex ? requestClose : undefined}
+							onRequestOpen={
+								index === activeIndex + 1 ? requestOpen : undefined
+							}
+							isActive={index === activeIndex}
+							className={cn(index !== activeIndex && "cursor-alias")}
+							transitionDelay={index === activeIndex + 2 && isMobile ? 0.3 : 0}
+						/>
+					))}
 				</AnimatePresence>
+			</div>
+
+			<div
+				ref={controlsRef}
+				className="absolute bottom-4 left-4 z-1000 flex flex-col"
+			>
+				<button
+					onClick={addCard}
+					className="bg-base-50 text-base-900 flex h-14 w-14 cursor-pointer items-center justify-center"
+				>
+					<Plus className="text-base-500 h-7 w-7" strokeWidth={1} />
+				</button>
+				<button
+					onClick={removeCard}
+					disabled={numCards <= 0}
+					className="bg-base-50 text-base-900 border-base-200 flex h-14 w-14 cursor-pointer items-center justify-center border-t-2 disabled:cursor-not-allowed disabled:opacity-50"
+				>
+					<Minus className="text-base-500 h-7 w-7" strokeWidth={1} />
+				</button>
 			</div>
 		</div>
 	);

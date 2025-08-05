@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { motion, useAnimate } from "motion/react";
-import { type ReactNode } from "react";
 
 interface CardProps {
 	pos: number;
@@ -14,7 +13,7 @@ interface CardProps {
 	onRequestClose?: () => void;
 	onRequestOpen?: () => void;
 	transitionDelay?: number;
-	children?: ReactNode | ReactNode[];
+	isActive?: boolean;
 }
 
 const Card = ({
@@ -24,12 +23,12 @@ const Card = ({
 	onMouseLeave,
 	onClick,
 	className,
-	children,
 	isDraggable = false,
 	threshold = 120,
 	onRequestClose,
 	onRequestOpen,
 	transitionDelay = 0,
+	isActive = false,
 }: CardProps) => {
 	const isHorizontal = orientation === "horizontal";
 
@@ -44,7 +43,6 @@ const Card = ({
 					drag: "y" as const,
 					dragMomentum: false,
 					dragSnapToOrigin: false,
-					// Restrict direction only for close (downwards). Upwards drag has no constraint to avoid jump.
 					...(hasClose && !hasOpen ? { dragConstraints: { top: 0 } } : {}),
 					dragElastic: 0,
 					onDragEnd: (
@@ -61,7 +59,6 @@ const Card = ({
 							return;
 						}
 
-						// bounce back to original pos if threshold not reached
 						if (scope.current) {
 							animate(
 								scope.current,
@@ -86,7 +83,12 @@ const Card = ({
 			}}
 			ref={scope}
 			className={cn(
-				"absolute inset-0 overflow-x-auto overflow-y-hidden",
+				"absolute inset-0 overflow-x-auto overflow-y-hidden transition-colors duration-300 ease-in-out",
+				!isHorizontal
+					? "bg-base-100"
+					: isActive
+						? "bg-base-200"
+						: "bg-base-100",
 				className,
 			)}
 			onMouseEnter={onMouseEnter}
@@ -98,9 +100,7 @@ const Card = ({
 				...(!isHorizontal && isDraggable ? { touchAction: "none" } : {}),
 			}}
 			{...dragProps}
-		>
-			{children}
-		</motion.section>
+		/>
 	);
 };
 
