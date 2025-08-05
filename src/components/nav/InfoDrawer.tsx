@@ -25,7 +25,8 @@ const InfoDrawer = ({
 	const [showDetails, setShowDetails] = useState(false);
 	const drawerRef = useRef<HTMLDivElement>(null);
 
-	const toggleDrawer = () => {
+	const toggleDrawer = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		if (isOpen) {
 			setShowDetails(false);
 		}
@@ -146,7 +147,10 @@ const InfoDrawer = ({
 										<div className="mt-6 mb-4 flex justify-center">
 											<motion.button
 												key="toggle-details"
-												onClick={() => setShowDetails(true)}
+												onClick={(e) => {
+													e.stopPropagation();
+													setShowDetails(true);
+												}}
 												className="text-base-500 hover:text-base-700 flex cursor-pointer flex-col items-center text-sm font-light"
 												layout
 											>
@@ -169,7 +173,7 @@ const InfoDrawer = ({
 						aria-expanded={isOpen}
 						aria-controls="info-drawer"
 						className="text-base-900 absolute right-0 bottom-0 flex h-14 w-14 cursor-pointer items-center justify-center"
-						onClick={toggleDrawer}
+						onClick={(e) => toggleDrawer(e)}
 						whileTap={{ scale: 0.9 }}
 						layout
 					>
