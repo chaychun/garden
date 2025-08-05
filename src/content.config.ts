@@ -30,6 +30,7 @@ const interactions = defineCollection({
 		previewVideo: z.string(),
 		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
 		position: z.enum(["top", "bottom"]).default("top"),
+		badgeVariant: z.enum(["light", "dark"]).default("light"),
 	}),
 });
 

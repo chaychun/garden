@@ -2,13 +2,18 @@
 export interface Props {
 	text: string;
 	class?: string;
+	variant?: "light" | "dark";
 }
-const { text, class: className = "" } = Astro.props;
+const { text, class: className = "", variant = "light" } = Astro.props;
 ---
 
 <span
 	class:list={[
-		"inline-block border border-white/30 px-3 py-1 font-mono text-[10px] text-white transition-colors duration-200 select-none hover:border-transparent hover:bg-white/30",
+		"inline-block px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none",
+		variant === "light" &&
+			"border border-white/30 text-white hover:border-transparent hover:bg-white/30",
+		variant === "dark" &&
+			"border-base-300/30 text-base-500 hover:bg-base-300/30 border hover:border-transparent",
 		className,
 	]}
 >

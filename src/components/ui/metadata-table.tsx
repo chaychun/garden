@@ -56,7 +56,7 @@ const MetadataTable = ({
 					{technologies.map((tech) => (
 						<span
 							key={tech}
-							className="border-base-200/30 text-base-500 hover:bg-base-200/30 inline-block border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none hover:border-transparent"
+							className="border-base-300/30 text-base-500 hover:bg-base-300/30 inline-block border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none hover:border-transparent"
 						>
 							{tech}
 						</span>
