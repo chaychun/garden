@@ -1,4 +1,4 @@
-import { motion, MotionConfig } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
 interface UnderlineLinkProps {
@@ -21,36 +21,27 @@ export function UnderlineLink({
 	};
 
 	return (
-		<MotionConfig transition={transition}>
-			<a
+		<AnimatePresence>
+			<motion.a
 				href={href}
-				className={`relative inline-block overflow-hidden ${className}`}
+				className={`relative inline-block overflow-hidden before:absolute before:bottom-0 before:left-0 before:h-[0.0625em] before:w-full before:origin-left before:scale-x-[var(--left-scale)] before:bg-red-500 after:absolute after:right-0 after:bottom-0 after:h-[0.0625em] after:w-full after:origin-right after:scale-x-[var(--right-scale)] after:bg-current ${className}`}
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
+				initial={{
+					"--left-scale": "0",
+					"--right-scale": "1",
+				}}
+				animate={{
+					"--left-scale": isHovered ? "1" : "0",
+					"--right-scale": isHovered ? "0" : "1",
+				}}
+				transition={{
+					"--left-scale": { ...transition, delay: isHovered ? 0.15 : 0 },
+					"--right-scale": { ...transition, delay: isHovered ? 0 : 0.15 },
+				}}
 			>
 				{children}
-
-				{/* Idle underline */}
-				<motion.div
-					className="absolute bottom-0 left-0 h-[0.0625em] bg-current"
-					style={{ width: "100%" }}
-					animate={{
-						x: isHovered ? "150%" : "0%",
-						transition: { ...transition, delay: isHovered ? 0 : 0.1 },
-					}}
-				/>
-
-				{/* New underline that animates in from left */}
-				<motion.div
-					className="absolute bottom-0 left-0 h-[0.0625em] bg-current"
-					style={{ width: "100%" }}
-					initial={{ x: "-100%" }}
-					animate={{
-						x: isHovered ? "0%" : "-150%",
-						transition: { ...transition, delay: isHovered ? 0.1 : 0 },
-					}}
-				/>
-			</a>
-		</MotionConfig>
+			</motion.a>
+		</AnimatePresence>
 	);
 }
