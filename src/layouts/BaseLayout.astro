@@ -25,5 +25,21 @@ const { title } = Astro.props;
 	</head>
 	<body>
 		<slot />
+
+		<script>
+			function stripFilterParamIfNotHome() {
+				if (typeof window === "undefined") return;
+				if (window.location.pathname === "/") return;
+				const url = new URL(window.location.href);
+				if (!url.searchParams.has("filter")) return;
+				url.searchParams.delete("filter");
+				const newSearch = url.searchParams.toString();
+				const newUrl = url.pathname + (newSearch ? `?${newSearch}` : "") + url.hash;
+				window.history.replaceState({}, "", newUrl);
+			}
+
+			document.addEventListener("DOMContentLoaded", stripFilterParamIfNotHome);
+			document.addEventListener("astro:page-load", stripFilterParamIfNotHome);
+		</script>
 	</body>
 </html>
