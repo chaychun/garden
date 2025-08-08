@@ -38,6 +38,8 @@ const { title, scrollAreaId = "main-scroll" } = Astro.props;
 
 			let currentCleanup: (() => void) | null = null;
 			let resizeTimeout: number | null = null;
+			let removeResizeListener: (() => void) | null = null;
+			let removePageLoadListener: (() => void) | null = null;
 
 			function setupScrollSmoothing() {
 				if (currentCleanup) {
@@ -65,24 +67,50 @@ const { title, scrollAreaId = "main-scroll" } = Astro.props;
 			}
 
 			if (document.readyState === "loading") {
-				document.addEventListener("DOMContentLoaded", setupScrollSmoothing);
+				document.addEventListener("DOMContentLoaded", setupScrollSmoothing, {
+					once: true,
+				});
 			} else {
 				setupScrollSmoothing();
 			}
 
-			document.addEventListener("astro:page-load", setupScrollSmoothing);
+			const onPageLoad = () => {
+				setupScrollSmoothing();
+			};
+			document.addEventListener("astro:page-load", onPageLoad);
+			removePageLoadListener = () => {
+				document.removeEventListener("astro:page-load", onPageLoad);
+			};
 
-			window.addEventListener("resize", handleResize);
+			const onResize = handleResize;
+			window.addEventListener("resize", onResize);
+			removeResizeListener = () => {
+				window.removeEventListener("resize", onResize);
+			};
 
-			window.addEventListener("beforeunload", () => {
+			function cleanupPage() {
 				if (currentCleanup) {
 					currentCleanup();
 					currentCleanup = null;
 				}
 				if (resizeTimeout) {
 					clearTimeout(resizeTimeout);
+					resizeTimeout = null;
 				}
+				if (removeResizeListener) {
+					removeResizeListener();
+					removeResizeListener = null;
+				}
+				if (removePageLoadListener) {
+					removePageLoadListener();
+					removePageLoadListener = null;
+				}
+			}
+
+			document.addEventListener("astro:before-visit", cleanupPage, {
+				once: true,
 			});
+			window.addEventListener("beforeunload", cleanupPage);
 		</script>
 	</div>
 </BaseLayout>

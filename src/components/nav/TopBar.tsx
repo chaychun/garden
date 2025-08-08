@@ -13,6 +13,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const cleanupRef = useRef<(() => void) | null>(null);
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(false);
+	const rafIdRef = useRef<number | null>(null);
 
 	useEffect(() => {
 		function detach() {
@@ -36,13 +37,18 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 			scrollTargetRef.current = target;
 
 			const readPosition = () => {
-				if (target instanceof Window) {
-					setIsScrolled(
-						(window.pageYOffset || document.documentElement.scrollTop) > 0,
-					);
-				} else {
-					setIsScrolled(target.scrollLeft > 0 || target.scrollTop > 0);
-				}
+				if (rafIdRef.current !== null) return;
+				rafIdRef.current = requestAnimationFrame(() => {
+					let scrolled = false;
+					if (target instanceof Window) {
+						scrolled =
+							(window.pageYOffset || document.documentElement.scrollTop) > 0;
+					} else {
+						scrolled = target.scrollLeft > 0 || target.scrollTop > 0;
+					}
+					setIsScrolled(scrolled);
+					rafIdRef.current = null;
+				});
 			};
 
 			const onScroll = () => readPosition();
@@ -53,6 +59,10 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 			window.addEventListener("resize", onResize, { passive: true });
 
 			cleanupRef.current = () => {
+				if (rafIdRef.current !== null) {
+					cancelAnimationFrame(rafIdRef.current);
+					rafIdRef.current = null;
+				}
 				if (target) {
 					target.removeEventListener("scroll", onScroll as EventListener);
 				}
@@ -90,7 +100,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 					layout={!isDesktop}
 					className={
 						"relative z-10 grid grid-cols-4 p-2 md:grid-cols-6 lg:grid-cols-5 " +
-						(isScrolled
+						(!isDesktop && isScrolled
 							? "grid-rows-1 items-center"
 							: "grid-rows-2 items-end md:grid-rows-1")
 					}
@@ -104,7 +114,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 								: { y: 0, opacity: 1 }
 						}
 						className="text-base-900 col-span-2 col-start-1 text-5xl font-semibold tracking-tight md:col-span-1"
-						style={{ gridRowStart: 1 as unknown as number }}
+						style={{ gridRowStart: 1 }}
 					>
 						{title}
 					</motion.h1>
@@ -114,7 +124,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 						initial={false}
 						className={
 							"text-base-700 col-start-1 text-3xl font-medium tracking-tight md:col-start-3 md:row-start-1 md:mr-6 md:justify-self-end md:text-4xl " +
-							(isScrolled ? "row-start-1" : "row-start-2")
+							(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
 						}
 					>
 						(42)
@@ -125,7 +135,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 						initial={false}
 						className={
 							"relative col-span-3 col-start-2 md:col-span-3 md:col-start-4 md:row-start-1 " +
-							(isScrolled ? "row-start-1" : "row-start-2")
+							(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
 						}
 					>
 						<div className="text-base-900 flex items-end gap-1 md:gap-2">
