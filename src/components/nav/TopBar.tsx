@@ -20,6 +20,17 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const { activeFilter, setActiveFilter } = useFilterStore();
 	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
 
+	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
+	const HEADER_HEIGHT_SINGLE_ROW = 80;
+	const HEADER_HEIGHT_DOUBLE_ROW = 135;
+	const MENU_EXTRA_HEIGHT = 200;
+	const baseHeight = isSingleRow
+		? HEADER_HEIGHT_SINGLE_ROW
+		: HEADER_HEIGHT_DOUBLE_ROW;
+	const targetHeight = isFilterOpen
+		? baseHeight + MENU_EXTRA_HEIGHT
+		: baseHeight;
+
 	useEffect(() => {
 		function detach() {
 			if (cleanupRef.current) {
@@ -94,12 +105,18 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 
 	return (
 		<div className="fixed top-0 right-0 left-0 z-40">
-			<ProgressiveBlur
-				className="from-base-50 via-base-50/70 absolute top-0 right-0 left-0 z-0 h-[120%] bg-gradient-to-b to-transparent"
-				direction="top"
-				blurLayers={8}
-				blurIntensity={3}
-			/>
+			<motion.div
+				initial={false}
+				animate={{ height: targetHeight }}
+				className="from-base-50 via-base-50/70 pointer-events-none absolute top-0 right-0 left-0 z-0 bg-gradient-to-b to-transparent"
+			>
+				<ProgressiveBlur
+					className="absolute inset-0"
+					direction="top"
+					blurLayers={8}
+					blurIntensity={3}
+				/>
+			</motion.div>
 			<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
 				<motion.div
 					layout={!isDesktop}
