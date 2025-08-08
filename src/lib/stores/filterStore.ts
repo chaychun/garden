@@ -8,6 +8,10 @@ interface FilterState {
 	setActiveFilter: (filter: FilterType) => void;
 }
 
+const isHomePage = () => {
+	return typeof window !== "undefined" && window.location.pathname === "/";
+};
+
 const getSearchParams = () => {
 	if (typeof window === "undefined") return new URLSearchParams();
 	return new URL(window.location.href).searchParams;
@@ -15,6 +19,7 @@ const getSearchParams = () => {
 
 const updateUrlWithParams = (key: string, value?: string) => {
 	if (typeof window === "undefined") return;
+	if (!isHomePage()) return;
 
 	const searchParams = getSearchParams();
 	if (value) {
@@ -23,7 +28,7 @@ const updateUrlWithParams = (key: string, value?: string) => {
 		searchParams.delete(key);
 	}
 
-	const newUrl = window.location.pathname + "?" + searchParams.toString();
+	const newUrl = window.location.pathname + (searchParams.toString() ? "?" + searchParams.toString() : "");
 	window.history.replaceState({}, "", newUrl);
 };
 
@@ -39,6 +44,8 @@ const dispatchFilterChangeEvent = (filter: FilterType) => {
 
 const urlStorageApi = {
 	getItem: (key: string): string | null => {
+		if (!isHomePage()) return null;
+
 		const searchParams = getSearchParams();
 		const filterParam = searchParams.get(key);
 
@@ -68,6 +75,7 @@ const urlStorageApi = {
 		});
 	},
 	setItem: (key: string, value: string): void => {
+		if (!isHomePage()) return;
 		try {
 			const data = JSON.parse(value);
 			const activeFilter = data.state?.activeFilter as FilterType | undefined;
@@ -87,6 +95,7 @@ const urlStorageApi = {
 		}
 	},
 	removeItem: (key: string): void => {
+		if (!isHomePage()) return;
 		updateUrlWithParams(key);
 	},
 };
