@@ -1,4 +1,6 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import { SlidingNumber } from "@/components/ui/sliding-number";
+import { filterCounts } from "@/lib/content-counts";
 import type { FilterType } from "@/lib/stores/filterStore";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { ChevronRight } from "lucide-react";
@@ -149,7 +151,11 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
 						}
 					>
-						(42)
+						(
+						<span className="inline-flex">
+							<SlidingNumber value={filterCounts[activeFilter]} />
+						</span>
+						)
 					</motion.div>
 
 					<motion.div
