@@ -3,10 +3,10 @@ import { SlidingNumber } from "@/components/ui/sliding-number";
 import { filterCounts } from "@/lib/content-counts";
 import type { FilterType } from "@/lib/stores/filterStore";
 import { useFilterStore } from "@/lib/stores/filterStore";
-import { ChevronRight } from "lucide-react";
 import { motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatedMenuIcon } from "../ui/animated-menu-icon";
+import { FilterMenu } from "./FilterMenu";
 
 interface TopBarProps {
 	title?: string;
@@ -21,22 +21,6 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter, setActiveFilter } = useFilterStore();
 	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
-
-	const menuContainerVariants = {
-		hidden: {},
-		show: {
-			transition: { staggerChildren: 0.06, delayChildren: 0.04 },
-		},
-	};
-
-	const menuItemVariants = {
-		hidden: { opacity: 0, y: -8 },
-		show: {
-			opacity: 1,
-			y: 0,
-			transition: { duration: 0.3 },
-		},
-	};
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 80;
@@ -182,54 +166,16 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
 						}
 					>
-						<button
-							type="button"
-							onClick={() => setIsFilterOpen((prev) => !prev)}
-							className="text-base-900 flex cursor-pointer items-end gap-1 md:gap-2"
-							aria-haspopup="menu"
-							aria-expanded={isFilterOpen}
-						>
-							<span className="text-4xl font-medium tracking-tight md:text-5xl">
-								{activeFilter}
-							</span>
-							<ChevronRight
-								className={
-									"h-8 w-8 transition-transform duration-200 md:h-9 md:w-9 md:stroke-3 " +
-									(isFilterOpen ? "rotate-90" : "rotate-0")
-								}
-							/>
-						</button>
-						{isFilterOpen ? (
-							<motion.div
-								role="menu"
-								className="absolute top-full left-0"
-								variants={menuContainerVariants}
-								initial="hidden"
-								animate="show"
-							>
-								{availableFilters
-									.filter((option) => option !== activeFilter)
-									.map((filterOption) => (
-										<motion.button
-											key={filterOption}
-											type="button"
-											onClick={() => {
-												setActiveFilter(filterOption);
-												setIsFilterOpen(false);
-											}}
-											className="block cursor-pointer text-left"
-											role="menuitem"
-											variants={menuItemVariants}
-										>
-											<span className="text-base-500 hover:text-base-900 flex items-end gap-1 transition-colors duration-300 md:gap-2">
-												<span className="text-4xl font-medium tracking-tight md:text-5xl">
-													{filterOption}
-												</span>
-											</span>
-										</motion.button>
-									))}
-							</motion.div>
-						) : null}
+						<FilterMenu
+							activeFilter={activeFilter}
+							availableFilters={availableFilters}
+							isOpen={isFilterOpen}
+							onOpenChange={setIsFilterOpen}
+							onSelect={(filterOption) => {
+								setActiveFilter(filterOption);
+								setIsFilterOpen(false);
+							}}
+						/>
 					</motion.div>
 				</motion.div>
 			</MotionConfig>
