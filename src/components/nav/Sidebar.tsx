@@ -9,6 +9,7 @@ interface SidebarProps {
 	title: string;
 	desktopContent: React.ReactNode;
 	number?: number;
+	disableClickOutside?: boolean;
 }
 
 export default function Sidebar({
@@ -16,6 +17,7 @@ export default function Sidebar({
 	title,
 	desktopContent,
 	number,
+	disableClickOutside,
 }: SidebarProps) {
 	const { isExpanded, isManualToggle, setExpanded, setManualToggle } =
 		useSidebarStore();
@@ -86,6 +88,7 @@ export default function Sidebar({
 	}, [scrollAreaId, isExpanded, isManualToggle, setExpanded]);
 
 	useEffect(() => {
+		if (disableClickOutside) return;
 		if (!isExpanded || isManualToggle) return;
 
 		const handleClickOutside = (event: MouseEvent) => {
@@ -110,7 +113,7 @@ export default function Sidebar({
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
-	}, [isExpanded, isManualToggle, setExpanded]);
+	}, [isExpanded, isManualToggle, setExpanded, disableClickOutside]);
 
 	const handleToggleSidebar = () => {
 		setManualToggle(true);

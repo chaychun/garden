@@ -30,6 +30,7 @@ if (key in interactiveModules) {
 	createdDate={entry.data.createdDate.toISOString()}
 	lastUpdatedDate={entry.data.lastUpdatedDate.toISOString()}
 	technologies={entry.data.tags || []}
+	disableSidebarClickOutside={entry.data.disableSidebarClickOutside}
 >
 	{ComponentToRender && <ComponentToRender slot="interactive" />}
 	<Content />

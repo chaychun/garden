@@ -9,9 +9,10 @@ interface Props {
 	createdDate: string;
 	lastUpdatedDate: string;
 	technologies: string[];
+	disableSidebarClickOutside?: boolean;
 }
 
-const { title, description, createdDate, lastUpdatedDate, technologies } =
+const { title, description, createdDate, lastUpdatedDate, technologies, disableSidebarClickOutside } =
 	Astro.props;
 ---
 
@@ -25,6 +26,7 @@ const { title, description, createdDate, lastUpdatedDate, technologies } =
 				createdDate={createdDate}
 				lastUpdatedDate={lastUpdatedDate}
 				technologies={technologies}
+				disableClickOutside={disableSidebarClickOutside}
 			>
 				<slot />
 			</InteractionSidebar>
