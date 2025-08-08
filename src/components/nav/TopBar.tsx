@@ -22,6 +22,22 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const { activeFilter, setActiveFilter } = useFilterStore();
 	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
 
+	const menuContainerVariants = {
+		hidden: {},
+		show: {
+			transition: { staggerChildren: 0.06, delayChildren: 0.04 },
+		},
+	};
+
+	const menuItemVariants = {
+		hidden: { opacity: 0, y: -8 },
+		show: {
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.3 },
+		},
+	};
+
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 80;
 	const HEADER_HEIGHT_DOUBLE_ROW = 135;
@@ -184,11 +200,17 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							/>
 						</button>
 						{isFilterOpen ? (
-							<div role="menu" className="absolute top-full left-0">
+							<motion.div
+								role="menu"
+								className="absolute top-full left-0"
+								variants={menuContainerVariants}
+								initial="hidden"
+								animate="show"
+							>
 								{availableFilters
 									.filter((option) => option !== activeFilter)
 									.map((filterOption) => (
-										<button
+										<motion.button
 											key={filterOption}
 											type="button"
 											onClick={() => {
@@ -197,15 +219,16 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 											}}
 											className="block cursor-pointer text-left"
 											role="menuitem"
+											variants={menuItemVariants}
 										>
 											<span className="text-base-500 hover:text-base-900 flex items-end gap-1 transition-colors duration-300 md:gap-2">
 												<span className="text-4xl font-medium tracking-tight md:text-5xl">
 													{filterOption}
 												</span>
 											</span>
-										</button>
+										</motion.button>
 									))}
-							</div>
+							</motion.div>
 						) : null}
 					</motion.div>
 				</motion.div>
