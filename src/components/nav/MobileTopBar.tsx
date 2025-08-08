@@ -103,7 +103,12 @@ export default function MobileTopBar({
 							className="pointer-events-none absolute inset-0"
 							style={{
 								background:
-									"radial-gradient(circle at top center, rgba(246, 246, 245, 0.8) 0%, rgba(246, 246, 245, 0.6) 30%, rgba(246, 246, 245, 0.2) 50%, rgba(246, 246, 245, 0.02) 70%, transparent 85%)",
+									"radial-gradient(circle at top center, " +
+									"color-mix(in oklch, var(--color-base-50) 80%, transparent) 0%, " +
+									"color-mix(in oklch, var(--color-base-50) 60%, transparent) 30%, " +
+									"color-mix(in oklch, var(--color-base-50) 20%, transparent) 50%, " +
+									"color-mix(in oklch, var(--color-base-50) 2%, transparent) 70%, " +
+									"transparent 85%)",
 								transformOrigin: "top center",
 							}}
 							initial={{ scale: 0, opacity: 0.5 }}
