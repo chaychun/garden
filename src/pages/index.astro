@@ -3,7 +3,7 @@ export const prerender = false;
 
 import ArticleBlock from "@/components/blocks/ArticleBlock.astro";
 import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
-import HorizontalScrollLayout from "@/layouts/HorizontalScrollLayout.astro";
+import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 
 const interactions = await getCollection("interactions");
@@ -25,11 +25,7 @@ const filterName =
 	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
 ---
 
-<HorizontalScrollLayout
-	title={`${filterName} | Chayut`}
-	sidebar="home"
-	scrollAreaId="main-scroll"
->
+<HomeLayout title={`${filterName} | Chayut`} scrollAreaId="main-scroll">
 	{
 		allItems.map((item) => {
 			const itemDate =
@@ -67,7 +63,7 @@ const filterName =
 			}
 		})
 	}
-</HorizontalScrollLayout>
+</HomeLayout>
 
 <script>
 	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";

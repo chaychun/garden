@@ -1,0 +1,88 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import TopBar from "../components/nav/TopBar";
+
+interface Props {
+	title: string;
+	scrollAreaId?: string;
+}
+
+const { title, scrollAreaId = "main-scroll" } = Astro.props;
+---
+
+<BaseLayout title={title}>
+	<div class="bg-base-50 min-h-screen">
+		<div class="fixed top-0 right-0 left-0 z-40">
+			<TopBar title="Chayut" />
+		</div>
+
+		<div class="w-full pt-[64px]">
+			<div
+				class="md:flex md:h-[calc(100dvh-64px)] md:overflow-x-auto md:overflow-y-hidden"
+				id="scroll-container"
+				data-scroll-area-id={scrollAreaId}
+			>
+				<div
+					class="mx-auto flex max-w-[528px] flex-col md:max-w-none md:flex-row"
+				>
+					<slot />
+				</div>
+			</div>
+		</div>
+
+		<script>
+			import {
+				setupHorizontalScrollSmoothing,
+				setupVerticalScrollSmoothing,
+			} from "../lib/scroll-smoothing";
+
+			let currentCleanup: (() => void) | null = null;
+			let resizeTimeout: number | null = null;
+
+			function setupScrollSmoothing() {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
+
+				const isDesktop = window.innerWidth >= 768;
+
+				if (isDesktop) {
+					currentCleanup = setupHorizontalScrollSmoothing("#scroll-container");
+				} else {
+					currentCleanup = setupVerticalScrollSmoothing();
+				}
+			}
+
+			function handleResize() {
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
+				}
+				resizeTimeout = window.setTimeout(() => {
+					setupScrollSmoothing();
+					resizeTimeout = null;
+				}, 150);
+			}
+
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", setupScrollSmoothing);
+			} else {
+				setupScrollSmoothing();
+			}
+
+			document.addEventListener("astro:page-load", setupScrollSmoothing);
+
+			window.addEventListener("resize", handleResize);
+
+			window.addEventListener("beforeunload", () => {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
+				if (resizeTimeout) {
+					clearTimeout(resizeTimeout);
+				}
+			});
+		</script>
+	</div>
+</BaseLayout>
