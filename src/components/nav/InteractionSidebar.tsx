@@ -11,6 +11,7 @@ interface InteractionSidebarProps {
 	lastUpdatedDate: string;
 	technologies: string[];
 	children?: React.ReactNode;
+	disableClickOutside?: boolean;
 }
 
 export default function InteractionSidebar({
@@ -21,6 +22,7 @@ export default function InteractionSidebar({
 	lastUpdatedDate,
 	technologies,
 	children,
+	disableClickOutside,
 }: InteractionSidebarProps) {
 	const desktopContent = (
 		<>
@@ -64,6 +66,7 @@ export default function InteractionSidebar({
 			scrollAreaId={scrollAreaId}
 			title={title}
 			desktopContent={desktopContent}
+			disableClickOutside={disableClickOutside}
 		/>
 	);
 }

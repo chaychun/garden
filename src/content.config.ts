@@ -31,6 +31,7 @@ const interactions = defineCollection({
 		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
 		position: z.enum(["top", "bottom"]).default("top"),
 		badgeVariant: z.enum(["light", "dark"]).default("light"),
+		disableSidebarClickOutside: z.boolean().default(false),
 	}),
 });
 
