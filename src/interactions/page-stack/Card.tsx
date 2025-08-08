@@ -15,6 +15,7 @@ interface CardProps {
 	transitionDelay?: number;
 	isActive?: boolean;
 	index: number;
+	isReady?: boolean;
 }
 
 const Card = ({
@@ -31,6 +32,7 @@ const Card = ({
 	transitionDelay = 0,
 	isActive = false,
 	index,
+	isReady = true,
 }: CardProps) => {
 	const isHorizontal = orientation === "horizontal";
 
@@ -74,9 +76,17 @@ const Card = ({
 
 	return (
 		<motion.section
-			initial={isHorizontal ? { x: "100vw", y: 0 } : { y: "100vh", x: 0 }}
-			animate={isHorizontal ? { x: pos, y: 0 } : { y: pos, x: 0 }}
-			exit={isHorizontal ? { x: "100vw", y: 0 } : { y: "100vh", x: 0 }}
+			initial={isHorizontal ? { x: "100%", y: 0 } : { y: "100%", x: 0 }}
+			animate={
+				isHorizontal
+					? isReady
+						? { x: pos, y: 0 }
+						: { x: "100%", y: 0 }
+					: isReady
+						? { y: pos, x: 0 }
+						: { y: "100%", x: 0 }
+			}
+			exit={isHorizontal ? { x: "100%", y: 0 } : { y: "100%", x: 0 }}
 			transition={{
 				type: "tween",
 				duration: 1,

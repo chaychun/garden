@@ -13,7 +13,9 @@ const Stack = () => {
 	const stackRef = useRef<HTMLDivElement>(null);
 	const [containerRef, containerBounds] = useMeasure();
 
-	const isMobile = containerBounds.width < 768;
+	const hasMeasured = containerBounds.width > 0 || containerBounds.height > 0;
+
+	const isMobile = hasMeasured ? containerBounds.width < 768 : false;
 
 	const peekHeight = 80;
 
@@ -147,6 +149,7 @@ const Stack = () => {
 						<Card
 							key={index}
 							index={index}
+							isReady={hasMeasured}
 							pos={baseStackPositions[index] + currentDynamicOffsets[index]}
 							orientation={orientation}
 							onMouseEnter={() => setPeekedIndex(index)}
