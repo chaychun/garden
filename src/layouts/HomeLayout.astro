@@ -13,12 +13,12 @@ const { title, scrollAreaId = "main-scroll" } = Astro.props;
 <BaseLayout title={title}>
 	<div class="bg-base-50 min-h-screen">
 		<div class="fixed top-0 right-0 left-0 z-40">
-			<TopBar title="Chayut" />
+			<TopBar title="Chayut" client:load />
 		</div>
 
-		<div class="w-full pt-[64px]">
+		<div class="h-dvh w-full pt-[112px]">
 			<div
-				class="md:flex md:h-[calc(100dvh-64px)] md:overflow-x-auto md:overflow-y-hidden"
+				class="md:flex md:h-full md:overflow-x-auto md:overflow-y-hidden"
 				id="scroll-container"
 				data-scroll-area-id={scrollAreaId}
 			>
