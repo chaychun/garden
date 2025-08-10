@@ -1,5 +1,4 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { SlidingNumber } from "@/components/ui/sliding-number";
 import { filterCounts } from "@/lib/content-counts";
 import type { FilterType } from "@/lib/stores/filterStore";
 import { useFilterStore } from "@/lib/stores/filterStore";
@@ -24,7 +23,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
-	const HEADER_HEIGHT_SINGLE_ROW = 80;
+	const HEADER_HEIGHT_SINGLE_ROW = 100;
 	const HEADER_HEIGHT_DOUBLE_ROW = 135;
 	const MENU_EXTRA_HEIGHT = 200;
 	const baseHeight = isSingleRow
@@ -137,7 +136,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							initial={false}
 							animate={
 								!isDesktop && isScrolled
-									? { y: -40, opacity: 0 }
+									? { y: -48, opacity: 0 }
 									: { y: 0, opacity: 1 }
 							}
 							className="text-base-900 col-span-2 col-start-1 text-5xl font-semibold tracking-tight md:col-span-1"
@@ -154,11 +153,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 								isScrolled && !isDesktop ? "row-start-1" : "row-start-2",
 							)}
 						>
-							(
-							<span className="inline-flex">
-								<SlidingNumber value={filterCounts[activeFilter]} />
-							</span>
-							)
+							({filterCounts[activeFilter]})
 						</motion.div>
 
 						<motion.div
