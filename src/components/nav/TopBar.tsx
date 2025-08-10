@@ -126,9 +126,9 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 						layout={!isDesktop}
 						className={
 							"relative z-10 grid grid-cols-4 p-2 md:grid-cols-6 lg:grid-cols-5 " +
-							(!isDesktop && isScrolled
+							(isScrolled
 								? "grid-rows-1 items-center"
-								: "grid-rows-2 items-end md:grid-rows-1")
+								: "grid-rows-2 items-center md:grid-rows-1")
 						}
 					>
 						<motion.h1
