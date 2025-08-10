@@ -3,6 +3,7 @@ import { SlidingNumber } from "@/components/ui/sliding-number";
 import { filterCounts } from "@/lib/content-counts";
 import type { FilterType } from "@/lib/stores/filterStore";
 import { useFilterStore } from "@/lib/stores/filterStore";
+import { cn } from "@/lib/utils";
 import { LayoutGroup, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatedMenuIcon } from "../ui/animated-menu-icon";
@@ -124,12 +125,12 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 
 					<motion.div
 						layout={!isDesktop}
-						className={
-							"relative z-10 grid grid-cols-4 p-2 md:grid-cols-6 lg:grid-cols-5 " +
-							(isScrolled
+						className={cn(
+							"relative z-10 grid grid-cols-4 p-3 md:grid-cols-6 lg:grid-cols-5",
+							isScrolled
 								? "grid-rows-1 items-center"
-								: "grid-rows-2 items-center md:grid-rows-1")
-						}
+								: "grid-rows-2 items-center md:grid-rows-1",
+						)}
 					>
 						<motion.h1
 							layout={!isDesktop}
@@ -148,10 +149,10 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 						<motion.div
 							layout={!isDesktop}
 							initial={false}
-							className={
-								"text-base-700 col-start-1 text-3xl font-medium tracking-tight md:col-start-3 md:row-start-1 md:mr-6 md:justify-self-end md:text-4xl " +
-								(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
-							}
+							className={cn(
+								"text-base-700 col-start-1 text-3xl font-medium tracking-tight md:col-start-3 md:row-start-1 md:mr-6 md:justify-self-end md:text-4xl",
+								isScrolled && !isDesktop ? "row-start-1" : "row-start-2",
+							)}
 						>
 							(
 							<span className="inline-flex">
@@ -163,10 +164,10 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 						<motion.div
 							layout={!isDesktop}
 							initial={false}
-							className={
-								"relative col-span-3 col-start-2 md:col-span-3 md:col-start-4 md:row-start-1 " +
-								(isScrolled && !isDesktop ? "row-start-1" : "row-start-2")
-							}
+							className={cn(
+								"relative col-span-3 col-start-2 md:col-span-3 md:col-start-4 md:row-start-1",
+								isScrolled && !isDesktop ? "row-start-1" : "row-start-2",
+							)}
 						>
 							<FilterMenu
 								activeFilter={activeFilter}
@@ -182,7 +183,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 					</motion.div>
 
 					<button
-						className="border-base-300/30 bg-base-50/50 text-base-500 hover:bg-base-300/30 hover:text-base-700 absolute top-[14px] right-2 z-20 flex h-9 w-fit items-center justify-center border px-3 py-1 backdrop-blur-sm transition-colors duration-300 hover:border-transparent"
+						className="border-base-300/30 bg-base-50/50 text-base-500 hover:bg-base-300/30 hover:text-base-700 absolute top-[22px] right-3 z-20 flex h-9 w-fit items-center justify-center border px-3 py-1 backdrop-blur-sm transition-colors duration-300 hover:border-transparent"
 						aria-label="Open menu"
 					>
 						<AnimatedMenuIcon isOpen={false} className="stroke-1" />
