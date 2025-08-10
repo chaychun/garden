@@ -36,13 +36,6 @@ export function FilterMenu({
 	const triggerId = useId();
 	const menuId = useId();
 	const containerRef = useRef<HTMLDivElement | null>(null);
-	const menuRef = useRef<HTMLDivElement | null>(null);
-
-	useEffect(() => {
-		if (isOpen) {
-			menuRef.current?.focus();
-		}
-	}, [isOpen]);
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -67,6 +60,11 @@ export function FilterMenu({
 			<button
 				type="button"
 				onClick={() => onOpenChange(!isOpen)}
+				onKeyDown={(e) => {
+					if (e.key === "Escape" && isOpen) {
+						onOpenChange(false);
+					}
+				}}
 				className="text-base-900 flex cursor-pointer items-end gap-1 md:gap-2"
 				aria-haspopup="menu"
 				aria-expanded={isOpen}
@@ -101,13 +99,6 @@ export function FilterMenu({
 					animate="show"
 					id={menuId}
 					aria-labelledby={triggerId}
-					tabIndex={-1}
-					ref={menuRef}
-					onKeyDown={(e) => {
-						if (e.key === "Escape") {
-							onOpenChange(false);
-						}
-					}}
 				>
 					{availableFilters
 						.filter((option) => option !== activeFilter)
