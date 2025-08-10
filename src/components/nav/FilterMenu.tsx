@@ -42,6 +42,7 @@ export function FilterMenu({
 			menuRef.current?.focus();
 		}
 	}, [isOpen]);
+
 	return (
 		<div className={cn("relative", className)}>
 			<button
@@ -63,10 +64,11 @@ export function FilterMenu({
 
 				<motion.span layout key="chevron">
 					<ChevronRight
-						className={
-							"h-8 w-8 transition-transform duration-200 md:h-9 md:w-9 md:stroke-3 " +
-							(isOpen ? "rotate-90" : "rotate-0")
-						}
+						aria-hidden="true"
+						className={cn(
+							"h-8 w-8 transition-transform duration-200 md:h-9 md:w-9 md:stroke-3",
+							isOpen ? "rotate-90" : "rotate-0",
+						)}
 					/>
 				</motion.span>
 			</button>
