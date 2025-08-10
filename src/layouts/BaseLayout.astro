@@ -6,7 +6,7 @@ import "../styles/global.css";
 const { title } = Astro.props;
 ---
 
-<html lang="en" class="bg-base-50 antialiased">
+<html lang="en" class="antialiased">
 	<head>
 		<meta charset="utf-8" />
 		<link
@@ -23,7 +23,7 @@ const { title } = Astro.props;
 
 		<ClientRouter />
 	</head>
-	<body>
+	<body class="bg-base-50">
 		<slot />
 	</body>
 </html>
