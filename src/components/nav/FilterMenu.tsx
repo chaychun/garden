@@ -35,6 +35,7 @@ export function FilterMenu({
 }: FilterMenuProps) {
 	const triggerId = useId();
 	const menuId = useId();
+	const containerRef = useRef<HTMLDivElement | null>(null);
 	const menuRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -43,8 +44,26 @@ export function FilterMenu({
 		}
 	}, [isOpen]);
 
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const onPointerDown = (event: PointerEvent) => {
+			const container = containerRef.current;
+			if (!container) return;
+			const target = event.target as Node | null;
+			if (target && !container.contains(target)) {
+				onOpenChange(false);
+			}
+		};
+
+		document.addEventListener("pointerdown", onPointerDown, { passive: true });
+		return () => {
+			document.removeEventListener("pointerdown", onPointerDown);
+		};
+	}, [isOpen, onOpenChange]);
+
 	return (
-		<div className={cn("relative", className)}>
+		<div className={cn("relative", className)} ref={containerRef}>
 			<button
 				type="button"
 				onClick={() => onOpenChange(!isOpen)}
