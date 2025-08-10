@@ -2,6 +2,7 @@ import type { FilterType } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useId, useRef } from "react";
 
 interface FilterMenuProps {
 	activeFilter: FilterType;
@@ -16,9 +17,6 @@ const menuContainerVariants = {
 	hidden: {},
 	show: {
 		transition: { staggerChildren: 0.06, delayChildren: 0.04 },
-	},
-	exit: {
-		transition: { staggerChildren: 0.06, staggerDirection: -1 },
 	},
 };
 
@@ -35,6 +33,15 @@ export function FilterMenu({
 	onSelect,
 	className,
 }: FilterMenuProps) {
+	const triggerId = useId();
+	const menuId = useId();
+	const menuRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		if (isOpen) {
+			menuRef.current?.focus();
+		}
+	}, [isOpen]);
 	return (
 		<div className={cn("relative", className)}>
 			<button
@@ -43,6 +50,8 @@ export function FilterMenu({
 				className="text-base-900 flex cursor-pointer items-end gap-1 md:gap-2"
 				aria-haspopup="menu"
 				aria-expanded={isOpen}
+				aria-controls={menuId}
+				id={triggerId}
 			>
 				<motion.span
 					key={activeFilter}
@@ -69,6 +78,15 @@ export function FilterMenu({
 					variants={menuContainerVariants}
 					initial="hidden"
 					animate="show"
+					id={menuId}
+					aria-labelledby={triggerId}
+					tabIndex={-1}
+					ref={menuRef}
+					onKeyDown={(e) => {
+						if (e.key === "Escape") {
+							onOpenChange(false);
+						}
+					}}
 				>
 					{availableFilters
 						.filter((option) => option !== activeFilter)
