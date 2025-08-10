@@ -1,4 +1,5 @@
 import type { FilterType } from "@/lib/stores/filterStore";
+import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -16,11 +17,14 @@ const menuContainerVariants = {
 	show: {
 		transition: { staggerChildren: 0.06, delayChildren: 0.04 },
 	},
+	exit: {
+		transition: { staggerChildren: 0.06, staggerDirection: -1 },
+	},
 };
 
 const menuItemVariants = {
 	hidden: { opacity: 0, y: -8 },
-	show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+	show: { opacity: 1, y: 0 },
 };
 
 export function FilterMenu({
@@ -32,7 +36,7 @@ export function FilterMenu({
 	className,
 }: FilterMenuProps) {
 	return (
-		<div className={"relative " + (className ?? "")}>
+		<div className={cn("relative", className)}>
 			<button
 				type="button"
 				onClick={() => onOpenChange(!isOpen)}
@@ -40,16 +44,24 @@ export function FilterMenu({
 				aria-haspopup="menu"
 				aria-expanded={isOpen}
 			>
-				<span className="text-4xl font-medium tracking-tight md:text-5xl">
+				<motion.span
+					key={activeFilter}
+					layoutId={`filter-${activeFilter}`}
+					className="text-4xl font-medium tracking-tight md:text-5xl"
+				>
 					{activeFilter}
-				</span>
-				<ChevronRight
-					className={
-						"h-8 w-8 transition-transform duration-200 md:h-9 md:w-9 md:stroke-3 " +
-						(isOpen ? "rotate-90" : "rotate-0")
-					}
-				/>
+				</motion.span>
+
+				<motion.span layout key="chevron">
+					<ChevronRight
+						className={
+							"h-8 w-8 transition-transform duration-200 md:h-9 md:w-9 md:stroke-3 " +
+							(isOpen ? "rotate-90" : "rotate-0")
+						}
+					/>
+				</motion.span>
 			</button>
+
 			{isOpen ? (
 				<motion.div
 					role="menu"
@@ -70,9 +82,12 @@ export function FilterMenu({
 								variants={menuItemVariants}
 							>
 								<span className="text-base-500 hover:text-base-900 flex items-end gap-1 transition-colors duration-300 md:gap-2">
-									<span className="text-4xl font-medium tracking-tight md:text-5xl">
+									<motion.span
+										layoutId={`filter-${filterOption}`}
+										className="text-4xl font-medium tracking-tight md:text-5xl"
+									>
 										{filterOption}
-									</span>
+									</motion.span>
 								</span>
 							</motion.button>
 						))}
