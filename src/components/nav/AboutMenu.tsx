@@ -47,9 +47,10 @@ export default function AboutMenu({ isOpen }: AboutMenuProps) {
 				<div className="mt-16 w-full flex-1 md:flex md:gap-12">
 					<div className="flex flex-col gap-16 md:flex-2 md:justify-between">
 						<p className="text-base-900 md:clamp-[text,24px,40px,md,2xl] text-[28px] leading-none">
-							Tempor fugiat velit voluptate dolor nisi. Et non et eiusmod
-							adipisicing Lorem. Consequat ad laboris ipsum commodo do nostrud
-							ad consectetur quis eu reprehenderit esse occaecat officia.
+							I build thoughtful interactive websites and web apps that enhance
+							our experiences with technologies. My work explores calm design
+							patterns, experimental UI paradigms, and the intersection of
+							technology and human behavior.
 						</p>
 						<img
 							src={profile}
@@ -60,21 +61,62 @@ export default function AboutMenu({ isOpen }: AboutMenuProps) {
 					<div className="mt-16 flex flex-col md:mt-0 md:flex-3 md:justify-between">
 						<div className="grid grid-cols-4 gap-y-4">
 							<div className="text-base-500 col-start-1 font-mono text-xs md:text-sm">
-								Category
+								Vision
 							</div>
-							<p className="text-base-900 col-span-3 col-start-2 leading-none md:text-xl">
-								Ea labore cillum occaecat commodo magna nisi mollit. Quis
-								laborum sit ipsum deserunt cupidatat aliquip dolore adipisicing.
-								Officia esse sint consectetur excepteur exercitation
-								adipisicing.
-							</p>
-							<div className="text-base-500 col-start-1 row-start-2 font-mono text-xs md:text-sm">
-								More
+							<div className="text-base-900 col-span-3 col-start-2 space-y-2 leading-none md:text-xl">
+								<p>
+									I believe technology should adapt to our needs, supporting the
+									way we think, work, and live. With the right patterns, it can
+									evoke clarity, encourage curiosity, and act as a true
+									facilitator for our ideas.
+								</p>
+								<p>
+									Many tools today are still shaped by the constraints of the
+									machine, asking us to match its logic instead of our own. No
+									one has folders in their brain. Our thoughts branch, connect,
+									and evolve in ways far more organic. Improvements in computing
+									means that future software interfaces can be fluid, perhaps
+									adapting to the thought pattern of each user. I'm exploring
+									ways to make this a reality.
+								</p>
 							</div>
-							<p className="text-base-900 col-span-3 col-start-2 row-start-2 leading-none md:text-xl">
-								Commodo commodo elit dolor ullamco veniam veniam tempor tempor.
-								Consectetur laborum quis esse Lorem esse. Consectetur ex
-								excepteur culpa. Anim ex dolore aliqua id fugiat anim.
+
+							<div className="text-base-500 col-start-1 row-start-3 font-mono text-xs md:text-sm">
+								Details
+							</div>
+							<p className="text-base-900 col-span-3 col-start-2 row-start-3 leading-none md:text-xl">
+								I build content-first websites and web apps, working mainly with{" "}
+								<UnderlineLink
+									href="https://astro.build"
+									className="text-base-700"
+								>
+									Astro
+								</UnderlineLink>{" "}
+								and{" "}
+								<UnderlineLink
+									href="https://react.dev"
+									className="text-base-700"
+								>
+									React
+								</UnderlineLink>
+								. My approach combines creative layouts with purposeful
+								interaction, drawing on my strength in motion design to create
+								smooth, seamless animations with libraries like{" "}
+								<UnderlineLink
+									href="https://motion.dev"
+									className="text-base-700"
+								>
+									Motion
+								</UnderlineLink>{" "}
+								and{" "}
+								<UnderlineLink
+									href="https://gsap.com"
+									className="text-base-700"
+								>
+									GSAP
+								</UnderlineLink>
+								. I work across both structure and presentation, aiming for
+								projects that are fast, focused, and enjoyable to use.
 							</p>
 						</div>
 						<div className="clamp-[text,24px,32px,375px,1024px] text-base-900 mt-16 flex w-full justify-between leading-[1.1]">
