@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 
-import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
+import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 
@@ -33,7 +33,7 @@ const filterName =
 			});
 
 			return (
-				<PreviewBlock
+				<PreviewWidget
 					{...item.data}
 					id={item.id}
 					date={formattedDate}
@@ -56,29 +56,29 @@ const filterName =
 		document.title = `${filterName} | Chayut`;
 	}
 
-	function setBlockVisibility(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-type]");
-		const visibleBlocks: HTMLElement[] = [];
+	function setWidgetVisibility(filter: string) {
+		const allWidgets = document.querySelectorAll("[data-type]");
+		const visibleWidgets: HTMLElement[] = [];
 
-		allBlocks.forEach((block) => {
-			const blockType = block.getAttribute("data-type");
+		allWidgets.forEach((widget) => {
+			const widgetType = widget.getAttribute("data-type");
 
-			if (filter === "all" || filter === blockType) {
-				block.classList.remove("hidden");
-				(block as HTMLElement).style.visibility = "visible";
-				visibleBlocks.push(block as HTMLElement);
+			if (filter === "all" || filter === widgetType) {
+				widget.classList.remove("hidden");
+				(widget as HTMLElement).style.visibility = "visible";
+				visibleWidgets.push(widget as HTMLElement);
 			} else {
-				block.classList.add("hidden");
+				widget.classList.add("hidden");
 			}
 		});
 
-		return visibleBlocks;
+		return visibleWidgets;
 	}
 
-	function animateBlocks(blocks: Element[]) {
-		if (blocks.length === 0) return;
+	function animateWidgets(widgets: Element[]) {
+		if (widgets.length === 0) return;
 		const animation = animate(
-			blocks,
+			widgets,
 			{
 				opacity: [0, 1],
 				y: [10, 0],
@@ -92,10 +92,10 @@ const filterName =
 	}
 
 	async function animateFilterChange(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-type]");
+		const allWidgets = document.querySelectorAll("[data-type]");
 
 		const exitAnimation = animate(
-			allBlocks,
+			allWidgets,
 			{
 				opacity: [1, 0],
 				y: [0, 10],
@@ -109,8 +109,8 @@ const filterName =
 
 		await exitAnimation.finished;
 
-		const visibleBlocks = setBlockVisibility(filter);
-		animateBlocks(visibleBlocks);
+		const visibleWidgets = setWidgetVisibility(filter);
+		animateWidgets(visibleWidgets);
 	}
 
 	function handleFilterChange(event: CustomEvent<{ filter: string }>) {
@@ -120,8 +120,8 @@ const filterName =
 	}
 
 	function animateInitialLoad(filter: string) {
-		const visibleBlocks = setBlockVisibility(filter);
-		animateBlocks(visibleBlocks);
+		const visibleWidgets = setWidgetVisibility(filter);
+		animateWidgets(visibleWidgets);
 	}
 
 	function initializeFiltering() {

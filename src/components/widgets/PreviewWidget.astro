@@ -1,6 +1,6 @@
 ---
 import Badge from "@/components/Badge.astro";
-import Block from "@/components/blocks/Block.astro";
+import Widget from "@/components/widgets/Widget.astro";
 import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
 
 interface Props {
@@ -35,7 +35,7 @@ const bgImageUrl = getCldImageUrl({ src: bgImage, width: 600 });
 const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 ---
 
-<Block
+<Widget
 	class:list={[
 		"flex flex-col gap-4 p-6 md:justify-between",
 		"mb-12 md:mb-0",
@@ -82,4 +82,4 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 			</p>
 		</div>
 	</a>
-</Block>
+</Widget>
