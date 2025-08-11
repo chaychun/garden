@@ -184,11 +184,11 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 			<AboutMenu isOpen={isAboutOpen} />
 
 			<button
-				className="border-base-300/30 text-base-500 hover:bg-base-300/30 hover:text-base-700 fixed top-[22px] right-3 z-[60] flex h-9 w-fit items-center justify-center border px-3 py-1 transition-colors duration-300 hover:border-transparent"
+				className="text-base-900 fixed top-4 right-3 z-[60] flex h-12 w-12 cursor-pointer items-center justify-center"
 				aria-label={isAboutOpen ? "Close about" : "Open about"}
 				onClick={() => setIsAboutOpen((v) => !v)}
 			>
-				<AnimatedMenuIcon isOpen={isAboutOpen} className="stroke-1" />
+				<AnimatedMenuIcon isOpen={isAboutOpen} size={28} />
 			</button>
 		</MotionConfig>
 	);
