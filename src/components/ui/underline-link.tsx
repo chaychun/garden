@@ -24,7 +24,7 @@ export function UnderlineLink({
 		<MotionConfig transition={transition}>
 			<a
 				href={href}
-				className={`relative inline-block overflow-hidden ${className}`}
+				className={`relative inline-flex items-baseline overflow-hidden ${className}`}
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
 			>
