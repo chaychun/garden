@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { LayoutGroup, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { AnimatedMenuIcon } from "../ui/animated-menu-icon";
+import AboutMenu from "./AboutMenu";
 import { FilterMenu } from "./FilterMenu";
 
 interface TopBarProps {
@@ -18,6 +19,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isDesktop, setIsDesktop] = useState(false);
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
+	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter, setActiveFilter } = useFilterStore();
 	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
@@ -176,15 +178,18 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							/>
 						</motion.div>
 					</motion.div>
-
-					<button
-						className="border-base-300/30 bg-base-50/50 text-base-500 hover:bg-base-300/30 hover:text-base-700 absolute top-[22px] right-3 z-20 flex h-9 w-fit items-center justify-center border px-3 py-1 backdrop-blur-sm transition-colors duration-300 hover:border-transparent"
-						aria-label="Open menu"
-					>
-						<AnimatedMenuIcon isOpen={false} className="stroke-1" />
-					</button>
 				</LayoutGroup>
 			</motion.div>
+
+			<AboutMenu isOpen={isAboutOpen} />
+
+			<button
+				className="text-base-900 fixed top-4 right-3 z-[60] flex h-12 w-12 cursor-pointer items-center justify-center"
+				aria-label={isAboutOpen ? "Close about" : "Open about"}
+				onClick={() => setIsAboutOpen((v) => !v)}
+			>
+				<AnimatedMenuIcon isOpen={isAboutOpen} size={28} />
+			</button>
 		</MotionConfig>
 	);
 }

@@ -88,6 +88,12 @@ export function setupVerticalScrollSmoothing() {
 	let smoothScrollTween: gsap.core.Tween | null = null;
 
 	const handleWheel = (e: WheelEvent) => {
+		const isMobileMenuOpen =
+			document.documentElement.classList.contains("mobile-menu-open");
+		if (isMobileMenuOpen) {
+			return;
+		}
+
 		e.preventDefault();
 
 		if (smoothScrollTween) {
