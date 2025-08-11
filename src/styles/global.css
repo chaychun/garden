@@ -77,10 +77,12 @@ html {
 	scrollbar-gutter: auto;
 }
 
-html.mobile-menu-open {
-	overflow: hidden;
-	overscroll-behavior: contain;
-	scrollbar-gutter: stable;
+@media (max-width: 767px) {
+	html.mobile-menu-open {
+		overflow: hidden;
+		overscroll-behavior: contain;
+		scrollbar-gutter: stable;
+	}
 }
 
 :root {

@@ -2,6 +2,7 @@ import { UnderlineLink } from "@/components/ui/underline-link";
 import { cn } from "@/lib/utils";
 import { getCldImageUrl } from "astro-cloudinary/helpers";
 import { motion } from "motion/react";
+import { useEffect } from "react";
 
 interface AboutMenuProps {
 	isOpen: boolean;
@@ -12,6 +13,18 @@ export default function AboutMenu({ isOpen }: AboutMenuProps) {
 		src: "profile-square_hnctm1",
 		width: 500,
 	});
+
+	useEffect(() => {
+		if (isOpen) {
+			document.documentElement.classList.add("mobile-menu-open");
+		} else {
+			document.documentElement.classList.remove("mobile-menu-open");
+		}
+
+		return () => {
+			document.documentElement.classList.remove("mobile-menu-open");
+		};
+	}, [isOpen]);
 
 	return (
 		<motion.div
