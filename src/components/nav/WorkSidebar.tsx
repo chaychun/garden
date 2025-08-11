@@ -9,7 +9,7 @@ interface WorkSidebarProps {
 	description: string;
 	createdDate: string;
 	lastUpdatedDate: string;
-	technologies: string[];
+	types: string[];
 	children?: React.ReactNode;
 	disableClickOutside?: boolean;
 }
@@ -20,7 +20,7 @@ export default function WorkSidebar({
 	description,
 	createdDate,
 	lastUpdatedDate,
-	technologies,
+	types,
 	children,
 	disableClickOutside,
 }: WorkSidebarProps) {
@@ -55,7 +55,7 @@ export default function WorkSidebar({
 					className="mt-12 px-6"
 					createdDate={createdDate}
 					lastUpdatedDate={lastUpdatedDate}
-					technologies={technologies}
+					types={types}
 				/>
 			</ScrollArea>
 		</>

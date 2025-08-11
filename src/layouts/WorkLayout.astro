@@ -8,7 +8,7 @@ interface Props {
 	description: string;
 	createdDate: string;
 	lastUpdatedDate: string;
-	technologies: string[];
+	types: string[];
 	disableSidebarClickOutside?: boolean;
 }
 
@@ -17,7 +17,7 @@ const {
 	description,
 	createdDate,
 	lastUpdatedDate,
-	technologies,
+	types,
 	disableSidebarClickOutside,
 } = Astro.props;
 ---
@@ -31,7 +31,7 @@ const {
 				description={description}
 				createdDate={createdDate}
 				lastUpdatedDate={lastUpdatedDate}
-				technologies={technologies}
+				types={types}
 				disableClickOutside={disableSidebarClickOutside}
 			>
 				<slot />
@@ -58,7 +58,7 @@ const {
 					description={description}
 					createdDate={createdDate}
 					lastUpdatedDate={lastUpdatedDate}
-					technologies={technologies}
+					types={types}
 				>
 					<slot />
 				</InfoDrawer>

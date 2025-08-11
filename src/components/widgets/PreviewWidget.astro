@@ -11,7 +11,7 @@ interface Props {
 	previewVideo: string;
 	position?: "top" | "bottom";
 	orientation?: "portrait" | "landscape";
-	tags?: string[];
+	types?: string[];
 	badgeVariant?: "light" | "dark";
 	id: string;
 	[key: string]: any;
@@ -25,7 +25,7 @@ const {
 	previewVideo,
 	position = "top",
 	orientation = "portrait",
-	tags,
+	types,
 	badgeVariant = "light",
 	id,
 	...rest
@@ -56,10 +56,13 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 			}}
 		>
 			{
-				tags && tags.length > 0 && (
+				types && types.length > 0 && (
 					<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
-						{tags.map((tag) => (
-							<Badge text={tag} variant={badgeVariant} />
+						{types.map((t) => (
+							<Badge
+								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+								variant={badgeVariant}
+							/>
 						))}
 					</div>
 				)

@@ -13,7 +13,6 @@ const works = defineCollection({
 		description: z.string(),
 		createdDate: z.coerce.date(),
 		lastUpdatedDate: z.coerce.date(),
-		tags: z.string().array().optional(),
 		bgImage: z.string(),
 		previewVideo: z.string(),
 		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
