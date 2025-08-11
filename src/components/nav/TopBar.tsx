@@ -181,7 +181,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 				</LayoutGroup>
 			</motion.div>
 
-			<AboutMenu isOpen={isAboutOpen} title={title} />
+			<AboutMenu isOpen={isAboutOpen} />
 
 			<button
 				className="border-base-300/30 text-base-500 hover:bg-base-300/30 hover:text-base-700 fixed top-[22px] right-3 z-[60] flex h-9 w-fit items-center justify-center border px-3 py-1 transition-colors duration-300 hover:border-transparent"
