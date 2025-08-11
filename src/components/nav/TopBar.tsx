@@ -22,7 +22,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter, setActiveFilter } = useFilterStore();
-	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
+	const availableFilters: FilterType[] = ["All", "Interactions"];
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;

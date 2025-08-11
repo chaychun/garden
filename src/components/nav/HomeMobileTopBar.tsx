@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import MobileTopBar from "./MobileTopBar";
 
-const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
+const filterOptions: FilterType[] = ["All", "Interactions"];
 
 export default function HomeMobileTopBar() {
 	const { activeFilter, setActiveFilter } = useFilterStore();

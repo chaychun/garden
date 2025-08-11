@@ -1,21 +1,18 @@
 ---
 export const prerender = false;
 
-import ArticleBlock from "@/components/blocks/ArticleBlock.astro";
 import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 
-const interactions = await getCollection("interactions");
-const articles = await getCollection("articles");
+const works = await getCollection("works");
 
-const allItems = [...interactions, ...articles].sort((a, b) => {
-	const aDate =
-		a.collection === "interactions" ? a.data.lastUpdatedDate : a.data.date;
-	const bDate =
-		b.collection === "interactions" ? b.data.lastUpdatedDate : b.data.date;
-	return bDate.getTime() - aDate.getTime();
-});
+const allItems = works
+	.filter((w) => (w.data.types ?? []).includes("interaction"))
+	.sort(
+		(a, b) =>
+			b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
+	);
 
 const urlParams = new URLSearchParams(
 	import.meta.env.SSR ? "" : window.location.search,
@@ -28,39 +25,24 @@ const filterName =
 <HomeLayout title={`${filterName} | Chayut`} scrollAreaId="main-scroll">
 	{
 		allItems.map((item) => {
-			const itemDate =
-				item.collection === "interactions"
-					? item.data.lastUpdatedDate
-					: item.data.date;
+			const itemDate = item.data.lastUpdatedDate;
 			const formattedDate = itemDate.toLocaleDateString("en-US", {
 				year: "numeric",
 				month: "short",
 				day: "numeric",
 			});
 
-			if (item.collection === "interactions") {
-				return (
-					<PreviewBlock
-						{...item.data}
-						id={item.id}
-						date={formattedDate}
-						bgImage={"bgImage" in item.data ? item.data.bgImage || "" : ""}
-						previewVideo={item.data.previewVideo ?? ""}
-						data-collection="interactions"
-						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
-					/>
-				);
-			} else {
-				return (
-					<ArticleBlock
-						{...item.data}
-						date={formattedDate}
-						link={`/articles/${item.id}/`}
-						data-collection="articles"
-						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
-					/>
-				);
-			}
+			return (
+				<PreviewBlock
+					{...item.data}
+					id={item.id}
+					date={formattedDate}
+					bgImage={item.data.bgImage || ""}
+					previewVideo={item.data.previewVideo ?? ""}
+					data-type="interactions"
+					style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+				/>
+			);
 		})
 	}
 </HomeLayout>
@@ -75,13 +57,13 @@ const filterName =
 	}
 
 	function setBlockVisibility(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-collection]");
+		const allBlocks = document.querySelectorAll("[data-type]");
 		const visibleBlocks: HTMLElement[] = [];
 
 		allBlocks.forEach((block) => {
-			const blockCollection = block.getAttribute("data-collection");
+			const blockType = block.getAttribute("data-type");
 
-			if (filter === "all" || filter === blockCollection) {
+			if (filter === "all" || filter === blockType) {
 				block.classList.remove("hidden");
 				(block as HTMLElement).style.visibility = "visible";
 				visibleBlocks.push(block as HTMLElement);
@@ -110,7 +92,7 @@ const filterName =
 	}
 
 	async function animateFilterChange(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-collection]");
+		const allBlocks = document.querySelectorAll("[data-type]");
 
 		const exitAnimation = animate(
 			allBlocks,

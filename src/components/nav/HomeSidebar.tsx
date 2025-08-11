@@ -10,7 +10,7 @@ interface HomeSidebarProps {
 	scrollAreaId?: string;
 }
 
-const filterOptions: FilterType[] = ["All", "Interactions", "Articles"];
+const filterOptions: FilterType[] = ["All", "Interactions"];
 
 export default function HomeSidebar({
 	scrollAreaId = "main-scroll",

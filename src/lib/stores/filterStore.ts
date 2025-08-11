@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export type FilterType = "All" | "Interactions" | "Articles";
+export type FilterType = "All" | "Interactions";
 
 interface FilterState {
 	activeFilter: FilterType;
@@ -28,7 +28,9 @@ const updateUrlWithParams = (key: string, value?: string) => {
 		searchParams.delete(key);
 	}
 
-	const newUrl = window.location.pathname + (searchParams.toString() ? "?" + searchParams.toString() : "");
+	const newUrl =
+		window.location.pathname +
+		(searchParams.toString() ? "?" + searchParams.toString() : "");
 	window.history.replaceState({}, "", newUrl);
 };
 
@@ -56,8 +58,6 @@ const urlStorageApi = {
 		let activeFilter: FilterType;
 		if (filterParam === "interactions") {
 			activeFilter = "Interactions";
-		} else if (filterParam === "articles") {
-			activeFilter = "Articles";
 		} else if (filterParam === "all") {
 			activeFilter = "All";
 		} else {

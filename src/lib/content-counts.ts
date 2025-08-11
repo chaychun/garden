@@ -1,12 +1,14 @@
-const articleModules = import.meta.glob("../contents/articles/**/*.{md,mdx}");
-const interactionModules = import.meta.glob("../interactions/*/*.{md,mdx}");
+const workModules = import.meta.glob("../works/*/*.{md,mdx}", { eager: true });
 
-export const articleCount = Object.keys(articleModules).length;
-export const interactionCount = Object.keys(interactionModules).length;
-export const totalCount = articleCount + interactionCount;
+type WorkModule = { frontmatter?: { types?: string[] } };
+
+const workEntries = Object.values(workModules) as WorkModule[];
+const interactionCount = workEntries.filter((m) =>
+	(m.frontmatter?.types ?? ["interaction"]).includes("interaction"),
+).length;
+const totalCount = interactionCount;
 
 export const filterCounts = {
 	All: totalCount,
 	Interactions: interactionCount,
-	Articles: articleCount,
 } as const;

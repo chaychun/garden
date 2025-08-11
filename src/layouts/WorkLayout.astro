@@ -1,5 +1,5 @@
 ---
-import InteractionSidebar from "@/components/nav/InteractionSidebar";
+import WorkSidebar from "@/components/nav/WorkSidebar";
 import BaseLayout from "./BaseLayout.astro";
 import InfoDrawer from "@/components/nav/InfoDrawer";
 
@@ -12,14 +12,20 @@ interface Props {
 	disableSidebarClickOutside?: boolean;
 }
 
-const { title, description, createdDate, lastUpdatedDate, technologies, disableSidebarClickOutside } =
-	Astro.props;
+const {
+	title,
+	description,
+	createdDate,
+	lastUpdatedDate,
+	technologies,
+	disableSidebarClickOutside,
+} = Astro.props;
 ---
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 flex h-dvh">
 		<div class="hidden min-[824px]:block">
-			<InteractionSidebar
+			<WorkSidebar
 				client:load
 				title={title}
 				description={description}
@@ -29,7 +35,7 @@ const { title, description, createdDate, lastUpdatedDate, technologies, disableS
 				disableClickOutside={disableSidebarClickOutside}
 			>
 				<slot />
-			</InteractionSidebar>
+			</WorkSidebar>
 		</div>
 		<div
 			id="content-area"

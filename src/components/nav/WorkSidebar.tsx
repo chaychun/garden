@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft } from "lucide-react";
 import Sidebar from "./Sidebar";
 
-interface InteractionSidebarProps {
+interface WorkSidebarProps {
 	scrollAreaId?: string;
 	title: string;
 	description: string;
@@ -14,8 +14,8 @@ interface InteractionSidebarProps {
 	disableClickOutside?: boolean;
 }
 
-export default function InteractionSidebar({
-	scrollAreaId = "interaction-scroll-area",
+export default function WorkSidebar({
+	scrollAreaId = "work-scroll-area",
 	title,
 	description,
 	createdDate,
@@ -23,7 +23,7 @@ export default function InteractionSidebar({
 	technologies,
 	children,
 	disableClickOutside,
-}: InteractionSidebarProps) {
+}: WorkSidebarProps) {
 	const desktopContent = (
 		<>
 			<div className="flex w-full items-center justify-between p-4">
