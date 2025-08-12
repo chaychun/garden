@@ -1,9 +1,5 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import {
-	AVAILABLE_FILTERS,
-	filterCounts,
-	type FilterType,
-} from "@/lib/content-types";
+import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { LayoutGroup, motion, MotionConfig } from "motion/react";
@@ -14,9 +10,13 @@ import { FilterMenu } from "./FilterMenu";
 
 interface TopBarProps {
 	title?: string;
+	filterCounts: Record<FilterType, number>;
 }
 
-export default function TopBar({ title = "Chayut" }: TopBarProps) {
+export default function TopBar({
+	title = "Chayut",
+	filterCounts,
+}: TopBarProps) {
 	const scrollTargetRef = useRef<HTMLElement | Window | null>(null);
 	const cleanupRef = useRef<(() => void) | null>(null);
 	const [isScrolled, setIsScrolled] = useState(false);

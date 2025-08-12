@@ -1,27 +1,6 @@
-import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import canonicalWorksLoader from "@/lib/loaders/canonical-works-loader";
+import { defineCollection } from "astro:content";
 
-const works = defineCollection({
-	loader: glob({
-		pattern: "*/*.{md,mdx}",
-		base: "./src/works",
-		generateId: ({ entry }) => entry.split("/")[0],
-	}),
-	schema: z.object({
-		types: z
-			.array(z.enum(["interaction", "experiment", "design"]))
-			.default(["interaction"]),
-		title: z.string(),
-		description: z.string(),
-		createdDate: z.coerce.date(),
-		lastUpdatedDate: z.coerce.date(),
-		bgImage: z.string(),
-		previewVideo: z.string(),
-		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
-		position: z.enum(["top", "bottom"]).default("top"),
-		badgeVariant: z.enum(["light", "dark"]).default("light"),
-		disableSidebarClickOutside: z.boolean().default(false),
-	}),
-});
+const works = defineCollection({ loader: canonicalWorksLoader() });
 
 export const collections = { works };

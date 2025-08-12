@@ -5,15 +5,16 @@ import TopBar from "../components/nav/TopBar";
 interface Props {
 	title: string;
 	scrollAreaId?: string;
+	filterCounts: Record<string, number>;
 }
 
-const { title, scrollAreaId = "main-scroll" } = Astro.props;
+const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 ---
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 min-h-screen">
 		<div class="fixed top-0 right-0 left-0 z-40">
-			<TopBar title="Chayut" client:load />
+			<TopBar title="Chayut" filterCounts={filterCounts} client:load />
 		</div>
 
 		<div class="h-dvh w-full pt-[112px]">

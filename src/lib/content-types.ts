@@ -79,31 +79,3 @@ export function urlFilterValueToTypeId(
 	const def = urlFilterToDefinition.get(urlValue.toLowerCase());
 	return def?.id;
 }
-
-// Counts for filters used in the UI
-type WorkModule = { frontmatter?: { types?: ContentTypeId[] } };
-
-const workModules = import.meta.glob("../works/*/*.{md,mdx}", { eager: true });
-const workEntries = Object.values(workModules) as WorkModule[];
-
-function countByTypeId(id: ContentTypeId): number {
-	// for backward compatibility
-	const fallbackTypes: ContentTypeId[] = ["interaction"];
-	return workEntries.filter((m) =>
-		(m.frontmatter?.types ?? fallbackTypes).includes(id),
-	).length;
-}
-
-const countsByLabelPlural = new Map<FilterType, number>();
-for (const def of CONTENT_TYPES) {
-	countsByLabelPlural.set(def.labelPlural as FilterType, countByTypeId(def.id));
-}
-
-const totalCount = workEntries.length;
-
-export const filterCounts: Record<FilterType, number> = {
-	All: totalCount,
-	...Object.fromEntries(countsByLabelPlural.entries()),
-} as const;
-
-// End counts

@@ -4,13 +4,33 @@ export const prerender = false;
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
-import type { ContentTypeId } from "@/lib/content-types";
+import type { ContentTypeId, FilterType } from "@/lib/content-types";
+import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 
 const works = await getCollection("works");
 
 const allItems = works.sort(
 	(a, b) => b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
 );
+
+const filterCounts: Record<FilterType, number> = (() => {
+	const counts = new Map<FilterType, number>();
+	for (const def of AVAILABLE_FILTERS.slice(1) as FilterType[]) {
+		counts.set(def, 0);
+	}
+	for (const entry of works) {
+		const types = (entry.data.types ?? ["interaction"]) as ContentTypeId[];
+		for (const t of types) {
+			const label = getDefinitionById(t).labelPlural as FilterType;
+			counts.set(label, (counts.get(label) ?? 0) + 1);
+		}
+	}
+	const total = works.length;
+	return {
+		All: total,
+		...(Object.fromEntries(counts.entries()) as Record<FilterType, number>),
+	};
+})();
 
 const urlParams = new URLSearchParams(
 	import.meta.env.SSR ? "" : window.location.search,
@@ -20,7 +40,11 @@ const filterName =
 	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
 ---
 
-<HomeLayout title={`${filterName} | Chayut`} scrollAreaId="main-scroll">
+<HomeLayout
+	title={`${filterName} | Chayut`}
+	scrollAreaId="main-scroll"
+	filterCounts={filterCounts}
+>
 	{
 		allItems.map((item) => {
 			const itemDate = item.data.lastUpdatedDate;
