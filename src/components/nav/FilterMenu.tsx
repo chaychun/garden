@@ -1,4 +1,4 @@
-import type { FilterType } from "@/lib/stores/filterStore";
+import type { FilterType } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";

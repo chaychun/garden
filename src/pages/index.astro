@@ -4,15 +4,13 @@ export const prerender = false;
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
+import type { ContentTypeId } from "@/lib/content-types";
 
 const works = await getCollection("works");
 
-const allItems = works
-	.filter((w) => (w.data.types ?? []).includes("interaction"))
-	.sort(
-		(a, b) =>
-			b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
-	);
+const allItems = works.sort(
+	(a, b) => b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
+);
 
 const urlParams = new URLSearchParams(
 	import.meta.env.SSR ? "" : window.location.search,
@@ -32,6 +30,8 @@ const filterName =
 				day: "numeric",
 			});
 
+			const typeTokens = (item.data.types ?? []) as ContentTypeId[];
+
 			return (
 				<PreviewWidget
 					{...item.data}
@@ -39,7 +39,7 @@ const filterName =
 					date={formattedDate}
 					bgImage={item.data.bgImage || ""}
 					previewVideo={item.data.previewVideo ?? ""}
-					data-type="interactions"
+					data-types={typeTokens.join(" ")}
 					style="opacity: 0; transform: translateY(10px); visibility: hidden;"
 				/>
 			);
@@ -48,22 +48,31 @@ const filterName =
 </HomeLayout>
 
 <script>
-	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
+	import type { FilterType } from "@/lib/content-types";
+	import {
+		filterFromUrlValue,
+		urlFilterValueToTypeId,
+	} from "@/lib/content-types";
+	import { useFilterStore } from "@/lib/stores/filterStore";
 	import { animate, stagger } from "motion";
 
-	function updateTitle(filter: string) {
-		const filterName = filter.charAt(0).toUpperCase() + filter.slice(1);
-		document.title = `${filterName} | Chayut`;
+	function updateTitle(urlFilterValue: string) {
+		const titleFilter = filterFromUrlValue(urlFilterValue);
+		document.title = `${titleFilter} | Chayut`;
 	}
 
 	function setWidgetVisibility(filter: string) {
-		const allWidgets = document.querySelectorAll("[data-type]");
+		const filterToken = urlFilterValueToTypeId(filter) ?? filter;
+		const allWidgets = document.querySelectorAll("[data-types]");
 		const visibleWidgets: HTMLElement[] = [];
 
 		allWidgets.forEach((widget) => {
-			const widgetType = widget.getAttribute("data-type");
+			const widgetTypes = (widget.getAttribute("data-types") || "")
+				.split(" ")
+				.map((t) => t.trim())
+				.filter(Boolean);
 
-			if (filter === "all" || filter === widgetType) {
+			if (filter === "all" || widgetTypes.includes(filterToken)) {
 				widget.classList.remove("hidden");
 				(widget as HTMLElement).style.visibility = "visible";
 				visibleWidgets.push(widget as HTMLElement);
@@ -92,7 +101,7 @@ const filterName =
 	}
 
 	async function animateFilterChange(filter: string) {
-		const allWidgets = document.querySelectorAll("[data-type]");
+		const allWidgets = document.querySelectorAll("[data-types]");
 
 		const exitAnimation = animate(
 			allWidgets,
@@ -131,12 +140,7 @@ const filterName =
 		updateTitle(initialFilterParam);
 		animateInitialLoad(initialFilterParam);
 
-		const storeFilter = (
-			initialFilterParam === "all"
-				? "All"
-				: initialFilterParam.charAt(0).toUpperCase() +
-					initialFilterParam.slice(1)
-		) as FilterType;
+		const storeFilter = filterFromUrlValue(initialFilterParam) as FilterType;
 		useFilterStore.getState().setActiveFilter(storeFilter);
 
 		document.addEventListener(

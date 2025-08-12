@@ -1,6 +1,9 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { filterCounts } from "@/lib/content-counts";
-import type { FilterType } from "@/lib/stores/filterStore";
+import {
+	AVAILABLE_FILTERS,
+	filterCounts,
+	type FilterType,
+} from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { LayoutGroup, motion, MotionConfig } from "motion/react";
@@ -22,7 +25,7 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter, setActiveFilter } = useFilterStore();
-	const availableFilters: FilterType[] = ["All", "Interactions"];
+	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS];
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;

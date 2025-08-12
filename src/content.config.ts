@@ -8,7 +8,9 @@ const works = defineCollection({
 		generateId: ({ entry }) => entry.split("/")[0],
 	}),
 	schema: z.object({
-		types: z.array(z.enum(["interaction"])).default(["interaction"]),
+		types: z
+			.array(z.enum(["interaction", "experiment", "design"]))
+			.default(["interaction"]),
 		title: z.string(),
 		description: z.string(),
 		createdDate: z.coerce.date(),

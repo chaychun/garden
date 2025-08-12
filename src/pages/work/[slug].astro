@@ -5,14 +5,10 @@ import { getCollection, render } from "astro:content";
 
 export const getStaticPaths = async () => {
 	const entries = await getCollection("works");
-	const paths = entries.flatMap((entry) => {
-		const types = (entry.data.types ?? ["interaction"]) as string[];
-		return types.map((t) => ({
-			params: { type: `${t}s`, slug: entry.id },
-			props: { entry },
-		}));
-	});
-	return paths;
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
 };
 
 const { entry } = Astro.props;

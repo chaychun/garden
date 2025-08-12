@@ -1,7 +1,7 @@
+import type { FilterType } from "@/lib/content-types";
+import { filterFromUrlValue, toUrlFilterValue } from "@/lib/content-types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-
-export type FilterType = "All" | "Interactions";
 
 interface FilterState {
 	activeFilter: FilterType;
@@ -37,7 +37,7 @@ const updateUrlWithParams = (key: string, value?: string) => {
 const dispatchFilterChangeEvent = (filter: FilterType) => {
 	if (typeof window === "undefined") return;
 
-	const urlValue = filter === "All" ? "all" : filter.toLowerCase();
+	const urlValue = toUrlFilterValue(filter);
 	const event = new CustomEvent("filter-changed", {
 		detail: { filter: urlValue },
 	});
@@ -55,18 +55,9 @@ const urlStorageApi = {
 			return null;
 		}
 
-		let activeFilter: FilterType;
-		if (filterParam === "interactions") {
-			activeFilter = "Interactions";
-		} else if (filterParam === "all") {
-			activeFilter = "All";
-		} else {
-			console.warn(
-				`Invalid filter value "${filterParam}" in URL. Falling back to "All".`,
-			);
-			activeFilter = "All";
-
-			updateUrlWithParams(key, "all");
+		const activeFilter: FilterType = filterFromUrlValue(filterParam);
+		if (activeFilter === "All" && filterParam && filterParam !== "all") {
+			updateUrlWithParams(key, toUrlFilterValue(activeFilter));
 		}
 
 		return JSON.stringify({
@@ -87,7 +78,7 @@ const urlStorageApi = {
 				return;
 			}
 
-			const urlValue = activeFilter.toLowerCase();
+			const urlValue = toUrlFilterValue(activeFilter);
 			updateUrlWithParams(key, urlValue);
 			dispatchFilterChangeEvent(activeFilter);
 		} catch (error) {
