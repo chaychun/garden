@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 
 const ParallaxList = ({ works }: { works: Work[] }) => {
 	const listRef = useRef<HTMLDivElement>(null);
-	const imageRef = useRef<HTMLImageElement>(null);
+	// Track a ref for each preview image so we can animate and move the active one without changing src
+	const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 	const overlayRefs = useRef<(HTMLSpanElement | null)[]>([]);
 	const [activeIndex, setActiveIndex] = useState<number>(0);
 	const prevActiveIndexRef = useRef<number | null>(null);
@@ -52,9 +53,10 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 					});
 				}
 
-				// Image positioning
-				if (imageRef.current) {
-					const imgHeight = imageRef.current.clientHeight;
+				// Image positioning (only move the active image)
+				const activeImageEl = imageRefs.current[activeIndex] || null;
+				if (activeImageEl) {
+					const imgHeight = activeImageEl.clientHeight;
 					if (imgHeight > 0) {
 						const containerRect = containerEl.getBoundingClientRect();
 						const imagePadding = 8 * 4;
@@ -68,7 +70,7 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 							const ratio = mouseY / containerEl.clientHeight;
 							const targetImgY = maxTranslateY * ratio;
 
-							gsap.to(imageRef.current, {
+							gsap.to(activeImageEl, {
 								y: targetImgY,
 								ease: "power2.out",
 								duration: 0.4,
@@ -86,19 +88,35 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 				containerEl?.removeEventListener("mousemove", handleMouseMove);
 			};
 		},
-		{ scope: listRef },
+		{ scope: listRef, dependencies: [activeIndex] },
 	);
 
 	// Fade and scale animation when the preview image changes
 	useGSAP(
 		() => {
-			if (imageRef.current) {
+			const prev = prevActiveIndexRef.current;
+			const current = activeIndex;
+
+			const currentEl = imageRefs.current[current] || null;
+			const prevEl = prev !== null ? imageRefs.current[prev] || null : null;
+
+			// Fade out previous
+			if (prevEl && prev !== current) {
+				gsap.killTweensOf(prevEl);
+				gsap.to(prevEl, { opacity: 0, scale: 0.96, duration: 0.3, ease: "power2.out" });
+			}
+
+			// Fade in current
+			if (currentEl) {
+				gsap.killTweensOf(currentEl);
 				gsap.fromTo(
-					imageRef.current,
+					currentEl,
 					{ opacity: 0, scale: 0.96 },
 					{ opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
 				);
 			}
+
+			prevActiveIndexRef.current = current;
 		},
 		{ dependencies: [activeIndex] },
 	);
@@ -168,15 +186,24 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 
 	return (
 		<div className="clamp-[ml,8,60,@64rem,@96rem] selection:bg-base-50 selection:text-base-900 flex h-full">
-			{/* Preview image pinned to the top-right corner */}
-			{works[activeIndex] && (
-				<img
-					ref={imageRef}
-					src={works[activeIndex].image}
-					alt={works[activeIndex].title}
-					className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw] object-cover select-none"
-				/>
-			)}
+			{/* Preview images pinned to the top-right corner (all rendered, only one visible) */}
+			<div className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw] select-none">
+				{works.map((work, index) => (
+					<img
+						key={work.title}
+						ref={(el) => (imageRefs.current[index] = el)}
+						src={work.image}
+						alt={work.title}
+						loading="eager"
+						decoding="sync"
+						className={cn(
+							"absolute top-0 right-0 w-full object-cover",
+							index === activeIndex ? "opacity-100" : "opacity-0",
+						)}
+						style={{ willChange: "transform, opacity" }}
+					/>
+				))}
+			</div>
 
 			<div
 				id="list"

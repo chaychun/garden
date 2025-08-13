@@ -59,6 +59,14 @@ const works = [
 ];
 ---
 
+<Head>
+	<link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+	<link rel="dns-prefetch" href="https://res.cloudinary.com" />
+	{works.map((work) => (
+		<link rel="preload" as="image" href={work.image} imagesrcset={work.image} />
+	))}
+</Head>
+
 <div
 	class="keep-base-colors bg-base-900 @container h-screen w-full overflow-hidden"
 >
