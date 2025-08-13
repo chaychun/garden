@@ -38,80 +38,42 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 			} from "../lib/scroll-smoothing";
 
 			let currentCleanup: (() => void) | null = null;
-			let resizeTimeout: number | null = null;
-			let removeResizeListener: (() => void) | null = null;
-			let removePageLoadListener: (() => void) | null = null;
+			let mediaQuery: MediaQueryList | null = null;
 
-			function setupScrollSmoothing() {
+			const setup = () => {
 				if (currentCleanup) {
 					currentCleanup();
 					currentCleanup = null;
 				}
-
-				const isDesktop = window.innerWidth >= 768;
-
-				if (isDesktop) {
-					currentCleanup = setupHorizontalScrollSmoothing("#scroll-container");
-				} else {
-					currentCleanup = setupVerticalScrollSmoothing();
-				}
-			}
-
-			function handleResize() {
-				if (resizeTimeout) {
-					clearTimeout(resizeTimeout);
-				}
-				resizeTimeout = window.setTimeout(() => {
-					setupScrollSmoothing();
-					resizeTimeout = null;
-				}, 150);
-			}
-
-			if (document.readyState === "loading") {
-				document.addEventListener("DOMContentLoaded", setupScrollSmoothing, {
-					once: true,
-				});
-			} else {
-				setupScrollSmoothing();
-			}
-
-			const onPageLoad = () => {
-				setupScrollSmoothing();
-			};
-			document.addEventListener("astro:page-load", onPageLoad);
-			removePageLoadListener = () => {
-				document.removeEventListener("astro:page-load", onPageLoad);
+				const isDesktop = mediaQuery
+					? mediaQuery.matches
+					: window.matchMedia("(min-width: 768px)").matches;
+				currentCleanup = isDesktop
+					? setupHorizontalScrollSmoothing("#scroll-container")
+					: setupVerticalScrollSmoothing();
 			};
 
-			const onResize = handleResize;
-			window.addEventListener("resize", onResize);
-			removeResizeListener = () => {
-				window.removeEventListener("resize", onResize);
+			const attachMedia = () => {
+				if (mediaQuery) return;
+				mediaQuery = window.matchMedia("(min-width: 768px)");
+				mediaQuery.addEventListener("change", setup);
 			};
 
-			function cleanupPage() {
-				if (currentCleanup) {
-					currentCleanup();
-					currentCleanup = null;
-				}
-				if (resizeTimeout) {
-					clearTimeout(resizeTimeout);
-					resizeTimeout = null;
-				}
-				if (removeResizeListener) {
-					removeResizeListener();
-					removeResizeListener = null;
-				}
-				if (removePageLoadListener) {
-					removePageLoadListener();
-					removePageLoadListener = null;
-				}
-			}
-
-			document.addEventListener("astro:before-visit", cleanupPage, {
-				once: true,
+			document.addEventListener("astro:page-load", () => {
+				attachMedia();
+				setup();
 			});
-			window.addEventListener("beforeunload", cleanupPage);
+
+			document.addEventListener("astro:before-swap", () => {
+				if (currentCleanup) {
+					currentCleanup();
+					currentCleanup = null;
+				}
+				if (mediaQuery) {
+					mediaQuery.removeEventListener("change", setup);
+					mediaQuery = null;
+				}
+			});
 		</script>
 	</div>
 </BaseLayout>

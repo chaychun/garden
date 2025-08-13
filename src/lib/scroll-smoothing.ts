@@ -32,26 +32,32 @@ export function setupHorizontalScrollSmoothing(containerSelector: string) {
 	const handleWheel = (e: WheelEvent) => {
 		const hasHorizontalScroll =
 			scrollContainer.scrollWidth > scrollContainer.offsetWidth;
-		const hasVerticalScroll =
-			scrollContainer.scrollHeight > scrollContainer.offsetHeight;
+		const computedOverflowY = getComputedStyle(scrollContainer).overflowY;
+		const isOverflowYHidden =
+			computedOverflowY === "hidden" || computedOverflowY === "clip";
 
 		const isShiftWheel = e.shiftKey && (e.deltaY !== 0 || e.deltaX !== 0);
+		const isDirectHorizontalWheel = e.deltaX !== 0 && hasHorizontalScroll;
+		const canTranslateVerticalToHorizontal =
+			isOverflowYHidden && hasHorizontalScroll;
 		const isNormalWheel =
-			!e.shiftKey &&
-			e.deltaY !== 0 &&
-			hasHorizontalScroll &&
-			!hasVerticalScroll;
+			!e.shiftKey && e.deltaY !== 0 && canTranslateVerticalToHorizontal;
 
-		if (isShiftWheel || isNormalWheel) {
+		if (isShiftWheel || isNormalWheel || isDirectHorizontalWheel) {
 			e.preventDefault();
 
 			if (smoothScrollTween) {
 				smoothScrollTween.kill();
 			}
 
-			const scrollDelta = isShiftWheel
-				? (e.deltaY || e.deltaX) * 1.5
-				: e.deltaY * 1.5;
+			let scrollDelta = 0;
+			if (isDirectHorizontalWheel) {
+				scrollDelta = e.deltaX * 1.5;
+			} else if (isShiftWheel) {
+				scrollDelta = (e.deltaY || e.deltaX) * 1.5;
+			} else {
+				scrollDelta = e.deltaY * 1.5;
+			}
 			const currentScrollLeft = scrollContainer.scrollLeft;
 			const maxScrollLeft =
 				scrollContainer.scrollWidth - scrollContainer.offsetWidth;
