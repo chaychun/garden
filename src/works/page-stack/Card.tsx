@@ -99,8 +99,8 @@ const Card = ({
 				!isHorizontal
 					? "bg-base-100"
 					: isActive
-						? "bg-base-200"
-						: "bg-base-100",
+						? "bg-base-100"
+						: "bg-base-200",
 				className,
 			)}
 			onMouseEnter={onMouseEnter}
