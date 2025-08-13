@@ -31,7 +31,7 @@ export function UnderlineLink({
 				{children}
 
 				{/* Idle underline */}
-				<motion.div
+				<motion.span
 					className="absolute bottom-0 left-0 h-[0.0625em] bg-current"
 					style={{ width: "100%" }}
 					animate={{
@@ -41,7 +41,7 @@ export function UnderlineLink({
 				/>
 
 				{/* New underline that animates in from left */}
-				<motion.div
+				<motion.span
 					className="absolute bottom-0 left-0 h-[0.0625em] bg-current"
 					style={{ width: "100%" }}
 					initial={{ x: "-100%" }}
