@@ -7,6 +7,7 @@ export interface ContentTypeDefinition {
 	labelSingular: string;
 	labelPlural: string;
 	urlFilterValue: string;
+	description: string;
 }
 
 export const CONTENT_TYPES: readonly ContentTypeDefinition[] = [
@@ -15,18 +16,24 @@ export const CONTENT_TYPES: readonly ContentTypeDefinition[] = [
 		labelSingular: "Interaction",
 		labelPlural: "Interactions",
 		urlFilterValue: "interactions",
+		description:
+			"Focused, self-contained UI pieces exploring a specific behavior or pattern.",
 	},
 	{
 		id: "experiment",
 		labelSingular: "Experiment",
 		labelPlural: "Experiments",
 		urlFilterValue: "experiments",
+		description:
+			"A collection of often controversial ideas, tools, and interfaces, optimized for learning over polish.",
 	},
 	{
 		id: "design",
 		labelSingular: "Design",
 		labelPlural: "Designs",
 		urlFilterValue: "designs",
+		description:
+			"Visual, artistic studies. Focused on form, composition, and feel.",
 	},
 ];
 
@@ -78,4 +85,14 @@ export function urlFilterValueToTypeId(
 ): ContentTypeId | undefined {
 	const def = urlFilterToDefinition.get(urlValue.toLowerCase());
 	return def?.id;
+}
+
+export function getDescriptionForFilter(
+	filter: FilterType,
+): string | undefined {
+	if (filter === "All") {
+		return "My latest explorations in design and systems. Discover interactive prototypes, experimental interfaces, visual design studies, and more.";
+	}
+	const def = CONTENT_TYPES.find((d) => d.labelPlural === filter);
+	return def?.description;
 }
