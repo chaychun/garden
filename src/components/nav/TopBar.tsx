@@ -24,7 +24,7 @@ export default function TopBar({
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
-	const { activeFilter, setActiveFilter } = useFilterStore();
+	const { activeFilter } = useFilterStore();
 	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS];
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
@@ -170,14 +170,9 @@ export default function TopBar({
 							)}
 						>
 							<FilterMenu
-								activeFilter={activeFilter}
 								availableFilters={availableFilters}
 								isOpen={isFilterOpen}
 								onOpenChange={setIsFilterOpen}
-								onSelect={(filterOption) => {
-									setActiveFilter(filterOption);
-									setIsFilterOpen(false);
-								}}
 							/>
 						</motion.div>
 					</motion.div>
