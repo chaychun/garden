@@ -1,21 +1,36 @@
 ---
 export const prerender = false;
 
-import ArticleBlock from "@/components/blocks/ArticleBlock.astro";
-import PreviewBlock from "@/components/blocks/PreviewBlock.astro";
+import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
+import type { ContentTypeId, FilterType } from "@/lib/content-types";
+import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 
-const interactions = await getCollection("interactions");
-const articles = await getCollection("articles");
+const works = await getCollection("works");
 
-const allItems = [...interactions, ...articles].sort((a, b) => {
-	const aDate =
-		a.collection === "interactions" ? a.data.lastUpdatedDate : a.data.date;
-	const bDate =
-		b.collection === "interactions" ? b.data.lastUpdatedDate : b.data.date;
-	return bDate.getTime() - aDate.getTime();
-});
+const allItems = works.sort(
+	(a, b) => b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
+);
+
+const filterCounts: Record<FilterType, number> = (() => {
+	const counts = new Map<FilterType, number>();
+	for (const def of AVAILABLE_FILTERS.slice(1) as FilterType[]) {
+		counts.set(def, 0);
+	}
+	for (const entry of works) {
+		const types = (entry.data.types ?? ["interaction"]) as ContentTypeId[];
+		for (const t of types) {
+			const label = getDefinitionById(t).labelPlural as FilterType;
+			counts.set(label, (counts.get(label) ?? 0) + 1);
+		}
+	}
+	const total = works.length;
+	return {
+		All: total,
+		...(Object.fromEntries(counts.entries()) as Record<FilterType, number>),
+	};
+})();
 
 const urlParams = new URLSearchParams(
 	import.meta.env.SSR ? "" : window.location.search,
@@ -25,78 +40,78 @@ const filterName =
 	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
 ---
 
-<HomeLayout title={`${filterName} | Chayut`} scrollAreaId="main-scroll">
+<HomeLayout
+	title={`${filterName} | Chayut`}
+	scrollAreaId="main-scroll"
+	filterCounts={filterCounts}
+>
 	{
 		allItems.map((item) => {
-			const itemDate =
-				item.collection === "interactions"
-					? item.data.lastUpdatedDate
-					: item.data.date;
+			const itemDate = item.data.lastUpdatedDate;
 			const formattedDate = itemDate.toLocaleDateString("en-US", {
 				year: "numeric",
 				month: "short",
 				day: "numeric",
 			});
 
-			if (item.collection === "interactions") {
-				return (
-					<PreviewBlock
-						{...item.data}
-						id={item.id}
-						date={formattedDate}
-						bgImage={"bgImage" in item.data ? item.data.bgImage || "" : ""}
-						previewVideo={item.data.previewVideo ?? ""}
-						data-collection="interactions"
-						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
-					/>
-				);
-			} else {
-				return (
-					<ArticleBlock
-						{...item.data}
-						date={formattedDate}
-						link={`/articles/${item.id}/`}
-						data-collection="articles"
-						style="opacity: 0; transform: translateY(10px); visibility: hidden;"
-					/>
-				);
-			}
+			const typeTokens = (item.data.types ?? []) as ContentTypeId[];
+
+			return (
+				<PreviewWidget
+					{...item.data}
+					id={item.id}
+					date={formattedDate}
+					bgImage={item.data.bgImage || ""}
+					previewVideo={item.data.previewVideo ?? ""}
+					data-types={typeTokens.join(" ")}
+					style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+				/>
+			);
 		})
 	}
 </HomeLayout>
 
 <script>
-	import { useFilterStore, type FilterType } from "@/lib/stores/filterStore";
+	import type { FilterType } from "@/lib/content-types";
+	import {
+		filterFromUrlValue,
+		urlFilterValueToTypeId,
+	} from "@/lib/content-types";
+	import { useFilterStore } from "@/lib/stores/filterStore";
 	import { animate, stagger } from "motion";
 
-	function updateTitle(filter: string) {
-		const filterName = filter.charAt(0).toUpperCase() + filter.slice(1);
-		document.title = `${filterName} | Chayut`;
+	function updateTitle(urlFilterValue: string) {
+		const titleFilter = filterFromUrlValue(urlFilterValue);
+		document.title = `${titleFilter} | Chayut`;
 	}
 
-	function setBlockVisibility(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-collection]");
-		const visibleBlocks: HTMLElement[] = [];
+	function setWidgetVisibility(filter: string) {
+		const filterToken = urlFilterValueToTypeId(filter) ?? filter;
+		const allWidgets = document.querySelectorAll("[data-types]");
+		const visibleWidgets: HTMLElement[] = [];
 
-		allBlocks.forEach((block) => {
-			const blockCollection = block.getAttribute("data-collection");
+		allWidgets.forEach((widget) => {
+			const widgetTypes = (widget.getAttribute("data-types") || "")
+				.split(" ")
+				.map((t) => t.trim())
+				.filter(Boolean);
 
-			if (filter === "all" || filter === blockCollection) {
-				block.classList.remove("hidden");
-				(block as HTMLElement).style.visibility = "visible";
-				visibleBlocks.push(block as HTMLElement);
+			if (filter === "all" || widgetTypes.includes(filterToken)) {
+				widget.classList.remove("hidden");
+				(widget as HTMLElement).style.visibility = "visible";
+				visibleWidgets.push(widget as HTMLElement);
 			} else {
-				block.classList.add("hidden");
+				widget.classList.add("hidden");
 			}
 		});
 
-		return visibleBlocks;
+		return visibleWidgets;
 	}
 
-	function animateBlocks(blocks: Element[]) {
-		if (blocks.length === 0) return;
+	function animateWidgets(widgets: Element[]) {
+		if (widgets.length === 0) return;
 		const animation = animate(
-			blocks,
+			widgets,
 			{
 				opacity: [0, 1],
 				y: [10, 0],
@@ -110,10 +125,10 @@ const filterName =
 	}
 
 	async function animateFilterChange(filter: string) {
-		const allBlocks = document.querySelectorAll("[data-collection]");
+		const allWidgets = document.querySelectorAll("[data-types]");
 
 		const exitAnimation = animate(
-			allBlocks,
+			allWidgets,
 			{
 				opacity: [1, 0],
 				y: [0, 10],
@@ -127,8 +142,8 @@ const filterName =
 
 		await exitAnimation.finished;
 
-		const visibleBlocks = setBlockVisibility(filter);
-		animateBlocks(visibleBlocks);
+		const visibleWidgets = setWidgetVisibility(filter);
+		animateWidgets(visibleWidgets);
 	}
 
 	function handleFilterChange(event: CustomEvent<{ filter: string }>) {
@@ -138,8 +153,8 @@ const filterName =
 	}
 
 	function animateInitialLoad(filter: string) {
-		const visibleBlocks = setBlockVisibility(filter);
-		animateBlocks(visibleBlocks);
+		const visibleWidgets = setWidgetVisibility(filter);
+		animateWidgets(visibleWidgets);
 	}
 
 	function initializeFiltering() {
@@ -149,12 +164,7 @@ const filterName =
 		updateTitle(initialFilterParam);
 		animateInitialLoad(initialFilterParam);
 
-		const storeFilter = (
-			initialFilterParam === "all"
-				? "All"
-				: initialFilterParam.charAt(0).toUpperCase() +
-					initialFilterParam.slice(1)
-		) as FilterType;
+		const storeFilter = filterFromUrlValue(initialFilterParam) as FilterType;
 		useFilterStore.getState().setActiveFilter(storeFilter);
 
 		document.addEventListener(

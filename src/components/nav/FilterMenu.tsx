@@ -1,15 +1,14 @@
-import type { FilterType } from "@/lib/stores/filterStore";
+import type { FilterType } from "@/lib/content-types";
+import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useId, useRef } from "react";
 
 interface FilterMenuProps {
-	activeFilter: FilterType;
 	availableFilters: FilterType[];
 	isOpen: boolean;
 	onOpenChange: (open: boolean) => void;
-	onSelect: (filter: FilterType) => void;
 	className?: string;
 }
 
@@ -26,16 +25,15 @@ const menuItemVariants = {
 };
 
 export function FilterMenu({
-	activeFilter,
 	availableFilters,
 	isOpen,
 	onOpenChange,
-	onSelect,
 	className,
 }: FilterMenuProps) {
 	const triggerId = useId();
 	const menuId = useId();
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const { activeFilter, setActiveFilter } = useFilterStore();
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -106,7 +104,10 @@ export function FilterMenu({
 							<motion.button
 								key={filterOption}
 								type="button"
-								onClick={() => onSelect(filterOption)}
+								onClick={() => {
+									setActiveFilter(filterOption);
+									onOpenChange(false);
+								}}
 								className="block cursor-pointer text-left"
 								role="menuitem"
 								variants={menuItemVariants}

@@ -1,6 +1,5 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { filterCounts } from "@/lib/content-counts";
-import type { FilterType } from "@/lib/stores/filterStore";
+import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { LayoutGroup, motion, MotionConfig } from "motion/react";
@@ -11,9 +10,13 @@ import { FilterMenu } from "./FilterMenu";
 
 interface TopBarProps {
 	title?: string;
+	filterCounts: Record<FilterType, number>;
 }
 
-export default function TopBar({ title = "Chayut" }: TopBarProps) {
+export default function TopBar({
+	title = "Chayut",
+	filterCounts,
+}: TopBarProps) {
 	const scrollTargetRef = useRef<HTMLElement | Window | null>(null);
 	const cleanupRef = useRef<(() => void) | null>(null);
 	const [isScrolled, setIsScrolled] = useState(false);
@@ -21,8 +24,8 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
-	const { activeFilter, setActiveFilter } = useFilterStore();
-	const availableFilters: FilterType[] = ["All", "Interactions", "Articles"];
+	const { activeFilter } = useFilterStore();
+	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS];
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;
@@ -167,14 +170,9 @@ export default function TopBar({ title = "Chayut" }: TopBarProps) {
 							)}
 						>
 							<FilterMenu
-								activeFilter={activeFilter}
 								availableFilters={availableFilters}
 								isOpen={isFilterOpen}
 								onOpenChange={setIsFilterOpen}
-								onSelect={(filterOption) => {
-									setActiveFilter(filterOption);
-									setIsFilterOpen(false);
-								}}
 							/>
 						</motion.div>
 					</motion.div>

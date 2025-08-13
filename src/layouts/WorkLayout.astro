@@ -1,5 +1,5 @@
 ---
-import InteractionSidebar from "@/components/nav/InteractionSidebar";
+import WorkSidebar from "@/components/nav/WorkSidebar";
 import BaseLayout from "./BaseLayout.astro";
 import InfoDrawer from "@/components/nav/InfoDrawer";
 
@@ -8,28 +8,34 @@ interface Props {
 	description: string;
 	createdDate: string;
 	lastUpdatedDate: string;
-	technologies: string[];
+	types: string[];
 	disableSidebarClickOutside?: boolean;
 }
 
-const { title, description, createdDate, lastUpdatedDate, technologies, disableSidebarClickOutside } =
-	Astro.props;
+const {
+	title,
+	description,
+	createdDate,
+	lastUpdatedDate,
+	types,
+	disableSidebarClickOutside,
+} = Astro.props;
 ---
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 flex h-dvh">
 		<div class="hidden min-[824px]:block">
-			<InteractionSidebar
-				client:load
+			<WorkSidebar
+				client:media="(min-width: 824px)"
 				title={title}
 				description={description}
 				createdDate={createdDate}
 				lastUpdatedDate={lastUpdatedDate}
-				technologies={technologies}
+				types={types}
 				disableClickOutside={disableSidebarClickOutside}
 			>
 				<slot />
-			</InteractionSidebar>
+			</WorkSidebar>
 		</div>
 		<div
 			id="content-area"
@@ -47,12 +53,12 @@ const { title, description, createdDate, lastUpdatedDate, technologies, disableS
 			>
 			<div class="block min-[824px]:hidden">
 				<InfoDrawer
-					client:load
+					client:media="(max-width: 823px)"
 					title={title}
 					description={description}
 					createdDate={createdDate}
 					lastUpdatedDate={lastUpdatedDate}
-					technologies={technologies}
+					types={types}
 				>
 					<slot />
 				</InfoDrawer>
@@ -106,9 +112,8 @@ const { title, description, createdDate, lastUpdatedDate, technologies, disableS
 	}
 
 	document.addEventListener("astro:page-load", () => {
-		cleanup();
 		init();
 	});
 
-	document.addEventListener("DOMContentLoaded", init);
+	document.addEventListener("astro:before-swap", cleanup);
 </script>

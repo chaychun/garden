@@ -1,6 +1,6 @@
 ---
 import { getCldImageUrl } from "astro-cloudinary/helpers";
-import ParallaxList from "./list.tsx";
+import ParallaxListComponent from "./list.tsx";
 
 const works = [
 	{
@@ -59,8 +59,10 @@ const works = [
 ];
 ---
 
-<div class="keep-base-colors bg-base-900 @container h-screen w-full overflow-hidden">
-	<ParallaxList works={works} client:load />
+<div
+	class="keep-base-colors bg-base-900 @container h-screen w-full overflow-hidden"
+>
+	<ParallaxListComponent works={works} client:load />
 </div>
 
 <style>

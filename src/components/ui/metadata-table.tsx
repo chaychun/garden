@@ -3,14 +3,14 @@ import { cn, formatDate } from "@/lib/utils";
 interface Props {
 	createdDate: string;
 	lastUpdatedDate: string;
-	technologies: string[];
+	types: string[];
 	className?: string;
 }
 
 const MetadataTable = ({
 	createdDate,
 	lastUpdatedDate,
-	technologies,
+	types,
 	className,
 }: Props) => {
 	return (
@@ -47,18 +47,18 @@ const MetadataTable = ({
 			{/* Horizontal separator */}
 			<div className="border-base-100 mt-4 h-2 w-full border-x border-t" />
 
-			{/* Technologies */}
+			{/* Types */}
 			<div className="mt-1">
 				<div className="text-base-400 mb-1 text-[10px] tracking-wide">
-					Technologies
+					Types
 				</div>
 				<div className="flex flex-wrap gap-1">
-					{technologies.map((tech) => (
+					{types.map((type) => (
 						<span
-							key={tech}
+							key={type}
 							className="border-base-300/30 text-base-500 hover:bg-base-300/30 inline-block border px-3 py-1 font-mono text-[10px] transition-colors duration-200 select-none hover:border-transparent"
 						>
-							{tech}
+							{`${type.slice(0, 1).toUpperCase()}${type.slice(1)}`}
 						</span>
 					))}
 				</div>

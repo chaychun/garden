@@ -10,7 +10,7 @@ interface InfoDrawerProps {
 	children?: React.ReactNode;
 	createdDate: string;
 	lastUpdatedDate: string;
-	technologies: string[];
+	types: string[];
 }
 
 const InfoDrawer = ({
@@ -19,7 +19,7 @@ const InfoDrawer = ({
 	children,
 	createdDate,
 	lastUpdatedDate,
-	technologies,
+	types,
 }: InfoDrawerProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
@@ -137,7 +137,7 @@ const InfoDrawer = ({
 													<MetadataTable
 														createdDate={createdDate}
 														lastUpdatedDate={lastUpdatedDate}
-														technologies={technologies}
+														types={types}
 													/>
 												</div>
 											</motion.div>
