@@ -16,7 +16,7 @@ if (typeof window !== "undefined") {
 
 const ParallaxList = ({ works }: { works: Work[] }) => {
 	const listRef = useRef<HTMLDivElement>(null);
-	const imageRef = useRef<HTMLImageElement>(null);
+	const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 	const overlayRefs = useRef<(HTMLSpanElement | null)[]>([]);
 	const [activeIndex, setActiveIndex] = useState<number>(0);
 	const prevActiveIndexRef = useRef<number | null>(null);
@@ -53,8 +53,9 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 				}
 
 				// Image positioning
-				if (imageRef.current) {
-					const imgHeight = imageRef.current.clientHeight;
+				const activeImageEl = imageRefs.current[activeIndex] ?? null;
+				if (activeImageEl) {
+					const imgHeight = activeImageEl.clientHeight;
 					if (imgHeight > 0) {
 						const containerRect = containerEl.getBoundingClientRect();
 						const imagePadding = 8 * 4;
@@ -67,8 +68,7 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 							const mouseY = mouseEvent.clientY - containerRect.top;
 							const ratio = mouseY / containerEl.clientHeight;
 							const targetImgY = maxTranslateY * ratio;
-
-							gsap.to(imageRef.current, {
+							gsap.to(activeImageEl, {
 								y: targetImgY,
 								ease: "power2.out",
 								duration: 0.4,
@@ -86,15 +86,16 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 				containerEl?.removeEventListener("mousemove", handleMouseMove);
 			};
 		},
-		{ scope: listRef },
+		{ scope: listRef, dependencies: [activeIndex] },
 	);
 
 	// Fade and scale animation when the preview image changes
 	useGSAP(
 		() => {
-			if (imageRef.current) {
+			const el = imageRefs.current[activeIndex] ?? null;
+			if (el) {
 				gsap.fromTo(
-					imageRef.current,
+					el,
 					{ opacity: 0, scale: 0.96 },
 					{ opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
 				);
@@ -168,15 +169,27 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 
 	return (
 		<div className="clamp-[ml,8,60,@64rem,@96rem] selection:bg-base-50 selection:text-base-900 flex h-full">
-			{/* Preview image pinned to the top-right corner */}
-			{works[activeIndex] && (
-				<img
-					ref={imageRef}
-					src={works[activeIndex].image}
-					alt={works[activeIndex].title}
-					className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw] object-cover select-none"
-				/>
-			)}
+			<div className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw]">
+				{works.map((work, index) => (
+					<img
+						key={work.title}
+						ref={(el) => {
+							imageRefs.current[index] = el;
+						}}
+						src={work.image}
+						alt={work.title}
+						loading="eager"
+						decoding="async"
+						aria-hidden={activeIndex === index ? undefined : true}
+						className={cn(
+							"absolute inset-0 h-auto w-full object-cover select-none",
+							activeIndex === index
+								? "visible opacity-100"
+								: "invisible opacity-0",
+						)}
+					/>
+				))}
+			</div>
 
 			<div
 				id="list"
@@ -192,11 +205,8 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 							className="relative select-none"
 							onMouseEnter={() => setActiveIndex(index)}
 						>
-							{/* Wrapper to stack default and overlay copies of the title */}
 							<h3 className="clamp-[text,4xl,7xl,@64rem,@96rem] relative inline-block leading-none font-medium">
-								{/* Default (ash) title */}
 								<span className="text-base-500">{work.title}</span>
-								{/* Overlay (paper) title that will be revealed via clip-path */}
 								<span
 									className="text-base-50 pointer-events-none absolute inset-0 block"
 									ref={(el) => {
@@ -208,7 +218,6 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 								</span>
 							</h3>
 
-							{/* Description paragraph */}
 							<p
 								className={cn(
 									"text-base-300 clamp-[text,xs,sm,@64rem,@96rem] absolute font-mono transition-opacity duration-400 @[80rem]:-bottom-6 @[80rem]:left-0 @[96rem]:bottom-1 @[96rem]:-left-8 @[96rem]:-translate-x-full",

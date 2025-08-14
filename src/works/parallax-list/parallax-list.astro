@@ -59,6 +59,10 @@ const works = [
 ];
 ---
 
+<head>
+	{works.map((w) => <link rel="preload" as="image" href={w.image} />)}
+</head>
+
 <div
 	class="keep-base-colors bg-base-900 @container h-screen w-full overflow-hidden"
 >
