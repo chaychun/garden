@@ -12,6 +12,7 @@ export default function AboutMenu({ isOpen }: AboutMenuProps) {
 	const profile = getCldImageUrl({
 		src: "profile-square_hnctm1",
 		width: 500,
+		grayscale: true,
 	});
 
 	useEffect(() => {
@@ -37,99 +38,62 @@ export default function AboutMenu({ isOpen }: AboutMenuProps) {
 			}}
 			transition={{ type: "spring", duration: 1, bounce: 0 }}
 			className={cn(
-				"fixed inset-0 z-50 overflow-y-auto bg-[#D6D7CB] md:overflow-y-hidden",
+				"fixed inset-0 z-50 overflow-y-auto bg-[#D6D7CB] lg:overflow-y-hidden",
 				isOpen ? "pointer-events-auto" : "pointer-events-none",
 			)}
 			style={{ willChange: "clip-path" }}
 		>
-			<div className="flex h-full flex-col p-3">
-				<h1 className="text-base-900 text-5xl font-semibold tracking-tight md:text-7xl">
-					Chayut Chunsamphran
-				</h1>
-				<div className="mt-16 w-full flex-1 md:flex">
-					<div className="flex flex-col gap-16 md:flex-2 md:justify-between">
-						<p className="text-base-900 md:clamp-[text,24px,40px,md,2xl] text-[28px] leading-none">
-							I build thoughtful interactive websites and web apps that enhance
-							our experiences with technologies. My work explores calm design
-							patterns, experimental UI paradigms, and the intersection of
-							technology and human behavior.
-						</p>
+			<div className="flex flex-col gap-16 p-3 lg:h-full lg:gap-32 lg:pb-24">
+				<div className="flex w-full flex-col gap-16 lg:flex-row lg:gap-0">
+					<h1 className="text-base-900 selection:bg-base-900 lg:clamp-[text,6xl,8xl,1024px,1920px] clamp-[text,5xl,6xl,375px,1024px] flex-1 leading-none font-semibold tracking-tight">
+						Chayut
+						<br />
+						Chunsamphran
+					</h1>
+					<p className="text-base-900 selection:bg-base-900 lg:clamp-[text,28px,40px,1024px,1920px] clamp-[text,24px,40px,375px,1024px] flex-1 leading-none lg:mr-10">
+						I build interactive websites and web apps that enhance our
+						experiences with technologies. My work explores calm design
+						patterns, experimental UI paradigms, and the intersection of
+						technology and human behavior.
+					</p>
+				</div>
+				<div className="flex w-full flex-col gap-16 lg:flex-row lg:gap-0">
+					<div className="flex-1">
 						<img
 							src={profile}
 							alt="Chayut's portrait"
-							className="w-3/4 max-w-[400px]"
+							className="aspect-square h-auto w-3/4 max-w-[400px] min-w-[200px] lg:w-1/2"
 							loading="lazy"
 						/>
 					</div>
-					<div className="mt-16 flex flex-col md:mt-0 md:flex-3 md:justify-between">
-						<div className="grid grid-cols-4 gap-y-4 md:grid-cols-3">
-							<div className="text-base-500 col-start-1 font-mono text-xs md:mr-12 md:justify-self-end md:text-sm">
-								Vision
-							</div>
-							<div className="text-base-900 md:clamp-[text,lg,2xl,md,2xl] col-span-3 col-start-2 space-y-2 leading-none!">
-								<p>
-									I believe technology should adapt to our needs, supporting the
-									way we think, work, and live. With the right patterns, it can
-									evoke clarity, encourage curiosity, and act as a true
-									facilitator for our ideas.
-								</p>
-								<p>
-									Many tools today are still shaped by the constraints of the
-									machine, asking us to match its logic instead of our own. No
-									one has folders in their brain. Our thoughts branch, connect,
-									and evolve in ways far more organic. Improvements in computing
-									means that future software interfaces can be fluid, perhaps
-									adapting to the thought pattern of each user. I'm exploring
-									ways to make this a reality.
-								</p>
-							</div>
+					<div className="text-base-900 lg:clamp-[text,lg,2xl,1024px,1920px] clamp-[text,base,xl,375px,1024px] selection:bg-base-900 lg:clamp-[mr,6,24,1024px,1920px] clamp-[mr,0,24,375px,1024px] order-2 grid flex-1 grid-cols-4 space-y-4 leading-none! lg:order-3 lg:grid-cols-1">
+						<p className="col-span-3 col-start-2 lg:col-span-1 lg:col-start-1">
+							I believe technology should adapt to our needs, supporting the way
+							we think, work, and live, instead of asking us to match its logic.
+							Future software interfaces can be fluid. They can evoke clarity,
+							encourage curiosity, and act as a true facilitator for our ideas.
+						</p>
 
-							<div className="text-base-500 col-start-1 row-start-3 font-mono text-xs md:mr-12 md:justify-self-end md:text-sm">
-								Details
-							</div>
-							<p className="text-base-900 md:clamp-[text,lg,2xl,md,2xl] col-span-3 col-start-2 row-start-3 leading-none!">
-								I build content-first websites and web apps, working mainly with{" "}
-								<UnderlineLink
-									href="https://astro.build"
-									className="text-base-700"
-								>
-									Astro
-								</UnderlineLink>{" "}
-								and{" "}
-								<UnderlineLink
-									href="https://react.dev"
-									className="text-base-700"
-								>
-									React
-								</UnderlineLink>
-								. My approach combines creative layouts with purposeful
-								interaction, drawing on my strength in motion design to create
-								smooth, seamless animations with libraries like{" "}
-								<UnderlineLink
-									href="https://motion.dev"
-									className="text-base-700"
-								>
-									Motion
-								</UnderlineLink>{" "}
-								and{" "}
-								<UnderlineLink
-									href="https://gsap.com"
-									className="text-base-700"
-								>
-									GSAP
-								</UnderlineLink>
-								. I work across both structure and presentation, aiming for
-								projects that are fast, focused, and enjoyable to use.
-							</p>
-						</div>
-						<div className="clamp-[text,24px,32px,375px,1024px] text-base-900 mt-16 flex w-full justify-between leading-[1.1]">
-							<UnderlineLink href="mailto:chun.chayut@gmail.com">
-								chun.chayut@gmail.com
-							</UnderlineLink>
-							<UnderlineLink href="https://github.com/chaychun">
-								Github
-							</UnderlineLink>
-						</div>
+						<p className="col-span-3 col-start-2 lg:col-span-1 lg:col-start-1">
+							This site is a series of small experiments in interface design,
+							aimed at creating structures that are both intuitive and
+							adaptable. I focus on designs and interactions that guide without
+							imposing, allowing the technology to recede into the background.
+							Each project is an opportunity to explore how technology can fit
+							more naturally into the ways we already think.
+						</p>
+					</div>
+
+					<div className="text-base-900 selection:bg-base-900 lg:clamp-[text,xl,4xl,1024px,1920px] clamp-[text,lg,2xl,375px,1024px] order-3 flex w-full flex-1 flex-row justify-between gap-4 lg:order-2 lg:flex-col lg:justify-start lg:gap-0">
+						<UnderlineLink
+							href="mailto:chun.chayut@gmail.com"
+							className="w-min"
+						>
+							chun.chayut@gmail.com
+						</UnderlineLink>
+						<UnderlineLink href="https://github.com/chaychun" className="w-min">
+							Github
+						</UnderlineLink>
 					</div>
 				</div>
 			</div>
