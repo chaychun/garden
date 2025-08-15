@@ -13,23 +13,21 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div class="bg-base-50 min-h-screen">
-		<div class="fixed top-0 right-0 left-0 z-40">
-			<TopBar title="Chayut" filterCounts={filterCounts} client:load />
-		</div>
+	<div class="bg-base-50 min-h-dvh">
+		<TopBar title="Chayut" filterCounts={filterCounts} client:load />
 
 		<div
-			class="grid h-dvh w-full grid-rows-[112px_auto_1fr] md:grid-rows-[72px_120px_1fr]"
+			class="grid h-dvh w-full grid-rows-[112px_auto_1fr] md:grid-rows-[100px_120px_1fr]"
 		>
 			<div class="row-start-1 px-3"></div>
 			<div class="row-start-2 px-3">
 				<div class="md:hidden">
 					<div
-						class="mx-auto mb-12 grid grid-cols-4 p-3 md:max-w-none md:grid-cols-6 lg:grid-cols-5"
+						class="mx-auto mt-8 mb-12 grid grid-cols-4 p-3 md:max-w-none md:grid-cols-6 lg:grid-cols-5"
 					>
 						<div class="col-span-3 col-start-2">
 							<FilterDescription
-								className="text-base-700"
+								className="text-base-700 text-xl leading-none"
 								client:media="(max-width: 767px)"
 							/>
 						</div>
@@ -41,7 +39,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 					>
 						<div class="col-span-3 col-start-2 md:col-span-3 md:col-start-4">
 							<FilterDescription
-								className="text-base-700 text-xl"
+								className="text-base-700 text-xl leading-none"
 								client:media="(min-width: 768px)"
 							/>
 						</div>
