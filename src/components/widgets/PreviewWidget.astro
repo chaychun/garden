@@ -9,10 +9,8 @@ interface Props {
 	date: string;
 	bgImage: string;
 	previewVideo: string;
-	position?: "top" | "bottom";
-	orientation?: "portrait" | "landscape";
 	types?: string[];
-	badgeVariant?: "light" | "dark";
+	tone?: "light" | "dark";
 	id: string;
 	[key: string]: any;
 }
@@ -23,24 +21,23 @@ const {
 	date,
 	bgImage,
 	previewVideo,
-	position = "top",
-	orientation = "portrait",
 	types,
-	badgeVariant = "light",
+	tone = "light",
 	id,
 	...rest
 } = Astro.props;
 
 const bgImageUrl = getCldImageUrl({ src: bgImage, width: 600 });
 const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
+
+const titleColorClass = tone === "light" ? "text-white" : "text-base-900";
+const descriptionColorClass =
+	tone === "light" ? "text-white/80" : "text-base-600";
+const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 ---
 
 <Widget
-	class:list={[
-		"flex flex-col gap-4 p-6 md:justify-between",
-		"mb-12 md:mb-0",
-		position === "bottom" && "md:flex-col-reverse",
-	]}
+	class:list={["flex flex-col gap-4 p-6 md:justify-between", "mb-12 md:mb-0"]}
 	{...rest}
 >
 	<a
@@ -51,8 +48,7 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 		<div
 			class:list={[
 				"group relative flex w-full items-center justify-center",
-				orientation === "portrait" && "aspect-4/5",
-				orientation === "landscape" && "aspect-5/4",
+				"aspect-4/5",
 			]}
 			style={{
 				backgroundImage: `url(${bgImageUrl})`,
@@ -65,12 +61,25 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 						{types.map((t) => (
 							<Badge
 								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
-								variant={badgeVariant}
+								variant={tone}
 							/>
 						))}
 					</div>
 				)
 			}
+
+			<div
+				class:list={[
+					"absolute top-2 left-2",
+					"opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100",
+					dateColorClass,
+				]}
+			>
+				<span class="inline-block px-3 py-1 font-mono text-[10px] select-none">
+					{date}
+				</span>
+			</div>
+
 			<video
 				src={previewVideoUrl}
 				loop
@@ -78,15 +87,27 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 				autoplay
 				playsinline
 				class="h-auto w-[90%]"></video>
-		</div>
-		<div class="flex flex-col gap-1 md:w-[480px]">
-			<p class="font-switzer text-base-300 text-sm">{date}</p>
-			<h2 class="font-cabinet text-base-900 text-3xl leading-none font-medium">
-				{title}
-			</h2>
-			<p class="font-switzer text-base-500 mt-2 text-sm leading-tight">
-				{description}
-			</p>
+
+			<div
+				class="pointer-events-none absolute right-2 bottom-2 left-2 flex flex-col gap-1 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100"
+			>
+				<h2
+					class:list={[
+						"font-switzer text-base leading-tight font-medium",
+						titleColorClass,
+					]}
+				>
+					{title}
+				</h2>
+				<p
+					class:list={[
+						"font-switzer text-xs leading-snug",
+						descriptionColorClass,
+					]}
+				>
+					{description}
+				</p>
+			</div>
 		</div>
 	</a>
 </Widget>

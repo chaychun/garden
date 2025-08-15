@@ -17,9 +17,7 @@ const works = defineCollection({
 		lastUpdatedDate: z.coerce.date(),
 		bgImage: z.string(),
 		previewVideo: z.string(),
-		orientation: z.enum(["portrait", "landscape"]).default("portrait"),
-		position: z.enum(["top", "bottom"]).default("top"),
-		badgeVariant: z.enum(["light", "dark"]).default("light"),
+		tone: z.enum(["light", "dark"]).default("light"),
 		disableSidebarClickOutside: z.boolean().default(false),
 	}),
 });
