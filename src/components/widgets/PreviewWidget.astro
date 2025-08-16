@@ -38,7 +38,10 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 ---
 
 <Widget
-	class:list={["flex flex-col gap-4 p-6 md:justify-between", "mb-12 md:mb-0"]}
+	class:list={[
+		"flex max-w-[528px] flex-col gap-4 p-6 md:justify-between",
+		"mb-12 md:mb-0",
+	]}
 	{...rest}
 >
 	<a

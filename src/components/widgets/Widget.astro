@@ -7,6 +7,9 @@ interface Props {
 const { class: className, ...rest } = Astro.props;
 ---
 
-<div class:list={["h-fit w-full md:h-full md:w-fit", className]} {...rest}>
+<div
+	class:list={["h-fit w-full md:h-full md:w-fit md:shrink-0", className]}
+	{...rest}
+>
 	<slot />
 </div>
