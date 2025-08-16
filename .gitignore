@@ -26,4 +26,4 @@ pnpm-debug.log*
 .idea/
 
 # Cursor
-.cursor/
+.cursor/rules/
