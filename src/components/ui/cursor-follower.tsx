@@ -4,7 +4,7 @@ import {
 	useMotionValue,
 	useSpring,
 } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type HoverData = {
 	title: string;
@@ -14,6 +14,8 @@ type HoverData = {
 export default function CursorFollower() {
 	const [isVisible, setIsVisible] = useState(false);
 	const [data, setData] = useState<HoverData | null>(null);
+	const resumeTrackingAtRef = useRef(0);
+	const isVisibleRef = useRef(false);
 
 	const rawX = useMotionValue(0);
 	const rawY = useMotionValue(0);
@@ -24,14 +26,22 @@ export default function CursorFollower() {
 	const handlePointerMove = useMemo(() => {
 		const offset = 14;
 		return (e: PointerEvent) => {
-			rawX.set(e.clientX + offset);
-			rawY.set(e.clientY + offset);
+			const now = performance.now();
+			if (!isVisibleRef.current && now < resumeTrackingAtRef.current) return;
 			const t = e.target as Element | null;
 			const over =
 				t && "closest" in t
 					? (t as Element).closest("[data-cursor-hover]")
 					: null;
-			if (!over) setIsVisible(false);
+			if (over) {
+				rawX.set(e.clientX + offset);
+				rawY.set(e.clientY + offset);
+				return;
+			}
+			if (now >= resumeTrackingAtRef.current) {
+				rawX.set(e.clientX + offset);
+				rawY.set(e.clientY + offset);
+			}
 		};
 	}, [rawX, rawY]);
 
@@ -51,10 +61,13 @@ export default function CursorFollower() {
 
 			setData({ title, types });
 			setIsVisible(true);
+			isVisibleRef.current = true;
 		}
 
 		function onLeave() {
 			setIsVisible(false);
+			resumeTrackingAtRef.current = performance.now() + 700;
+			isVisibleRef.current = false;
 		}
 
 		anchors.forEach((a) => {
@@ -62,7 +75,9 @@ export default function CursorFollower() {
 			a.addEventListener("mouseleave", onLeave);
 		});
 
-		document.addEventListener("pointermove", handlePointerMove);
+		document.addEventListener("pointermove", handlePointerMove, {
+			passive: true,
+		});
 
 		return () => {
 			anchors.forEach((a) => {
@@ -80,19 +95,32 @@ export default function CursorFollower() {
 			.join(" / ");
 	}, [data?.types]);
 
+	const variants = {
+		show: {
+			opacity: 1,
+			scale: 1,
+			transition: { duration: 0.5, ease: "easeOut" },
+		},
+		hide: {
+			opacity: 0,
+			scale: 0.98,
+			transition: { delay: 0.2, duration: 0.5, ease: "easeOut" },
+		},
+	} as const;
+
 	return (
 		<AnimatePresence>
 			{isVisible && data && (
 				<motion.div
 					key="cursor-follower"
-					initial={{ opacity: 0, scale: 0.98 }}
-					animate={{ opacity: 1, scale: 1 }}
-					exit={{ opacity: 0, scale: 0.98 }}
-					transition={{ duration: 0.5, ease: "easeOut" }}
+					initial="hide"
+					animate="show"
+					exit="hide"
+					variants={variants}
 					className="pointer-events-none fixed top-0 left-0 z-[100] select-none"
 					style={{ x, y }}
 				>
-					<div className="bg-base-950/80 text-base-50 px-2 py-1 text-[11px] leading-tight shadow-sm backdrop-blur-md">
+					<div className="bg-base-950/80 text-base-50 p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md">
 						<div className="flex items-start gap-1">
 							<div className="font-switzer text-base-50 text-sm leading-none select-none">
 								+
