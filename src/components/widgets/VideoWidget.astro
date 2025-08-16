@@ -25,7 +25,7 @@ const videoUrl = getCldVideoUrl({ src: video });
 	]}
 	{...rest}
 >
-	<div class="w-full md:h-1/2">
+	<div class="w-full md:h-1/2 md:min-h-[300px]">
 		<a
 			href={id ? `/work/${encodeURIComponent(id)}/` : undefined}
 			class="block"
