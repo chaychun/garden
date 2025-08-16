@@ -7,6 +7,8 @@ import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
 import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 import CursorFollower from "@/components/ui/cursor-follower";
+import ImageWidget from "@/components/widgets/ImageWidget.astro";
+import VideoWidget from "@/components/widgets/VideoWidget.astro";
 
 const works = await getCollection("works");
 
@@ -70,6 +72,22 @@ const filterName =
 			);
 		})
 	}
+	<ImageWidget
+		title="Mock Image Widget"
+		image="elisa-kerschbaumer-eFSrad6qb3k-unsplash_nusevh"
+		id="page-stack"
+		types={["design"]}
+		data-types="design"
+		style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+	/>
+	<VideoWidget
+		title="Mock Video Widget"
+		video="page-stack-preview_fift9g"
+		id="page-stack"
+		types={["interaction"]}
+		data-types="interaction"
+		style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+	/>
 	<CursorFollower
 		client:media="(pointer: fine) and (prefers-reduced-motion: no-preference)"
 	/>

@@ -1,0 +1,38 @@
+---
+import Widget from "@/components/widgets/Widget.astro";
+import { getCldVideoUrl } from "astro-cloudinary/helpers";
+
+interface Props {
+	title: string;
+	video: string;
+	poster?: string;
+	types?: string[];
+	id?: string;
+	[key: string]: any;
+}
+
+const { title, video, poster, types, id, ...rest } = Astro.props;
+
+const videoUrl = getCldVideoUrl({ src: video });
+---
+
+<Widget class:list={["md:h-1/2 md:w-auto"]} {...rest}>
+	<a
+		href={id ? `/work/${encodeURIComponent(id)}/` : undefined}
+		class="block"
+		aria-label={`View ${title}`}
+		data-cursor-hover
+		data-cursor-title={title}
+		data-cursor-types={(types ?? []).join(",")}
+	>
+		<video
+			src={videoUrl}
+			poster={poster}
+			loop
+			muted
+			autoplay
+			playsinline
+			class="w-full h-auto md:h-full md:w-auto max-w-none"
+		/>
+	</a>
+</Widget>

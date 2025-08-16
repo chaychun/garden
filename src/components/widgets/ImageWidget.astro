@@ -1,0 +1,54 @@
+---
+import Widget from "@/components/widgets/Widget.astro";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
+
+interface Props {
+	title: string;
+	image: string;
+	types?: string[];
+	id?: string;
+	alt?: string;
+	[key: string]: any;
+}
+
+const { title, image, types, id, alt, ...rest } = Astro.props;
+
+const imageUrl = getCldImageUrl({ src: image, width: 1200, format: "auto" });
+const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+---
+
+<Widget class:list={["md:h-1/2 md:w-auto"]} {...rest}>
+	{href ? (
+		<a
+			href={href}
+			class="block"
+			aria-label={`View ${title}`}
+			data-cursor-hover
+			data-cursor-title={title}
+			data-cursor-types={(types ?? []).join(",")}
+		>
+			<img
+				src={imageUrl}
+				alt={alt || title}
+				loading="lazy"
+				decoding="async"
+				class="w-full h-auto md:h-full md:w-auto max-w-none"
+			/>
+		</a>
+	) : (
+		<div
+			class="block"
+			data-cursor-hover
+			data-cursor-title={title}
+			data-cursor-types={(types ?? []).join(",")}
+		>
+			<img
+				src={imageUrl}
+				alt={alt || title}
+				loading="lazy"
+				decoding="async"
+				class="w-full h-auto md:h-full md:w-auto max-w-none"
+			/>
+		</div>
+	)}
+</Widget>
