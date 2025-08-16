@@ -39,7 +39,7 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 
 <Widget
 	class:list={[
-		"flex max-w-[528px] flex-col gap-4 p-6 md:justify-between",
+		"flex max-w-[528px] flex-col gap-3 p-6 md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	{...rest}
@@ -63,7 +63,7 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 
 			{
 				types && types.length > 0 && (
-					<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
+					<div class="absolute top-2 right-2 hidden gap-2 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100">
 						{types.map((t) => (
 							<Badge
 								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
@@ -95,7 +95,7 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 				class="relative z-10 h-auto w-[90%]"></video>
 
 			<div
-				class="pointer-events-none absolute right-2 bottom-2 left-2 flex flex-col gap-1 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100"
+				class="pointer-events-none absolute right-2 bottom-2 left-2 hidden flex-col gap-1 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100"
 			>
 				<h2
 					class:list={[
@@ -107,7 +107,7 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 				</h2>
 				<p
 					class:list={[
-						"font-switzer text-xs leading-snug",
+						"font-switzer text-xs leading-none",
 						descriptionColorClass,
 					]}
 				>
@@ -116,4 +116,28 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 			</div>
 		</div>
 	</a>
+	<div class="flex flex-col gap-2 md:hidden">
+		<div class="flex items-center justify-between gap-2">
+			<h2
+				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
+			>
+				{title}
+			</h2>
+			{
+				types && types.length > 0 && (
+					<div class="flex flex-none gap-2">
+						{types.map((t) => (
+							<Badge
+								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+								variant="dark"
+							/>
+						))}
+					</div>
+				)
+			}
+		</div>
+		<p class="font-switzer text-base-600 leading-none">
+			{description}
+		</p>
+	</div>
 </Widget>
