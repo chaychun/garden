@@ -48,6 +48,9 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 		href={`/work/${encodeURIComponent(id)}/`}
 		class="block"
 		aria-label={`View ${title}`}
+		data-cursor-hover
+		data-cursor-title={title}
+		data-cursor-types={(types ?? []).join(",")}
 	>
 		<div
 			class:list={[
