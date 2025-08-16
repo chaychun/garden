@@ -1,5 +1,6 @@
 ---
 import Badge from "@/components/Badge.astro";
+import BlurOverlay from "@/components/ui/blur-overlay";
 import Widget from "@/components/widgets/Widget.astro";
 import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
 
@@ -55,6 +56,8 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 				backgroundSize: "cover",
 			}}
 		>
+			<BlurOverlay client:load />
+
 			{
 				types && types.length > 0 && (
 					<div class="absolute top-2 right-2 flex gap-2 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
@@ -86,7 +89,7 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 				muted
 				autoplay
 				playsinline
-				class="h-auto w-[90%]"></video>
+				class="relative z-10 h-auto w-[90%]"></video>
 
 			<div
 				class="pointer-events-none absolute right-2 bottom-2 left-2 flex flex-col gap-1 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100"
