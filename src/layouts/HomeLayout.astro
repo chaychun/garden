@@ -14,7 +14,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 min-h-dvh">
-		<TopBar title="Chayut" filterCounts={filterCounts} client:load />
+		<TopBar title="Chayut" filterCounts={filterCounts} client:only="react" />
 
 		<div
 			class="grid h-dvh w-full grid-rows-[112px_auto_1fr] md:grid-rows-[100px_120px_1fr]"
@@ -28,7 +28,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 						<div class="col-span-3 col-start-2">
 							<FilterDescription
 								className="text-base-700 text-xl leading-none"
-								client:media="(max-width: 767px)"
+								client:only="react"
 							/>
 						</div>
 					</div>
@@ -40,7 +40,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 						<div class="col-span-3 col-start-2 md:col-span-3 md:col-start-4">
 							<FilterDescription
 								className="text-base-700 text-xl leading-none"
-								client:media="(min-width: 768px)"
+								client:only="react"
 							/>
 						</div>
 					</div>

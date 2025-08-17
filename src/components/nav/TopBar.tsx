@@ -112,7 +112,13 @@ export default function TopBar({
 
 	return (
 		<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
-			<motion.div layoutRoot className="fixed top-0 right-0 left-0 z-40">
+			<motion.div
+				layoutRoot
+				initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+				animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+				transition={{ duration: 0.5, ease: "easeOut" }}
+				className="fixed top-0 right-0 left-0 z-40"
+			>
 				<LayoutGroup id="filter-menu">
 					<motion.div
 						initial={false}
