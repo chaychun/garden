@@ -85,7 +85,6 @@ html {
 
 :root {
 	--radius: 0.625rem;
-	color-scheme: light;
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
 	--card: oklch(1 0 0);
@@ -117,22 +116,9 @@ html {
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
-
-	--base-50: #f6f6f5;
-	--base-100: #e7e7e6;
-	--base-200: #d1d1d0;
-	--base-300: #b1b0af;
-	--base-400: #8a8a86;
-	--base-500: #6f6f6b;
-	--base-600: #5e5d5c;
-	--base-700: #504f4e;
-	--base-800: #464644;
-	--base-900: #353534;
-	--base-950: #262626;
 }
 
 .dark {
-	color-scheme: dark;
 	--color-base-50: #262626;
 	--color-base-100: #353534;
 	--color-base-200: #464644;
@@ -195,5 +181,3 @@ html {
 		color: var(--color-base-50);
 	}
 }
-
-
