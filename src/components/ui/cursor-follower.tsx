@@ -120,23 +120,37 @@ export default function CursorFollower() {
 					className="pointer-events-none fixed top-0 left-0 z-[100] select-none"
 					style={{ x, y }}
 				>
-					<div className="bg-base-950/80 text-base-50 p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md">
+					<motion.div
+						layout
+						transition={{ layout: { duration: 0.25, ease: "easeOut" } }}
+						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md"
+					>
 						<div className="flex items-start gap-1">
 							<div className="font-switzer text-base-50 text-sm leading-none select-none">
 								+
 							</div>
 							<div className="min-w-0">
-								<div className="font-switzer max-w-[40vw] truncate font-medium md:max-w-[24rem]">
-									{data.title}
-								</div>
-								{typesText ? (
-									<div className="font-switzer text-base-400 max-w-[40vw] truncate md:max-w-[24rem]">
-										{typesText}
-									</div>
-								) : null}
+								<AnimatePresence mode="popLayout" initial={false}>
+									<motion.div
+										key={`${data.title}::${typesText}`}
+										initial={{ opacity: 0, y: 4 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -4 }}
+										transition={{ duration: 0.18, ease: "easeOut" }}
+									>
+										<div className="font-switzer max-w-[40vw] truncate font-medium md:max-w-[24rem]">
+											{data.title}
+										</div>
+										{typesText ? (
+											<div className="font-switzer text-base-400 max-w-[40vw] truncate md:max-w-[24rem]">
+												{typesText}
+											</div>
+										) : null}
+									</motion.div>
+								</AnimatePresence>
 							</div>
 						</div>
-					</div>
+					</motion.div>
 				</motion.div>
 			)}
 		</AnimatePresence>
