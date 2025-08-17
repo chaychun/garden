@@ -30,7 +30,7 @@ export default defineConfig({
 		fonts: [
 			{
 				provider: fontProviders.fontshare(),
-				name: "Switzer Variable",
+				name: "Switzer",
 				cssVariable: "--font-switzer",
 				weights: ["100 900"],
 				styles: ["normal", "italic"],
