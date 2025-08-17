@@ -161,7 +161,7 @@ export default function Sidebar({
 								key="expanded"
 							>
 								{desktopContent}
-								<div className="flex w-full items-center justify-end p-4">
+								<div className="flex w-full items-center justify-end px-6 py-4 border-t border-base-100">
 									<motion.button
 										onClick={handleToggleSidebar}
 										className="text-base-500 flex cursor-pointer items-center justify-center rounded-md"
@@ -184,13 +184,13 @@ export default function Sidebar({
 								key="collapsed"
 							>
 								<div className="h-4 w-4" />
-								<div
-									onClick={handleToggleSidebar}
-									className="text-vertical flex cursor-pointer items-baseline gap-2 p-6 select-none"
-								>
-									<span className="text-base-900 text-3xl font-medium">
-										{title}
-									</span>
+																	<div
+										onClick={handleToggleSidebar}
+										className="text-vertical flex cursor-pointer items-baseline gap-2 p-6 select-none"
+									>
+										<span className="text-base-900 text-3xl font-semibold tracking-tight">
+											{title}
+										</span>
 									{number !== undefined && (
 										<span className="text-base-300 flex font-mono text-sm">
 											<span>(</span>

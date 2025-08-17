@@ -26,7 +26,7 @@ export default function WorkSidebar({
 }: WorkSidebarProps) {
 	const desktopContent = (
 		<>
-			<div className="flex w-full items-center justify-between p-4">
+			<div className="flex w-full items-center justify-between px-6 py-4 border-b border-base-100">
 				<button
 					onClick={() => history.back()}
 					className="text-base-500 hover:text-base-700 group flex cursor-pointer items-center gap-2 text-sm"
@@ -40,19 +40,19 @@ export default function WorkSidebar({
 			<ScrollArea className="flex h-full flex-1 flex-col overflow-y-auto">
 				<div className="flex flex-col">
 					<div className="flex w-full flex-col gap-2 p-6">
-						<h1 className="text-base-900 font-cabinet text-4xl font-medium">
+						<h1 className="text-base-900 font-cabinet text-4xl font-semibold tracking-tight">
 							{title}
 						</h1>
-						<p className="text-base-500 font-mono">{description}</p>
+						<p className="text-base-600 font-mono text-base leading-relaxed">{description}</p>
 					</div>
 					{children && (
-						<div className="text-base-700 [&_a]:text-base-500 flex w-full flex-col gap-4 p-6 text-sm [&_a]:underline">
+						<div className="text-base-700 [&_a]:text-base-600 flex w-full flex-col gap-4 p-6 text-sm [&_a]:underline border-t border-base-100 pt-6 mt-2">
 							{children}
 						</div>
 					)}
 				</div>
 				<MetadataTable
-					className="mt-12 px-6"
+					className="mt-8 px-6"
 					createdDate={createdDate}
 					lastUpdatedDate={lastUpdatedDate}
 					types={types}
