@@ -82,7 +82,7 @@ const swapId = Math.random().toString(36).slice(2);
 							<img
 								src={url}
 								alt={alt || title}
-								loading="lazy"
+								loading="eager"
 								decoding="async"
 								data-swap-image
 								class:list={[
@@ -105,7 +105,7 @@ const swapId = Math.random().toString(36).slice(2);
 							<img
 								src={url}
 								alt={alt || title}
-								loading="lazy"
+								loading="eager"
 								decoding="async"
 								data-swap-image
 								class:list={[
@@ -143,10 +143,11 @@ const swapId = Math.random().toString(36).slice(2);
 	</div>
 </Widget>
 
-<script>
+<script is:inline>
 	const swapId = "{swapId}";
 	let intervalId: ReturnType<typeof setInterval> | undefined;
 	function startSwap() {
+		if (intervalId) return;
 		const root = document.querySelector(`[data-swap-id="${swapId}"]`);
 		if (!root) return;
 		const imgs = Array.from(root.querySelectorAll("img[data-swap-image]"));
@@ -168,4 +169,5 @@ const swapId = Math.random().toString(36).slice(2);
 	}
 	document.addEventListener("astro:page-load", startSwap);
 	document.addEventListener("astro:before-swap", stopSwap);
+	startSwap();
 </script>
