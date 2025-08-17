@@ -129,25 +129,35 @@ export default function CursorFollower() {
 							<motion.div
 								layout
 								className="font-switzer text-base-50 text-sm leading-none select-none"
+								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 							>
 								+
 							</motion.div>
-							<div className="min-w-0">
+							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.div
-									layout
-									className="font-switzer w-fit max-w-[40vw] truncate font-medium md:max-w-[24rem]"
+									className="min-w-0"
+									key={data.title}
+									initial={{ opacity: 0 }}
+									animate={{
+										opacity: 1,
+										transition: { duration: 0.4, ease: "easeIn", delay: 0.2 },
+									}}
+									exit={{
+										opacity: 0,
+										transition: { type: "spring", duration: 0.2, bounce: 0 },
+									}}
 								>
-									{data.title}
+									<div className="font-switzer w-fit max-w-[40vw] truncate font-medium md:max-w-[24rem]">
+										{data.title}
+									</div>
+
+									{typesText ? (
+										<div className="font-switzer text-base-400 w-fit max-w-[40vw] truncate md:max-w-[24rem]">
+											{typesText}
+										</div>
+									) : null}
 								</motion.div>
-								{typesText ? (
-									<motion.div
-										layout
-										className="font-switzer text-base-400 w-fit max-w-[40vw] truncate md:max-w-[24rem]"
-									>
-										{typesText}
-									</motion.div>
-								) : null}
-							</div>
+							</AnimatePresence>
 						</div>
 					</motion.div>
 				</motion.div>
