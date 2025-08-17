@@ -26,6 +26,7 @@ export default function TopBar({
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter } = useFilterStore();
 	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS];
+	const [isIntroDone, setIsIntroDone] = useState(false);
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;
@@ -110,9 +111,22 @@ export default function TopBar({
 		};
 	}, []);
 
+	useEffect(() => {
+		const id = requestAnimationFrame(() => setIsIntroDone(true));
+		return () => cancelAnimationFrame(id);
+	}, []);
+
 	return (
 		<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
-			<motion.div layoutRoot className="fixed top-0 right-0 left-0 z-40">
+			<motion.div
+				layoutRoot
+				className={cn(
+					"fixed top-0 right-0 left-0 z-40 transition-all duration-500 ease-out",
+					isIntroDone
+						? "opacity-100 translate-y-0 blur-0"
+						: "opacity-0 translate-y-2 blur-sm",
+				)}
+			>
 				<LayoutGroup id="filter-menu">
 					<motion.div
 						initial={false}
