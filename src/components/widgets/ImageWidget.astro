@@ -1,6 +1,7 @@
 ---
 import Badge from "@/components/Badge.astro";
 import Widget from "@/components/widgets/Widget.astro";
+import { toCssHeight } from "@/lib/utils";
 import { getCldImageUrl } from "astro-cloudinary/helpers";
 
 interface Props {
@@ -10,23 +11,39 @@ interface Props {
 	types?: string[];
 	id?: string;
 	alt?: string;
+	height?: string | number;
+	position?: "top" | "bottom";
 	[key: string]: any;
 }
 
-const { title, image, description, types, id, alt, ...rest } = Astro.props;
+const { title, image, description, types, id, alt, height, position, ...rest } =
+	Astro.props;
 
 const imageUrl = getCldImageUrl({ src: image, width: 1200, format: "auto" });
 const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+
+const mediaHeightCss = toCssHeight(height);
+const mediaWrapperStyle = `--media-h:${mediaHeightCss};`;
+const containerJustifyClass =
+	position === "bottom"
+		? "md:justify-end"
+		: position === "top"
+			? "md:justify-start"
+			: "";
 ---
 
 <Widget
 	class:list={[
-		"flex max-w-[528px] flex-col gap-3 p-6 md:max-w-none md:justify-between",
+		"flex max-w-[528px] flex-col gap-3 p-6 md:max-w-none",
+		containerJustifyClass,
 		"mb-12 md:mb-0",
 	]}
 	{...rest}
 >
-	<div class="md:h-2/3 md:min-h-[300px]">
+	<div
+		class:list={["md:h-[var(--media-h)] md:min-h-[300px]"]}
+		style={mediaWrapperStyle}
+	>
 		{
 			href ? (
 				<a
