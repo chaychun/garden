@@ -14,7 +14,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 min-h-dvh">
-		<div class="will-animate opacity-0 blur-sm translate-y-2 transition-all duration-500 ease-out">
+		<div class="will-animate-fixed-safe opacity-0 transition-opacity duration-500 ease-out">
 			<TopBar title="Chayut" filterCounts={filterCounts} client:only="react" />
 		</div>
 
@@ -94,6 +94,14 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 			};
 
 			const animateIn = () => {
+				const fadeOnly = document.querySelectorAll(".will-animate-fixed-safe");
+				fadeOnly.forEach(el => {
+					requestAnimationFrame(() => {
+						el.classList.remove("opacity-0");
+						el.classList.add("opacity-100");
+					});
+				});
+
 				const targets = document.querySelectorAll(".will-animate");
 				targets.forEach(el => {
 					requestAnimationFrame(() => {
