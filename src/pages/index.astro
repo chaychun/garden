@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
+import ImageSwapWidget from "@/components/widgets/ImageSwapWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
@@ -46,6 +47,14 @@ const filterName =
 	scrollAreaId="main-scroll"
 	filterCounts={filterCounts}
 >
+	<ImageSwapWidget
+		title="Parallax Images"
+		images={["bbva_mkmupf", "cedrus-residential_rdpmyb", "icc-sydney_daohjj", "maersk-tower_s5iugf"]}
+		orientation="landscape"
+		position="top"
+		height="2/3"
+	/>
+
 	{
 		allItems.map((item) => {
 			const itemDate = item.data.lastUpdatedDate;
