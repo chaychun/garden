@@ -112,31 +112,54 @@ export default function CursorFollower() {
 		<AnimatePresence>
 			{isVisible && data && (
 				<motion.div
+					layoutRoot
 					key="cursor-follower"
 					initial="hide"
 					animate="show"
 					exit="hide"
 					variants={variants}
 					className="pointer-events-none fixed top-0 left-0 z-[100] select-none"
-					style={{ x, y }}
+					style={{ x, y, position: "fixed" }}
 				>
-					<div className="bg-base-950/80 text-base-50 p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md">
+					<motion.div
+						layout
+						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md"
+					>
 						<div className="flex items-start gap-1">
-							<div className="font-switzer text-base-50 text-sm leading-none select-none">
+							<motion.div
+								layout
+								className="font-switzer text-base-50 text-sm leading-none select-none"
+								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
+							>
 								+
-							</div>
-							<div className="min-w-0">
-								<div className="font-switzer max-w-[40vw] truncate font-medium md:max-w-[24rem]">
-									{data.title}
-								</div>
-								{typesText ? (
-									<div className="font-switzer text-base-400 max-w-[40vw] truncate md:max-w-[24rem]">
-										{typesText}
+							</motion.div>
+							<AnimatePresence mode="popLayout" initial={false}>
+								<motion.div
+									className="min-w-0"
+									key={data.title}
+									initial={{ opacity: 0 }}
+									animate={{
+										opacity: 1,
+										transition: { duration: 0.4, ease: "easeIn", delay: 0.2 },
+									}}
+									exit={{
+										opacity: 0,
+										transition: { type: "spring", duration: 0.2, bounce: 0 },
+									}}
+								>
+									<div className="font-switzer w-fit max-w-[40vw] truncate font-medium md:max-w-[24rem]">
+										{data.title}
 									</div>
-								) : null}
-							</div>
+
+									{typesText ? (
+										<div className="font-switzer text-base-400 w-fit max-w-[40vw] truncate md:max-w-[24rem]">
+											{typesText}
+										</div>
+									) : null}
+								</motion.div>
+							</AnimatePresence>
 						</div>
-					</div>
+					</motion.div>
 				</motion.div>
 			)}
 		</AnimatePresence>
