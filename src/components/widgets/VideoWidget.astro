@@ -1,6 +1,6 @@
 ---
-import Widget from "@/components/widgets/Widget.astro";
 import Badge from "@/components/Badge.astro";
+import Widget from "@/components/widgets/Widget.astro";
 import { getCldVideoUrl } from "astro-cloudinary/helpers";
 
 interface Props {
@@ -20,15 +20,15 @@ const videoUrl = getCldVideoUrl({ src: video });
 
 <Widget
 	class:list={[
-		"flex max-w-[528px] flex-col gap-3 p-6 md:justify-between",
+		"flex max-w-[528px] flex-col gap-3 p-6 md:max-w-none md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	{...rest}
 >
-	<div class="w-full md:h-1/2 md:min-h-[300px]">
+	<div class="w-full md:h-2/3 md:min-h-[300px]">
 		<a
 			href={id ? `/work/${encodeURIComponent(id)}/` : undefined}
-			class="block"
+			class="block md:h-full md:w-full"
 			aria-label={`View ${title}`}
 			data-cursor-hover
 			data-cursor-title={title}
@@ -41,26 +41,34 @@ const videoUrl = getCldVideoUrl({ src: video });
 				muted
 				autoplay
 				playsinline
-				class="w-full h-auto md:h-full md:w-auto max-w-none"
-			/>
+				class="h-auto w-full md:h-full md:w-auto md:max-w-full"></video>
 		</a>
 	</div>
 
 	<div class="flex flex-col gap-2 md:hidden">
 		<div class="flex items-center justify-between gap-2">
-			<h2 class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium">
+			<h2
+				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
+			>
 				{title}
 			</h2>
-			{types && types.length > 0 && (
-				<div class="flex flex-none gap-2">
-					{types.map((t) => (
-						<Badge text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`} variant="dark" />
-					))}
-				</div>
-			)}
+			{
+				types && types.length > 0 && (
+					<div class="flex flex-none gap-2">
+						{types.map((t) => (
+							<Badge
+								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+								variant="dark"
+							/>
+						))}
+					</div>
+				)
+			}
 		</div>
-		{description && (
-			<p class="font-switzer text-base-600 leading-none">{description}</p>
-		)}
+		{
+			description && (
+				<p class="font-switzer text-base-600 leading-none">{description}</p>
+			)
+		}
 	</div>
 </Widget>
