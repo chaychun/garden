@@ -14,7 +14,9 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 min-h-dvh">
-		<TopBar title="Chayut" filterCounts={filterCounts} client:load />
+		<div class="will-animate opacity-0 blur-sm translate-y-2 transition-all duration-500 ease-out">
+			<TopBar title="Chayut" filterCounts={filterCounts} client:only="react" />
+		</div>
 
 		<div
 			class="grid h-dvh w-full grid-rows-[112px_auto_1fr] md:grid-rows-[100px_120px_1fr]"
@@ -26,10 +28,12 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 						class="mx-auto mt-8 mb-12 grid grid-cols-4 p-3 md:max-w-none md:grid-cols-6 lg:grid-cols-5"
 					>
 						<div class="col-span-3 col-start-2">
-							<FilterDescription
-								className="text-base-700 text-xl leading-none"
-								client:media="(max-width: 767px)"
-							/>
+							<div class="will-animate opacity-0 blur-sm translate-y-2 transition-all duration-500 ease-out">
+								<FilterDescription
+									className="text-base-700 text-xl leading-none"
+									client:only="react"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -38,10 +42,12 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 						class="mx-auto grid grid-cols-4 p-3 md:grid-cols-6 lg:grid-cols-5"
 					>
 						<div class="col-span-3 col-start-2 md:col-span-3 md:col-start-4">
-							<FilterDescription
-								className="text-base-700 text-xl leading-none"
-								client:media="(min-width: 768px)"
-							/>
+							<div class="will-animate opacity-0 blur-sm translate-y-2 transition-all duration-500 ease-out">
+								<FilterDescription
+									className="text-base-700 text-xl leading-none"
+									client:only="react"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -87,9 +93,20 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 				mediaQuery.addEventListener("change", setup);
 			};
 
+			const animateIn = () => {
+				const targets = document.querySelectorAll(".will-animate");
+				targets.forEach(el => {
+					requestAnimationFrame(() => {
+						el.classList.remove("opacity-0", "blur-sm", "translate-y-2");
+						el.classList.add("opacity-100", "blur-0", "translate-y-0");
+					});
+				});
+			};
+
 			document.addEventListener("astro:page-load", () => {
 				attachMedia();
 				setup();
+				animateIn();
 			});
 
 			document.addEventListener("astro:before-swap", () => {
