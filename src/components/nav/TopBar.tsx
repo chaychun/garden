@@ -30,7 +30,7 @@ export default function TopBar({
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;
 	const HEADER_HEIGHT_DOUBLE_ROW = 135;
-	const MENU_EXTRA_HEIGHT = 200;
+	const MENU_EXTRA_HEIGHT = 600;
 	const baseHeight = isSingleRow
 		? HEADER_HEIGHT_SINGLE_ROW
 		: HEADER_HEIGHT_DOUBLE_ROW;
@@ -114,8 +114,6 @@ export default function TopBar({
 		<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
 			<motion.div
 				layoutRoot
-				initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
-				animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
 				transition={{ duration: 0.5, ease: "easeOut" }}
 				className="fixed top-0 right-0 left-0 z-40"
 			>
@@ -123,7 +121,7 @@ export default function TopBar({
 					<motion.div
 						initial={false}
 						animate={{ height: targetHeight }}
-						className="from-base-50 via-base-50/70 pointer-events-none absolute top-0 right-0 left-0 z-0 bg-gradient-to-b to-transparent"
+						className="from-base-50/90 via-base-50/70 pointer-events-none absolute top-0 right-0 left-0 z-0 bg-gradient-to-b to-transparent"
 					>
 						<ProgressiveBlur
 							className="absolute inset-0"
@@ -135,6 +133,9 @@ export default function TopBar({
 
 					<motion.div
 						layout={!isDesktop}
+						initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+						animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+						transition={{ duration: 0.5, ease: "easeOut" }}
 						className={cn(
 							"relative z-10 grid grid-cols-4 p-3 md:grid-cols-6 lg:grid-cols-5",
 							isScrolled
