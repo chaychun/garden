@@ -1,0 +1,184 @@
+---
+import Badge from "@/components/Badge.astro";
+import Widget from "@/components/widgets/Widget.astro";
+import { toCssHeight } from "@/lib/utils";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
+
+interface Props {
+	title: string;
+	images: string[];
+	description?: string;
+	types?: string[];
+	id?: string;
+	alt?: string;
+	height?: string | number;
+	position?: "top" | "bottom";
+	aspect?: "portrait" | "landscape" | "square";
+	intervalMs?: number;
+	[key: string]: any;
+}
+
+const {
+	title,
+	images = [],
+	description,
+	types,
+	id,
+	alt,
+	height,
+	position,
+	aspect = "portrait",
+	intervalMs = 500,
+	...rest
+} = Astro.props as Props;
+
+const imageUrls = images.map((src) => getCldImageUrl({ src, width: 1200, format: "auto" }));
+const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+
+const mediaHeightCss = toCssHeight(height);
+const aspectCss = aspect === "landscape" ? "4 / 3" : aspect === "square" ? "1 / 1" : "3 / 4";
+const mediaWrapperStyle = `--media-h:${mediaHeightCss}; --aspect:${aspectCss};`;
+const containerJustifyClass =
+	position === "bottom"
+		? "md:justify-end"
+		: position === "top"
+			? "md:justify-start"
+			: "";
+---
+
+<Widget
+	class:list={[
+		"flex max-w-[528px] flex-col gap-3 p-6 md:max-w-none",
+		containerJustifyClass,
+		"mb-12 md:mb-0",
+	]}
+	data-types={(types ?? []).join(" ")}
+	{...rest}
+>
+	<div
+		class:list={["relative md:h-[var(--media-h)] md:min-h-[300px]"]}
+		style={mediaWrapperStyle}
+	>
+		{
+			href ? (
+				<a
+					href={href}
+					class="block md:h-full md:w-full relative"
+					aria-label={`View ${title}`}
+					data-cursor-hover
+					data-cursor-title={title}
+					data-cursor-types={(types ?? []).join(",")}
+					data-swap-id={`swap-${title.replace(/\s+/g, "-").toLowerCase()}-${Math.random().toString(36).slice(2)}`}
+					style="aspect-ratio: var(--aspect);"
+				>
+					{imageUrls.map((url, i) => (
+						<img
+							src={url}
+							alt={alt || `${title} ${i + 1}`}
+							loading="lazy"
+							decoding="async"
+							class="absolute inset-0 h-full w-full object-cover transition-opacity duration-300"
+							style={i === 0 ? "opacity: 1;" : "opacity: 0;"}
+							data-swap-index={i}
+						/>
+					))}
+				</a>
+			) : (
+				<div
+					class="block md:h-full md:w-full relative"
+					data-cursor-hover
+					data-cursor-title={title}
+					data-cursor-types={(types ?? []).join(",")}
+					data-swap-id={`swap-${title.replace(/\s+/g, "-").toLowerCase()}-${Math.random().toString(36).slice(2)}`}
+					style="aspect-ratio: var(--aspect);"
+				>
+					{imageUrls.map((url, i) => (
+						<img
+							src={url}
+							alt={alt || `${title} ${i + 1}`}
+							loading="lazy"
+							decoding="async"
+							class="absolute inset-0 h-full w-full object-cover transition-opacity duration-300"
+							style={i === 0 ? "opacity: 1;" : "opacity: 0;"}
+							data-swap-index={i}
+						/>
+					))}
+				</div>
+			)
+		}
+	</div>
+
+	<div class="flex flex-col gap-2 md:hidden">
+		<div class="flex items-center justify-between gap-2">
+			<h2
+				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
+			>
+				{title}
+			</h2>
+			{
+				types && types.length > 0 && (
+					<div class="flex flex-none gap-2">
+						{types.map((t) => (
+							<Badge
+								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+								variant="dark"
+							/>
+						))}
+					</div>
+				)
+			}
+		</div>
+		{
+			description && (
+				<p class="font-switzer text-base-600 leading-none">{description}</p>
+			)
+		}
+	</div>
+</Widget>
+
+<script>
+	const INTERVAL = {intervalMs};
+	const swapContainers = Array.from(
+		document.querySelectorAll('[data-swap-id]')
+	);
+
+	swapContainers.forEach((container) => {
+		let index = 0;
+		let timer = null;
+		const images = Array.from(
+			container.querySelectorAll('img[data-swap-index]')
+		);
+		if (images.length <= 1) return;
+
+		function show(nextIndex) {
+			images.forEach((img, i) => {
+				img.style.opacity = i === nextIndex ? '1' : '0';
+			});
+			index = nextIndex;
+		}
+
+		function start() {
+			stop();
+			timer = window.setInterval(() => {
+				const next = (index + 1) % images.length;
+				show(next);
+			}, INTERVAL);
+		}
+
+		function stop() {
+			if (timer !== null) {
+				window.clearInterval(timer);
+				timer = null;
+			}
+		}
+
+		const onVisibility = () => {
+			if (document.hidden) stop();
+			else start();
+		};
+
+		document.addEventListener('astro:before-swap', stop);
+		document.addEventListener('visibilitychange', onVisibility);
+		start();
+	});
+</script>
