@@ -2,11 +2,13 @@
 export const prerender = false;
 
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
+import ImageSwapWidget from "@/components/widgets/ImageSwapWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
 import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 import CursorFollower from "@/components/ui/cursor-follower";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
 
 const works = await getCollection("works");
 
@@ -39,6 +41,22 @@ const urlParams = new URLSearchParams(
 const initialFilterParam = urlParams.get("filter") || "all";
 const filterName =
 	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
+
+// Demo images reused from parallax-list
+const swapDemoImages = [
+	getCldImageUrl({ src: "bbva_mkmupf", width: 1200, format: "auto" }),
+	getCldImageUrl({
+		src: "cedrus-residential_rdpmyb",
+		width: 1200,
+		format: "auto",
+	}),
+	getCldImageUrl({ src: "icc-sydney_daohjj", width: 1200, format: "auto" }),
+	getCldImageUrl({
+		src: "john-cranko-school_xi8wyq",
+		width: 1200,
+		format: "auto",
+	}),
+];
 ---
 
 <HomeLayout
@@ -46,6 +64,18 @@ const filterName =
 	scrollAreaId="main-scroll"
 	filterCounts={filterCounts}
 >
+	<ImageSwapWidget
+		title="Image Swap Demo"
+		description="Rotating architecture images"
+		images={swapDemoImages}
+		types={["interaction"]}
+		data-types="interaction"
+		aspect="portrait"
+		intervalMs={500}
+		height="420px"
+		position="top"
+		style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+	/>
 	{
 		allItems.map((item) => {
 			const itemDate = item.data.lastUpdatedDate;
