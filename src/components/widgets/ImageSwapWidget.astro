@@ -1,0 +1,144 @@
+---
+import Badge from "@/components/Badge.astro";
+import Widget from "@/components/widgets/Widget.astro";
+import ImageSwapMedia from "@/components/widgets/image-swap-media";
+import { toCssHeight } from "@/lib/utils";
+
+interface Props {
+	title: string;
+	images: string[];
+	description?: string;
+	types?: string[];
+	id?: string;
+	alt?: string;
+	height?: string | number;
+	position?: "top" | "bottom";
+	aspect?: "portrait" | "landscape" | "square";
+	intervalMs?: number;
+	[key: string]: any;
+}
+
+const {
+	title,
+	images,
+	description,
+	types,
+	id,
+	alt,
+	height,
+	position,
+	aspect = "portrait",
+	intervalMs = 500,
+	...rest
+} = Astro.props as Props;
+
+const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+
+const mediaHeightCss = toCssHeight(height);
+const mediaWrapperStyle = `--media-h:${mediaHeightCss};`;
+const containerJustifyClass =
+	position === "bottom"
+		? "md:justify-end"
+		: position === "top"
+			? "md:justify-start"
+			: "";
+
+const aspectClass =
+	aspect === "landscape"
+		? "aspect-4/3"
+		: aspect === "square"
+			? "aspect-square"
+			: "aspect-3/4"; // portrait default
+---
+
+<Widget
+	class:list={[
+		"flex max-w-[528px] flex-col gap-3 p-6 md:max-w-none",
+		containerJustifyClass,
+		"mb-12 md:mb-0",
+	]}
+	{...rest}
+>
+	<div style={mediaWrapperStyle}>
+		{
+			href ? (
+				<a
+					href={href}
+					class="block md:h-full md:w-full"
+					aria-label={`View ${title}`}
+					data-cursor-hover
+					data-cursor-title={title}
+					data-cursor-types={(types ?? []).join(",")}
+				>
+					<div
+						class:list={[
+							"relative w-full",
+							aspectClass,
+							"md:h-[var(--media-h)]",
+						]}
+					>
+						<ImageSwapMedia
+							client:load
+							images={images}
+							alt={alt || title}
+							intervalMs={intervalMs}
+							containerClassName="absolute inset-0 h-full w-full"
+							className="absolute inset-0 h-full w-full object-cover"
+						/>
+					</div>
+				</a>
+			) : (
+				<div
+					class="block md:h-full md:w-full"
+					data-cursor-hover
+					data-cursor-title={title}
+					data-cursor-types={(types ?? []).join(",")}
+				>
+					<div
+						class:list={[
+							"relative w-full",
+							aspectClass,
+							"md:h-[var(--media-h)]",
+						]}
+					>
+						<ImageSwapMedia
+							client:load
+							images={images}
+							alt={alt || title}
+							intervalMs={intervalMs}
+							containerClassName="absolute inset-0 h-full w-full"
+							className="absolute inset-0 h-full w-full object-cover"
+						/>
+					</div>
+				</div>
+			)
+		}
+	</div>
+
+	<div class="flex flex-col gap-2 md:hidden">
+		<div class="flex items-center justify-between gap-2">
+			<h2
+				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
+			>
+				{title}
+			</h2>
+			{
+				types && types.length > 0 && (
+					<div class="flex flex-none gap-2">
+						{types.map((t) => (
+							<Badge
+								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+								variant="dark"
+							/>
+						))}
+					</div>
+				)
+			}
+		</div>
+		{
+			description && (
+				<p class="font-switzer text-base-600 leading-none">{description}</p>
+			)
+		}
+	</div>
+</Widget>
