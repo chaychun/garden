@@ -8,7 +8,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type HoverData = {
 	title: string;
-	types: string[];
 };
 
 export default function CursorFollower() {
@@ -53,13 +52,8 @@ export default function CursorFollower() {
 		function onEnter(e: Event) {
 			const el = e.currentTarget as HTMLElement;
 			const title = el.getAttribute("data-cursor-title") || "";
-			const rawTypes = el.getAttribute("data-cursor-types") || "";
-			const types = rawTypes
-				.split(",")
-				.map((t) => t.trim())
-				.filter(Boolean);
 
-			setData({ title, types });
+			setData({ title });
 			setIsVisible(true);
 			isVisibleRef.current = true;
 		}
@@ -87,13 +81,6 @@ export default function CursorFollower() {
 			document.removeEventListener("pointermove", handlePointerMove);
 		};
 	}, [handlePointerMove]);
-
-	const typesText = useMemo(() => {
-		if (!data?.types?.length) return "";
-		return data.types
-			.map((t) => (t ? `${t.slice(0, 1).toUpperCase()}${t.slice(1)}` : ""))
-			.join(" / ");
-	}, [data?.types]);
 
 	const variants = {
 		show: {
@@ -123,12 +110,12 @@ export default function CursorFollower() {
 				>
 					<motion.div
 						layout
-						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 text-[11px] leading-tight shadow-sm backdrop-blur-md"
+						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1.5 text-[12px] leading-tight shadow-sm backdrop-blur-md"
 					>
 						<div className="flex items-start gap-1">
 							<motion.div
 								layout
-								className="font-switzer text-base-50 text-sm leading-none select-none"
+								className="font-switzer text-base-50 text-[15px] leading-none select-none"
 								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 							>
 								+
@@ -147,15 +134,9 @@ export default function CursorFollower() {
 										transition: { type: "spring", duration: 0.2, bounce: 0 },
 									}}
 								>
-									<div className="font-switzer w-fit max-w-[40vw] truncate font-medium md:max-w-[24rem]">
+									<div className="font-switzer w-fit max-w-[40vw] truncate font-medium text-[13px] md:max-w-[24rem] md:text-[14px]">
 										{data.title}
 									</div>
-
-									{typesText ? (
-										<div className="font-switzer text-base-400 w-fit max-w-[40vw] truncate md:max-w-[24rem]">
-											{typesText}
-										</div>
-									) : null}
 								</motion.div>
 							</AnimatePresence>
 						</div>
