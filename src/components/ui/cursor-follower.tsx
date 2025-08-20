@@ -1,9 +1,4 @@
-import {
-	AnimatePresence,
-	motion,
-	useMotionValue,
-	useSpring,
-} from "motion/react";
+import { AnimatePresence, motion, useSpring } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type HoverData = {
@@ -16,11 +11,8 @@ export default function CursorFollower() {
 	const resumeTrackingAtRef = useRef(0);
 	const isVisibleRef = useRef(false);
 
-	const rawX = useMotionValue(0);
-	const rawY = useMotionValue(0);
-
-	const x = useSpring(rawX, { stiffness: 650, damping: 80, mass: 1.2 });
-	const y = useSpring(rawY, { stiffness: 650, damping: 80, mass: 1.2 });
+	const x = useSpring(0, { stiffness: 650, damping: 80, mass: 1.2 });
+	const y = useSpring(0, { stiffness: 650, damping: 80, mass: 1.2 });
 
 	const handlePointerMove = useMemo(() => {
 		const offset = 14;
@@ -33,16 +25,16 @@ export default function CursorFollower() {
 					? (t as Element).closest("[data-cursor-hover]")
 					: null;
 			if (over) {
-				rawX.set(e.clientX + offset);
-				rawY.set(e.clientY + offset);
+				x.set(e.clientX + offset);
+				y.set(e.clientY + offset);
 				return;
 			}
 			if (now >= resumeTrackingAtRef.current) {
-				rawX.set(e.clientX + offset);
-				rawY.set(e.clientY + offset);
+				x.set(e.clientX + offset);
+				y.set(e.clientY + offset);
 			}
 		};
-	}, [rawX, rawY]);
+	}, [x, y]);
 
 	useEffect(() => {
 		const anchors = Array.from(
@@ -134,7 +126,7 @@ export default function CursorFollower() {
 										transition: { type: "spring", duration: 0.2, bounce: 0 },
 									}}
 								>
-									<div className="font-switzer w-fit max-w-[40vw] truncate font-medium text-[13px] md:max-w-[24rem] md:text-[14px]">
+									<div className="font-switzer w-fit max-w-[40vw] truncate text-[13px] font-medium md:max-w-[24rem] md:text-[14px]">
 										{data.title}
 									</div>
 								</motion.div>
