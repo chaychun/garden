@@ -171,12 +171,6 @@ html {
 		@apply bg-background text-foreground;
 	}
 	::selection {
-		background-color: var(--color-base-500);
-		color: var(--color-base-50);
-	}
-	h1::selection,
-	h2::selection,
-	h3::selection {
 		background-color: var(--color-base-900);
 		color: var(--color-base-50);
 	}
