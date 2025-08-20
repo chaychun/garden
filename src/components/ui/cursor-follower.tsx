@@ -102,12 +102,12 @@ export default function CursorFollower() {
 				>
 					<motion.div
 						layout
-						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1.5 text-[12px] leading-tight shadow-sm backdrop-blur-md"
+						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 pr-2 leading-tight shadow-sm backdrop-blur-md"
 					>
 						<div className="flex items-start gap-1">
 							<motion.div
 								layout
-								className="font-switzer text-base-50 text-[15px] leading-none select-none"
+								className="font-switzer text-base-50 text-lg leading-none select-none"
 								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 							>
 								+
@@ -126,7 +126,7 @@ export default function CursorFollower() {
 										transition: { type: "spring", duration: 0.2, bounce: 0 },
 									}}
 								>
-									<div className="font-switzer w-fit max-w-[40vw] truncate text-[13px] font-medium md:max-w-[24rem] md:text-[14px]">
+									<div className="font-switzer w-fit max-w-[40vw] truncate text-xs font-medium md:max-w-[24rem] md:text-[14px]">
 										{data.title}
 									</div>
 								</motion.div>
