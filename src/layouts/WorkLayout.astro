@@ -10,6 +10,7 @@ interface Props {
 	lastUpdatedDate: string;
 	types: string[];
 	disableSidebarClickOutside?: boolean;
+	floatingSidebar?: boolean;
 }
 
 const {
@@ -19,12 +20,20 @@ const {
 	lastUpdatedDate,
 	types,
 	disableSidebarClickOutside,
+	floatingSidebar = false,
 } = Astro.props;
 ---
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 flex h-dvh">
-		<div class="hidden min-[824px]:block">
+		<div
+			class:list={[
+				"hidden min-[824px]:block",
+				floatingSidebar
+					? "min-[824px]:absolute min-[824px]:inset-y-0 min-[824px]:left-0 min-[824px]:z-10"
+					: "",
+			]}
+		>
 			<WorkSidebar
 				client:media="(min-width: 824px)"
 				title={title}
@@ -39,7 +48,11 @@ const {
 		</div>
 		<div
 			id="content-area"
-			class="flex w-full flex-1 flex-col overflow-hidden pl-0 transition-all duration-800 ease-out min-[824px]:overflow-auto"
+			data-floating-sidebar={floatingSidebar}
+			class:list={[
+				"flex w-full flex-1 flex-col overflow-hidden pl-0 transition-all duration-800 ease-out min-[824px]:overflow-auto",
+				floatingSidebar ? "min-[824px]:ml-16" : "",
+			]}
 		>
 			<slot name="interactive">
 				<div
@@ -75,6 +88,14 @@ const {
 	function updateContentPadding() {
 		const contentArea = document.getElementById("content-area");
 		if (!contentArea) return;
+
+		// Skip padding logic when using floating sidebar
+		const floatingSidebar =
+			contentArea.getAttribute("data-floating-sidebar") === "true";
+		if (floatingSidebar) {
+			contentArea.classList.remove("p-4");
+			return;
+		}
 
 		// Only apply padding on desktop (custom 824px and up)
 		const isDesktop = window.matchMedia("(min-width: 824px)").matches;

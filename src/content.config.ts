@@ -19,6 +19,7 @@ const works = defineCollection({
 		previewVideo: z.string(),
 		tone: z.enum(["light", "dark"]).default("light"),
 		disableSidebarClickOutside: z.boolean().default(false),
+		floatingSidebar: z.boolean().default(false),
 	}),
 });
 
