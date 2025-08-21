@@ -48,10 +48,11 @@ const {
 		</div>
 		<div
 			id="content-area"
-			data-floating-sidebar={floatingSidebar}
 			class:list={[
-				"flex w-full flex-1 flex-col overflow-hidden pl-0 transition-all duration-800 ease-out min-[824px]:overflow-auto",
-				floatingSidebar ? "min-[824px]:ml-16" : "",
+				"flex w-full flex-1 flex-col overflow-hidden pl-0 min-[824px]:overflow-auto",
+				floatingSidebar
+					? "min-[824px]:ml-16"
+					: "min-[824px]:p-4 min-[824px]:pl-0",
 			]}
 		>
 			<slot name="interactive">
@@ -83,58 +84,11 @@ const {
 <script>
 	import { useSidebarStore } from "@/lib/stores/sidebarStore";
 
-	let unsubscribe: (() => void) | undefined;
-
-	function updateContentPadding() {
-		const contentArea = document.getElementById("content-area");
-		if (!contentArea) return;
-
-		// Skip padding logic when using floating sidebar
-		const floatingSidebar =
-			contentArea.getAttribute("data-floating-sidebar") === "true";
-		if (floatingSidebar) {
-			contentArea.classList.remove("p-4");
-			return;
-		}
-
-		// Only apply padding on desktop (custom 824px and up)
-		const isDesktop = window.matchMedia("(min-width: 824px)").matches;
-		if (!isDesktop) {
-			contentArea.classList.remove("p-4");
-			return;
-		}
-
-		try {
-			const isExpanded = useSidebarStore.getState().isExpanded;
-			contentArea.classList.toggle("p-4", isExpanded);
-		} catch (error) {
-			console.warn("Failed to update content padding:", error);
-		}
-	}
-
-	function init() {
+	document.addEventListener("astro:page-load", () => {
 		try {
 			useSidebarStore.getState().setExpanded(true);
 		} catch (error) {
 			console.warn("Failed to force open sidebar on interaction page:", error);
 		}
-
-		updateContentPadding();
-		unsubscribe = useSidebarStore.subscribe(updateContentPadding);
-		window.addEventListener("resize", updateContentPadding);
-	}
-
-	function cleanup() {
-		if (unsubscribe) {
-			unsubscribe();
-			unsubscribe = undefined;
-		}
-		window.removeEventListener("resize", updateContentPadding);
-	}
-
-	document.addEventListener("astro:page-load", () => {
-		init();
 	});
-
-	document.addEventListener("astro:before-swap", cleanup);
 </script>
