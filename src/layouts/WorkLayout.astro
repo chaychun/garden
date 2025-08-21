@@ -84,11 +84,17 @@ const {
 <script>
 	import { useSidebarStore } from "@/lib/stores/sidebarStore";
 
-	document.addEventListener("astro:page-load", () => {
+	const handlePageLoad = () => {
 		try {
 			useSidebarStore.getState().setExpanded(true);
 		} catch (error) {
 			console.warn("Failed to force open sidebar on interaction page:", error);
 		}
+	};
+
+	document.addEventListener("astro:page-load", handlePageLoad);
+
+	document.addEventListener("astro:before-swap", () => {
+		document.removeEventListener("astro:page-load", handlePageLoad);
 	});
 </script>
