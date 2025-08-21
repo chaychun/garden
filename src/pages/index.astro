@@ -2,6 +2,8 @@
 export const prerender = false;
 
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
+import ImageWidget from "@/components/widgets/ImageWidget.astro";
+import VideoWidget from "@/components/widgets/VideoWidget.astro";
 import ImageSwapWidget from "@/components/widgets/ImageSwapWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
@@ -64,18 +66,6 @@ const swapDemoImages = [
 	scrollAreaId="main-scroll"
 	filterCounts={filterCounts}
 >
-	<ImageSwapWidget
-		title="Image Swap Demo"
-		description="Rotating architecture images"
-		images={swapDemoImages}
-		types={["interaction"]}
-		data-types="interaction"
-		aspect="portrait"
-		intervalMs={500}
-		height="420px"
-		position="top"
-		style="opacity: 0; transform: translateY(10px); visibility: hidden;"
-	/>
 	{
 		allItems.map((item) => {
 			const itemDate = item.data.lastUpdatedDate;
@@ -84,18 +74,86 @@ const swapDemoImages = [
 				month: "short",
 				day: "numeric",
 			});
-
 			const typeTokens = (item.data.types ?? []) as ContentTypeId[];
+			const baseProps = {
+				title: item.data.title,
+				description: item.data.description,
+				types: typeTokens,
+				id: item.id,
+			};
 
+			const animationStyle =
+				"opacity: 0; transform: translateY(10px); visibility: hidden;";
+			const dataTypes = typeTokens.join(" ");
+
+			// If widget configuration exists, use it
+			if (item.data.widget) {
+				const { type, config } = item.data.widget;
+
+				switch (type) {
+					case "preview":
+						return (
+							<PreviewWidget
+								{...baseProps}
+								bgImage={config.bgImage}
+								previewVideo={config.previewVideo}
+								date={formattedDate}
+								tone={config.tone || "light"}
+								data-types={dataTypes}
+								style={animationStyle}
+							/>
+						);
+					case "image":
+						return (
+							<ImageWidget
+								{...baseProps}
+								image={config.image}
+								alt={config.alt}
+								height={config.height}
+								position={config.position}
+								data-types={dataTypes}
+								style={animationStyle}
+							/>
+						);
+					case "video":
+						return (
+							<VideoWidget
+								{...baseProps}
+								video={config.video}
+								poster={config.poster}
+								height={config.height}
+								position={config.position}
+								data-types={dataTypes}
+								style={animationStyle}
+							/>
+						);
+					case "imageSwap":
+						return (
+							<ImageSwapWidget
+								{...baseProps}
+								images={config.images}
+								alt={config.alt}
+								height={config.height}
+								position={config.position}
+								aspect={config.aspect}
+								intervalMs={config.intervalMs}
+								data-types={dataTypes}
+								style={animationStyle}
+							/>
+						);
+				}
+			}
+
+			// Default to PreviewWidget for backward compatibility
 			return (
 				<PreviewWidget
-					{...item.data}
-					id={item.id}
+					{...baseProps}
+					bgImage=""
+					previewVideo=""
 					date={formattedDate}
-					bgImage={item.data.bgImage || ""}
-					previewVideo={item.data.previewVideo ?? ""}
-					data-types={typeTokens.join(" ")}
-					style="opacity: 0; transform: translateY(10px); visibility: hidden;"
+					tone="light"
+					data-types={dataTypes}
+					style={animationStyle}
 				/>
 			);
 		})
