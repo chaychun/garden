@@ -20,7 +20,13 @@ function categoryColor(category: string) {
 const FilterLayoutTransition: React.FC = () => {
 	const [activeFilter, setActiveFilter] = useState("all");
 	const [selectedId, setSelectedId] = useState<number | null>(null);
+	const [hoveredId, setHoveredId] = useState<number | null>(null);
 	const closingIdRef = useRef<number | null>(null);
+	const isAnimatingRef = useRef(false);
+
+	const isItemInCurrentFilter = (item: Item) => {
+		return activeFilter === "all" || item.category === activeFilter;
+	};
 
 	return (
 		<div className="bg-base-50 relative h-full w-full">
@@ -37,50 +43,81 @@ const FilterLayoutTransition: React.FC = () => {
 
 			<div className="hidden h-full w-full @5xl:grid @5xl:grid-cols-[3fr_2fr]">
 				<div className="bg-base-50 relative h-full overflow-hidden p-4">
-					<div
-						className="grid h-full max-h-full place-items-start content-start gap-4"
-						style={{
-							gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-						}}
-					>
-						{items.map((item) => {
-							const isActive =
-								activeFilter === "all" || item.category === activeFilter;
-							const isDimmed = selectedId !== null && item.id !== selectedId;
-							const canExpand =
-								activeFilter === "all" || item.category === activeFilter;
+					<div className="flex h-full max-w-[674px] flex-col gap-4">
+						{Array.from({ length: 4 }, (_, rowIndex) => (
+							<div key={rowIndex} className="flex items-start gap-4">
+								{items.slice(rowIndex * 4, (rowIndex + 1) * 4).map((item) => {
+									const isDimmed =
+										selectedId !== null && item.id !== selectedId;
+									const isItemInFilter = isItemInCurrentFilter(item);
+									const isHovered = hoveredId === item.id;
+									const isClosing = closingIdRef.current === item.id;
 
-							const isClosing = closingIdRef.current === item.id;
-
-							return (
-								<div className="w-full">
-									<motion.button
-										key={item.id}
-										onClick={() => canExpand && setSelectedId(item.id)}
-										className="relative block w-full focus:outline-none"
-										style={{
-											cursor: canExpand ? "pointer" : "default",
-											paddingBottom: `${(1 / item.aspectRatio) * 100}%`,
-											width: "100%",
-										}}
-										aria-label={canExpand ? `View item ${item.id}` : undefined}
-										disabled={!canExpand}
-									>
-										<motion.div
-											layoutId={`item-${item.id}`}
-											className={`absolute inset-0 ${categoryColor(item.category)}`}
+									return (
+										<motion.button
+											key={item.id}
+											onClick={() => isItemInFilter && setSelectedId(item.id)}
+											onMouseEnter={() =>
+												isItemInFilter &&
+												!isAnimatingRef.current &&
+												setHoveredId(item.id)
+											}
+											onMouseLeave={() =>
+												!isAnimatingRef.current && setHoveredId(null)
+											}
+											className="relative flex-1 focus:outline-none"
 											style={{
-												zIndex: selectedId === item.id || isClosing ? 30 : 0,
+												cursor: isItemInFilter ? "pointer" : "default",
+												aspectRatio: item.aspectRatio,
+												flex: isHovered ? "3" : "2",
+												height: "auto",
 											}}
-											animate={{
-												opacity: isActive ? (isDimmed ? 0 : 1) : 0.2,
+											aria-label={
+												isItemInFilter ? `View item ${item.id}` : undefined
+											}
+											disabled={!isItemInFilter}
+											layout
+											onLayoutAnimationStart={() => {
+												isAnimatingRef.current = true;
+												setHoveredId(null);
 											}}
-											transition={{ duration: 0.25 }}
-										/>
-									</motion.button>
-								</div>
-							);
-						})}
+											onLayoutAnimationComplete={() => {
+												isAnimatingRef.current = false;
+											}}
+										>
+											<motion.div
+												layoutId={`item-${item.id}`}
+												className={`absolute inset-0 ${categoryColor(item.category)}`}
+												style={{
+													zIndex: selectedId === item.id || isClosing ? 30 : 0,
+												}}
+												animate={
+													isClosing
+														? {}
+														: {
+																opacity: isItemInFilter
+																	? isDimmed
+																		? 0
+																		: 1
+																	: 0.2,
+															}
+												}
+												transition={{
+													opacity: isClosing ? { duration: 0 } : undefined,
+												}}
+												onLayoutAnimationStart={() => {
+													isAnimatingRef.current = true;
+													setHoveredId(null);
+												}}
+												onLayoutAnimationComplete={() => {
+													isAnimatingRef.current = false;
+												}}
+											/>
+										</motion.button>
+									);
+								})}
+							</div>
+						))}
 					</div>
 					<AnimatePresence
 						mode="popLayout"
@@ -111,6 +148,13 @@ const FilterLayoutTransition: React.FC = () => {
 											<motion.div
 												layoutId={`item-${selectedId}`}
 												className={`h-full w-full ${categoryColor(current.category)}`}
+												onLayoutAnimationStart={() => {
+													isAnimatingRef.current = true;
+													setHoveredId(null);
+												}}
+												onLayoutAnimationComplete={() => {
+													isAnimatingRef.current = false;
+												}}
 											/>
 										);
 									})()}
