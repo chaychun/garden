@@ -27,6 +27,7 @@ const FilterLayoutTransition: React.FC = () => {
 	const [selectedId, setSelectedId] = useState<number | null>(null);
 	const [hoveredId, setHoveredId] = useState<number | null>(null);
 	const closingIdRef = useRef<number | null>(null);
+	const isFilterCollapseRef = useRef(false);
 	const isAnimatingRef = useRef(false);
 
 	const isItemInCurrentFilter = (item: Item) => {
@@ -97,7 +98,7 @@ const FilterLayoutTransition: React.FC = () => {
 													zIndex: selectedId === item.id || isClosing ? 30 : 0,
 												}}
 												animate={
-													isClosing
+													isClosing && !isFilterCollapseRef.current
 														? {}
 														: {
 																opacity: isItemInFilter
@@ -108,7 +109,11 @@ const FilterLayoutTransition: React.FC = () => {
 															}
 												}
 												transition={{
-													opacity: isClosing ? { duration: 0 } : undefined,
+													opacity: isClosing
+														? {
+																duration: isFilterCollapseRef.current ? 0.3 : 0,
+															}
+														: undefined,
 												}}
 												onLayoutAnimationStart={() => {
 													isAnimatingRef.current = true;
@@ -128,6 +133,7 @@ const FilterLayoutTransition: React.FC = () => {
 						mode="popLayout"
 						onExitComplete={() => {
 							closingIdRef.current = null;
+							isFilterCollapseRef.current = false;
 						}}
 					>
 						{selectedId !== null && (
@@ -199,7 +205,14 @@ const FilterLayoutTransition: React.FC = () => {
 							{categories.map((c) => (
 								<button
 									key={c}
-									onClick={() => setActiveFilter(c)}
+									onClick={() => {
+										if (selectedId !== null) {
+											isFilterCollapseRef.current = true;
+											closingIdRef.current = selectedId;
+											setSelectedId(null);
+										}
+										setActiveFilter(c);
+									}}
 									className={`px-3 py-1.5 text-xs whitespace-nowrap capitalize transition-colors ${
 										activeFilter === c
 											? "bg-base-900 text-base-50"
