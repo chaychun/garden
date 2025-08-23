@@ -62,6 +62,15 @@ export default defineConfig({
 					"Courier New",
 				],
 			},
+			{
+				provider: fontProviders.fontshare(),
+				name: "Gambarino",
+				cssVariable: "--font-gambarino",
+				weights: ["100 900"],
+				styles: ["normal", "italic"],
+				subsets: ["latin"],
+				fallbacks: ["system-ui", "sans-serif"],
+			},
 		],
 	},
 

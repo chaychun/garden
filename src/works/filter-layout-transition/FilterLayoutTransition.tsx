@@ -2,7 +2,12 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useRef, useState } from "react";
 import rawItems from "./items.json";
 
-type Item = { id: number; category: string; aspectRatio: number };
+type Item = {
+	id: number;
+	category: string;
+	title: string;
+	aspectRatio: number;
+};
 
 const categories = ["all", "chairs", "sofas", "tables", "storage", "lighting"];
 
@@ -165,26 +170,32 @@ const FilterLayoutTransition: React.FC = () => {
 				</div>
 
 				<div className="bg-base-50 flex h-full flex-col p-4">
-					{selectedId !== null && (
-						<div className="bg-base-50 mb-4 p-4">
-							{(() => {
-								const current = items.find((i) => i.id === selectedId)!;
-								return (
-									<div className="flex items-center justify-between">
-										<div className="text-base-700 text-sm">Selected</div>
-										<div className="text-base-900 text-sm font-medium">
-											#{current.id}
-										</div>
-										<div className="text-base-500 text-xs capitalize">
-											{current.category}
-										</div>
-									</div>
-								);
-							})()}
-						</div>
-					)}
-					<div className="mt-auto">
-						<div className="flex flex-row gap-2">
+					<div className="mt-auto flex flex-col gap-2">
+						<AnimatePresence>
+							{selectedId !== null && (
+								<div className="bg-base-50">
+									{(() => {
+										const current = items.find((i) => i.id === selectedId)!;
+										return (
+											<motion.div
+												initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+												animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+												exit={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+												transition={{
+													type: "spring",
+													duration: 0.4,
+													bounce: 0,
+												}}
+												className="text-base-900 font-gambarino text-4xl leading-tight"
+											>
+												{current.title}
+											</motion.div>
+										);
+									})()}
+								</div>
+							)}
+						</AnimatePresence>
+						<div className="mt-4 flex flex-row gap-2">
 							{categories.map((c) => (
 								<button
 									key={c}
