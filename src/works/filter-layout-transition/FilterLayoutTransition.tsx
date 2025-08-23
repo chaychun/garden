@@ -1,3 +1,4 @@
+import { FilterButton } from "@/components/ui/filter-button";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import React, { useRef, useState } from "react";
 import rawItems from "./items.json";
@@ -37,7 +38,7 @@ const FilterLayoutTransition: React.FC = () => {
 		<MotionConfig
 			transition={{
 				type: "spring",
-				duration: 0.4,
+				duration: 0.6,
 				bounce: 0,
 			}}
 		>
@@ -180,8 +181,9 @@ const FilterLayoutTransition: React.FC = () => {
 							</AnimatePresence>
 							<div className="mt-4 flex flex-row gap-2">
 								{categories.map((c) => (
-									<button
+									<FilterButton
 										key={c}
+										active={activeFilter === c}
 										onClick={() => {
 											if (selectedId !== null) {
 												isFilterCollapseRef.current = true;
@@ -190,14 +192,11 @@ const FilterLayoutTransition: React.FC = () => {
 											}
 											setActiveFilter(c);
 										}}
-										className={`px-3 py-1.5 text-xs whitespace-nowrap capitalize transition-colors duration-200 ${
-											activeFilter === c
-												? "bg-base-900 text-base-50"
-												: "bg-base-50 text-base-700 hover:bg-base-100"
-										}`}
+										className="text-xs capitalize"
+										ariaLabel={`Filter ${c}`}
 									>
 										{c}
-									</button>
+									</FilterButton>
 								))}
 							</div>
 						</div>
