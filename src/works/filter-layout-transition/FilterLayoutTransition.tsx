@@ -1,18 +1,18 @@
 import { FilterButton } from "@/components/ui/filter-button";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import React, { useRef, useState } from "react";
 import rawItems from "./items.json";
 
 type Item = {
-	id: number;
+	id: string;
 	category: string;
 	title: string;
-	aspectRatio: number;
 };
 
 const categories = ["all", "chairs", "sofas", "tables", "storage", "lighting"];
 
-const items = rawItems as Item[];
+const items: Item[] = rawItems;
 
 function categoryColor(category: string) {
 	if (category === "chairs") return "bg-emerald-400";
@@ -25,9 +25,9 @@ function categoryColor(category: string) {
 
 const FilterLayoutTransition: React.FC = () => {
 	const [activeFilter, setActiveFilter] = useState("all");
-	const [selectedId, setSelectedId] = useState<number | null>(null);
-	const [hoveredId, setHoveredId] = useState<number | null>(null);
-	const closingIdRef = useRef<number | null>(null);
+	const [selectedId, setSelectedId] = useState<string | null>(null);
+	const [hoveredId, setHoveredId] = useState<string | null>(null);
+	const closingIdRef = useRef<string | null>(null);
 	const isFilterCollapseRef = useRef(false);
 
 	const isItemInCurrentFilter = (item: Item) => {
@@ -83,9 +83,7 @@ const FilterLayoutTransition: React.FC = () => {
 												className="relative flex-1 focus:outline-none"
 												style={{
 													cursor: isItemInFilter ? "pointer" : "default",
-													aspectRatio: item.aspectRatio,
 													flex: isHovered ? "3" : "2",
-													height: "auto",
 												}}
 												aria-label={
 													isItemInFilter ? `View item ${item.id}` : undefined
@@ -93,9 +91,11 @@ const FilterLayoutTransition: React.FC = () => {
 												disabled={!isItemInFilter}
 												layout
 											>
-												<motion.div
+												<motion.img
 													layoutId={`item-${item.id}`}
-													className={`absolute inset-0 ${categoryColor(item.category)}`}
+													src={getCldImageUrl({ src: item.id })}
+													alt={item.title}
+													className="block h-auto w-full"
 													style={{
 														zIndex:
 															selectedId === item.id || isClosing ? 30 : 0,
@@ -146,9 +146,11 @@ const FilterLayoutTransition: React.FC = () => {
 										{(() => {
 											const current = items.find((i) => i.id === selectedId)!;
 											return (
-												<motion.div
+												<motion.img
 													layoutId={`item-${selectedId}`}
-													className={`h-full w-full ${categoryColor(current.category)}`}
+													src={getCldImageUrl({ src: current.id })}
+													alt={current.title}
+													className="h-full w-full object-cover"
 												/>
 											);
 										})()}
