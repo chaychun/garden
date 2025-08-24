@@ -14,15 +14,6 @@ const categories = ["all", "chairs", "sofas", "tables", "storage", "lighting"];
 
 const items: Item[] = rawItems;
 
-function categoryColor(category: string) {
-	if (category === "chairs") return "bg-emerald-400";
-	if (category === "sofas") return "bg-sky-400";
-	if (category === "tables") return "bg-amber-400";
-	if (category === "storage") return "bg-fuchsia-400";
-	if (category === "lighting") return "bg-lime-400";
-	return "bg-gray-300";
-}
-
 const FilterLayoutTransition: React.FC = () => {
 	const [activeFilter, setActiveFilter] = useState("all");
 	const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -58,7 +49,20 @@ const FilterLayoutTransition: React.FC = () => {
 					<div className="bg-base-50 relative h-full overflow-hidden p-4">
 						<div className="flex h-full max-w-[674px] flex-col gap-4">
 							{Array.from({ length: 4 }, (_, rowIndex) => (
-								<div key={rowIndex} className="flex items-start gap-4">
+								<div
+									key={rowIndex}
+									className="relative flex items-start gap-4"
+									style={{
+										zIndex: items
+											.slice(rowIndex * 4, (rowIndex + 1) * 4)
+											.some(
+												(i) =>
+													i.id === selectedId || closingIdRef.current === i.id,
+											)
+											? 4
+											: 0,
+									}}
+								>
 									{items.slice(rowIndex * 4, (rowIndex + 1) * 4).map((item) => {
 										const isDimmed =
 											selectedId !== null && item.id !== selectedId;
@@ -84,6 +88,7 @@ const FilterLayoutTransition: React.FC = () => {
 												style={{
 													cursor: isItemInFilter ? "pointer" : "default",
 													flex: isHovered ? "3" : "2",
+													zIndex: selectedId === item.id || isClosing ? 5 : 0,
 												}}
 												aria-label={
 													isItemInFilter ? `View item ${item.id}` : undefined
