@@ -34,7 +34,7 @@ export function FilterButton({
 		>
 			<span className="relative z-10">{children}</span>
 			<motion.span
-				aria-hidden
+				aria-hidden="true"
 				className="bg-base-100 group-hover:bg-base-50 absolute inset-[1px] z-0 transition-colors duration-300"
 				initial={false}
 				animate={{

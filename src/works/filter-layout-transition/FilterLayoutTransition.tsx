@@ -1,7 +1,7 @@
 import { FilterButton } from "@/components/ui/filter-button";
 import { getCldImageUrl } from "astro-cloudinary/helpers";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import rawItems from "./items.json";
 
 type Item = {
@@ -20,6 +20,30 @@ const FilterLayoutTransition: React.FC = () => {
 	const [hoveredId, setHoveredId] = useState<string | null>(null);
 	const closingIdRef = useRef<string | null>(null);
 	const isFilterCollapseRef = useRef(false);
+
+	const collapseExpandedView = useCallback(() => {
+		if (selectedId !== null) {
+			closingIdRef.current = selectedId;
+			setHoveredId(null);
+			setSelectedId(null);
+		}
+	}, [selectedId]);
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape" && selectedId !== null) {
+				collapseExpandedView();
+			}
+		};
+
+		if (selectedId !== null) {
+			document.addEventListener("keydown", handleKeyDown);
+		}
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [selectedId, collapseExpandedView]);
 
 	const isItemInCurrentFilter = (item: Item) => {
 		return activeFilter === "all" || item.category === activeFilter;
@@ -139,12 +163,7 @@ const FilterLayoutTransition: React.FC = () => {
 									exit={{ opacity: 0 }}
 								>
 									<motion.button
-										onClick={() => {
-											if (selectedId !== null)
-												closingIdRef.current = selectedId;
-											setHoveredId(null);
-											setSelectedId(null);
-										}}
+										onClick={collapseExpandedView}
 										className="block h-full w-full cursor-pointer focus:outline-none"
 										aria-label="Close expanded view"
 									>
