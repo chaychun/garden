@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import TopBar from "../components/nav/TopBar";
-import { FilterDescription } from "@/components/nav/FilterDescription";
+import Header from "../components/nav/header";
 
 interface Props {
 	title: string;
@@ -13,49 +12,18 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div class="bg-base-50 min-h-dvh">
-		<TopBar title="Chayut" filterCounts={filterCounts} client:only="react" />
+	<div class="bg-base-50 flex h-dvh flex-col justify-between">
+		<Header title="Chayut" filterCounts={filterCounts} client:only="react" />
 
 		<div
-			class="grid h-dvh w-full grid-rows-[112px_auto_1fr] md:grid-rows-[100px_120px_1fr]"
+			class="p-4 md:flex md:max-h-3/4 md:overflow-x-auto md:overflow-y-hidden"
+			id="scroll-container"
+			data-scroll-area-id={scrollAreaId}
 		>
-			<div class="row-start-1 px-3"></div>
-			<div class="row-start-2 px-3">
-				<div class="md:hidden">
-					<div
-						class="mx-auto mt-8 mb-12 grid grid-cols-4 p-3 md:max-w-none md:grid-cols-6 lg:grid-cols-5"
-					>
-						<div class="col-span-3 col-start-2">
-							<FilterDescription
-								className="text-base-700 text-xl leading-none"
-								client:only="react"
-							/>
-						</div>
-					</div>
-				</div>
-				<div class="hidden md:block">
-					<div
-						class="mx-auto grid grid-cols-4 p-3 md:grid-cols-6 lg:grid-cols-5"
-					>
-						<div class="col-span-3 col-start-2 md:col-span-3 md:col-start-4">
-							<FilterDescription
-								className="text-base-700 text-xl leading-none"
-								client:only="react"
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div
-				class="row-start-3 min-h-0 md:flex md:h-full md:overflow-x-auto md:overflow-y-hidden"
-				id="scroll-container"
-				data-scroll-area-id={scrollAreaId}
+				class="mx-auto flex max-w-[528px] flex-col md:mx-0 md:max-w-none md:flex-row md:*:pr-4"
 			>
-				<div
-					class="mx-auto flex max-w-[528px] flex-col md:mx-0 md:max-w-none md:flex-row"
-				>
-					<slot />
-				</div>
+				<slot />
 			</div>
 		</div>
 
