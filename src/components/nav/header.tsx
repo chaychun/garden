@@ -11,44 +11,43 @@ interface HeaderProps {
 export default function Header({ title, filterCounts }: HeaderProps) {
 	const { activeFilter, setActiveFilter } = useFilterStore();
 
-	const totalCount = Object.values(filterCounts).reduce(
-		(sum, count) => sum + count,
-		0,
-	);
-
 	const handleFilterClick = (filter: FilterType) => {
 		setActiveFilter(filter);
 	};
 
+	const getFilterCount = (filter: FilterType): number => {
+		if (filter === "All") {
+			return Object.values(filterCounts).reduce((sum, count) => sum + count, 0);
+		}
+		return filterCounts[filter] || 0;
+	};
+
 	return (
-		<header className="px-5 py-5">
+		<header className="p-4">
 			<div className="grid grid-cols-5 items-start gap-2.5">
-				{/* Brand/Logo */}
-				<div className="text-base-900 text-sm font-medium md:text-base">
-					{title}.
-				</div>
+				<div className="text-base-900 text-xl font-medium">{title}.</div>
 
-				{/* Filters Section */}
 				<div className="flex gap-2.5">
-					{/* Count */}
-					<div className="text-base-900 text-xs leading-[1.1] font-semibold">
-						({totalCount})
-					</div>
-
-					{/* Filter Options */}
 					<div className="flex flex-col">
 						{AVAILABLE_FILTERS.map((filter) => (
 							<button
 								key={filter}
 								onClick={() => handleFilterClick(filter)}
 								className={cn(
-									"text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
+									"relative text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
 									activeFilter === filter
 										? "text-base-900"
 										: "text-base-300 hover:text-base-700",
 								)}
 							>
-								{filter.toLowerCase()}
+								{activeFilter === filter && (
+									<span className="text-base-900 absolute -left-6 text-xs leading-[1.1] font-semibold">
+										({getFilterCount(filter)})
+									</span>
+								)}
+								<span className="flex items-center">
+									{filter.toLowerCase()}
+								</span>
 							</button>
 						))}
 					</div>
@@ -65,13 +64,13 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						<span className="text-base-500 text-xs leading-[1.1] font-semibold uppercase">
 							More info
 						</span>
-						<ChevronDown className="text-base-500 h-4 w-4" strokeWidth={3} />
+						<ChevronDown className="text-base-500 h-3 w-3" strokeWidth={3} />
 					</div>
 				</div>
 
 				{/* Contact */}
 				<div className="text-base-900 hover:text-base-600 cursor-pointer text-right text-xs leading-[1.1] font-semibold uppercase transition-colors">
-					contact
+					Contact
 				</div>
 			</div>
 		</header>
