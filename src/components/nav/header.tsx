@@ -1,0 +1,79 @@
+import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
+import { useFilterStore } from "@/lib/stores/filterStore";
+import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+
+interface HeaderProps {
+	title: string;
+	filterCounts: Record<string, number>;
+}
+
+export default function Header({ title, filterCounts }: HeaderProps) {
+	const { activeFilter, setActiveFilter } = useFilterStore();
+
+	const totalCount = Object.values(filterCounts).reduce(
+		(sum, count) => sum + count,
+		0,
+	);
+
+	const handleFilterClick = (filter: FilterType) => {
+		setActiveFilter(filter);
+	};
+
+	return (
+		<header className="px-5 py-5">
+			<div className="grid grid-cols-5 items-start gap-2.5">
+				{/* Brand/Logo */}
+				<div className="text-base-900 text-sm font-medium md:text-base">
+					{title}.
+				</div>
+
+				{/* Filters Section */}
+				<div className="flex gap-2.5">
+					{/* Count */}
+					<div className="text-base-900 text-xs leading-[1.1] font-semibold">
+						({totalCount})
+					</div>
+
+					{/* Filter Options */}
+					<div className="flex flex-col">
+						{AVAILABLE_FILTERS.map((filter) => (
+							<button
+								key={filter}
+								onClick={() => handleFilterClick(filter)}
+								className={cn(
+									"text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
+									activeFilter === filter
+										? "text-base-900"
+										: "text-base-300 hover:text-base-700",
+								)}
+							>
+								{filter.toLowerCase()}
+							</button>
+						))}
+					</div>
+				</div>
+
+				{/* Description Section (spans 2 columns) */}
+				<div className="col-span-2 flex flex-col gap-1">
+					<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
+						I'm a self-taught designer-builder exploring interesting patterns on
+						the web.
+					</div>
+
+					<div className="mt-2 flex items-center gap-1">
+						<span className="text-base-500 text-xs leading-[1.1] font-semibold uppercase">
+							More info
+						</span>
+						<ChevronDown className="text-base-500 h-4 w-4" strokeWidth={3} />
+					</div>
+				</div>
+
+				{/* Contact */}
+				<div className="text-base-900 hover:text-base-600 cursor-pointer text-right text-xs leading-[1.1] font-semibold uppercase transition-colors">
+					contact
+				</div>
+			</div>
+		</header>
+	);
+}
