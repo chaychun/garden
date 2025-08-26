@@ -12,16 +12,16 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div class="bg-base-50 flex h-dvh flex-col">
+	<div class="bg-base-50 flex h-dvh flex-col justify-between">
 		<Header title="Chayut" filterCounts={filterCounts} client:only="react" />
 
 		<div
-			class="md:flex md:overflow-x-auto md:overflow-y-hidden"
+			class="p-4 md:flex md:max-h-3/4 md:overflow-x-auto md:overflow-y-hidden"
 			id="scroll-container"
 			data-scroll-area-id={scrollAreaId}
 		>
 			<div
-				class="mx-auto flex max-w-[528px] flex-col gap-4 p-4 md:mx-0 md:max-w-none md:flex-row"
+				class="mx-auto flex max-w-[528px] flex-col md:mx-0 md:max-w-none md:flex-row md:*:pr-4"
 			>
 				<slot />
 			</div>

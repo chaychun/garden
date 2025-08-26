@@ -1,7 +1,7 @@
 import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 interface HeaderProps {
 	title: string;
@@ -64,14 +64,17 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						<span className="text-base-500 text-xs leading-[1.1] font-semibold uppercase">
 							More info
 						</span>
-						<ChevronDown className="text-base-500 h-3 w-3" strokeWidth={3} />
+						<ArrowDown className="text-base-500 h-3 w-3" strokeWidth={2.5} />
 					</div>
 				</div>
 
 				{/* Contact */}
-				<div className="text-base-900 hover:text-base-600 cursor-pointer text-right text-xs leading-[1.1] font-semibold uppercase transition-colors">
+				<a
+					href="mailto:chun.chayut@gmail.com"
+					className="text-base-900 hover:text-base-600 cursor-pointer text-right text-xs leading-[1.1] font-semibold uppercase transition-colors"
+				>
 					Contact
-				</div>
+				</a>
 			</div>
 		</header>
 	);
