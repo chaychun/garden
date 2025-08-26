@@ -31,7 +31,7 @@ export default defineConfig({
 			{
 				provider: fontProviders.fontshare(),
 				name: "Switzer",
-				cssVariable: "--font-switzer",
+				cssVariable: "--astro-font-switzer",
 				weights: ["100 900"],
 				styles: ["normal", "italic"],
 				subsets: ["latin"],
@@ -40,7 +40,7 @@ export default defineConfig({
 			{
 				provider: fontProviders.fontshare(),
 				name: "Cabinet Grotesk",
-				cssVariable: "--font-cabinet",
+				cssVariable: "--astro-font-cabinet",
 				weights: ["100 900"],
 				styles: ["normal", "italic"],
 				subsets: ["latin"],
@@ -49,7 +49,7 @@ export default defineConfig({
 			{
 				provider: fontProviders.fontshare(),
 				name: "Tabular",
-				cssVariable: "--font-tabular",
+				cssVariable: "--astro-font-tabular",
 				weights: ["300 700"],
 				styles: ["normal", "italic"],
 				subsets: ["latin"],
@@ -65,7 +65,7 @@ export default defineConfig({
 			{
 				provider: fontProviders.fontshare(),
 				name: "Gambarino",
-				cssVariable: "--font-gambarino",
+				cssVariable: "--astro-font-gambarino",
 				weights: ["100 900"],
 				styles: ["normal", "italic"],
 				subsets: ["latin"],
