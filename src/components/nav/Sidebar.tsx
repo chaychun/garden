@@ -144,7 +144,7 @@ export default function Sidebar({
 		<MotionConfig transition={defaultTransition}>
 			<motion.div
 				ref={sidebarRef}
-				className="bg-base-50 flex h-full flex-col justify-between overflow-hidden"
+				className="bg-base-50 z-9999 flex h-full flex-col justify-between overflow-hidden"
 				initial={{ width: 400 }}
 				animate={{
 					width: isExpanded ? 400 : 64,
