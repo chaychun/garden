@@ -3,7 +3,7 @@ import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface HeaderProps {
 	title: string;
@@ -23,7 +23,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 			<div className="relative mt-2 flex items-center gap-1">
 				<button
 					onClick={() => setIsInfoOpen((v) => !v)}
-					className="text-base-500 hover:text-base-700 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
+					className="text-base-300 hover:text-base-700 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
 				>
 					<span>{isInfoOpen ? "Less info" : "More info"}</span>
 					{isInfoOpen ? (
@@ -71,17 +71,32 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 		return filterCounts[filter] || 0;
 	};
 
+	const isMobile = () => window.innerWidth < 768;
+
+	useEffect(() => {
+		if (isMobile() && isInfoOpen) {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+			document.documentElement.classList.add("mobile-menu-open");
+		} else {
+			document.documentElement.classList.remove("mobile-menu-open");
+		}
+
+		return () => {
+			document.documentElement.classList.remove("mobile-menu-open");
+		};
+	}, [isInfoOpen]);
+
 	return (
 		<header className="relative z-50 p-4">
 			{isInfoOpen && (
 				<div
-					className="from-base-50/50 fixed inset-0 z-30 bg-gradient-to-b to-transparent"
+					className="from-base-50/60 via-base-50/60 fixed inset-x-0 top-0 z-30 h-[120dvh] bg-gradient-to-b to-transparent"
 					onClick={() => setIsInfoOpen(false)}
 				>
 					<ProgressiveBlur
 						className="h-full w-full"
 						direction="top"
-						blurIntensity={2}
+						blurIntensity={5}
 					/>
 				</div>
 			)}
