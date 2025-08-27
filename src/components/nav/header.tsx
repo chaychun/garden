@@ -3,8 +3,47 @@ import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { easeOut } from "motion";
+import { AnimatePresence, motion, stagger } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { UnderlineLink } from "../ui/underline-link";
+
+const infoVariants = {
+	container: {
+		hidden: {
+			transition: {
+				duration: 0.3,
+				delayChildren: stagger(0.05, {
+					from: "last",
+				}),
+				ease: easeOut,
+			},
+		},
+		visible: {
+			transition: {
+				duration: 0.3,
+				delayChildren: stagger(0.05),
+				ease: easeOut,
+			},
+		},
+	},
+	block: {
+		hidden: {
+			opacity: 0,
+			y: 8,
+			filter: "blur(8px)",
+		},
+		visible: {
+			opacity: 1,
+			y: 0,
+			filter: "blur(0px)",
+			transition: {
+				duration: 0.2,
+				ease: easeOut,
+			},
+		},
+	},
+};
 
 interface HeaderProps {
 	title: string;
@@ -33,48 +72,76 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
 					)}
 				</button>
-				{isInfoOpen && (
-					<div className="absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full">
-						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-							<div className="text-base-900 flex flex-col gap-1 text-xs leading-[1.35]">
-								<div className="font-semibold uppercase">About</div>
-								<p className="text-base-700">
-									This site is a curated collection of my experiments in web
-									design and interaction. I build things I find interesting to
-									learn about how they work. Many of them are inspired by other
-									works on the web, or my attempt at recreating them one-to-one.
-									I've made sure to credit the original source when I can.
-								</p>
-								<p className="text-base-700">
-									I build mainly with Astro and React. I also quite like motion
-									design, if you can't tell. Other than that, I also like
-									writing notes, reading psychology, and doing recreational
-									mathematics.
-								</p>
+				<AnimatePresence>
+					{isInfoOpen && (
+						<motion.div
+							className="absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full"
+							initial="hidden"
+							animate="visible"
+							exit="hidden"
+							variants={infoVariants.container}
+						>
+							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+								<div className="flex flex-col gap-3">
+									<motion.div
+										variants={infoVariants.block}
+										className="text-base-900 text-xs font-semibold uppercase"
+									>
+										About
+									</motion.div>
+									<motion.p
+										variants={infoVariants.block}
+										className="text-base-700 text-xs leading-[1.35]"
+									>
+										This site is a curated collection of my experiments in web
+										design and interaction. I build things I find interesting to
+										learn about how they work. Many of them are inspired by
+										other works on the web, or my attempt at recreating them
+										one-to-one. I've made sure to credit the original source
+										when I can.
+									</motion.p>
+									<motion.p
+										variants={infoVariants.block}
+										className="text-base-700 text-xs leading-[1.35]"
+									>
+										I build mainly with Astro and React. I also quite like
+										motion design, if you can't tell. Other than that, I also
+										like writing notes, reading psychology, and doing
+										recreational mathematics.
+									</motion.p>
+								</div>
+								<div className="flex flex-col gap-3">
+									<motion.div
+										variants={infoVariants.block}
+										className="text-base-900 text-xs font-semibold uppercase"
+									>
+										Find me
+									</motion.div>
+									<motion.ul
+										variants={infoVariants.block}
+										className="text-base-700 flex gap-2 text-xs"
+									>
+										<li>
+											<UnderlineLink href="mailto:chun.chayut@gmail.com">
+												Email
+											</UnderlineLink>
+										</li>
+										<li>
+											<UnderlineLink href="https://github.com/chayut-chunsamphran">
+												GitHub
+											</UnderlineLink>
+										</li>
+										<li>
+											<UnderlineLink href="https://x.com/ChunChayut">
+												Twitter
+											</UnderlineLink>
+										</li>
+									</motion.ul>
+								</div>
 							</div>
-							<div className="text-base-900 flex flex-col gap-1 text-xs leading-[1.35]">
-								<div className="font-semibold uppercase">Find me</div>
-								<ul className="text-base-700 flex gap-2">
-									<li>
-										<UnderlineLink href="mailto:chun.chayut@gmail.com">
-											Email
-										</UnderlineLink>
-									</li>
-									<li>
-										<UnderlineLink href="https://github.com/chayut-chunsamphran">
-											GitHub
-										</UnderlineLink>
-									</li>
-									<li>
-										<UnderlineLink href="https://x.com/ChunChayut">
-											Twitter
-										</UnderlineLink>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				)}
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</div>
 		),
 		[isInfoOpen],
@@ -104,18 +171,51 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 
 	return (
 		<header className="relative z-50 p-4">
-			{isInfoOpen && (
-				<div
-					className="from-base-50/60 via-base-50/60 fixed inset-x-0 top-0 z-30 h-[120dvh] bg-gradient-to-b to-transparent"
-					onClick={() => setIsInfoOpen(false)}
-				>
-					<ProgressiveBlur
-						className="h-full w-full"
-						direction="top"
-						blurIntensity={5}
-					/>
-				</div>
-			)}
+			<AnimatePresence>
+				{isInfoOpen && (
+					<div
+						className="fixed inset-x-0 top-0 z-30"
+						onClick={() => setIsInfoOpen(false)}
+					>
+						<motion.div
+							className="fixed inset-0"
+							style={{
+								background:
+									"linear-gradient(to bottom, rgba(248, 248, 247, 0.7) 0%, rgba(248, 248, 247, 0.6) 20%, rgba(248, 248, 247, 0.1) 70%, transparent 100%)",
+								transformOrigin: "top center",
+							}}
+							initial={{ scale: 1, opacity: 0 }}
+							animate={{ scale: 3, opacity: 1 }}
+							exit={{
+								scale: 1,
+								opacity: 0,
+								transition: { ease: "easeIn", duration: 0.3 },
+							}}
+							transition={{
+								duration: 0.4,
+								ease: easeOut,
+							}}
+						/>
+
+						<ProgressiveBlur
+							direction="top"
+							blurLayers={10}
+							blurIntensity={5}
+							className="absolute inset-x-0 top-0 h-[120dvh]"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{
+								opacity: 0,
+								transition: { ease: "easeIn", duration: 0.3 },
+							}}
+							transition={{
+								duration: 0.4,
+								ease: easeOut,
+							}}
+						/>
+					</div>
+				)}
+			</AnimatePresence>
 			<div className="relative z-50">
 				<div className="border-base-100 bg-base-50 fixed top-0 right-0 left-0 z-40 border-b md:hidden">
 					<div className="mx-auto px-4 py-3">
