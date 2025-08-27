@@ -127,12 +127,18 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 											</UnderlineLink>
 										</li>
 										<li>
-											<UnderlineLink href="https://github.com/chayut-chunsamphran">
+											<UnderlineLink
+												href="https://github.com/chaychun"
+												target="_blank"
+											>
 												GitHub
 											</UnderlineLink>
 										</li>
 										<li>
-											<UnderlineLink href="https://x.com/ChunChayut">
+											<UnderlineLink
+												href="https://x.com/ChunChayut"
+												target="_blank"
+											>
 												Twitter
 											</UnderlineLink>
 										</li>
