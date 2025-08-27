@@ -4,6 +4,7 @@ import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { UnderlineLink } from "../ui/underline-link";
 
 interface HeaderProps {
 	title: string;
@@ -23,7 +24,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 			<div className="relative mt-2 flex items-center gap-1">
 				<button
 					onClick={() => setIsInfoOpen((v) => !v)}
-					className="text-base-300 hover:text-base-700 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
+					className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
 				>
 					<span>{isInfoOpen ? "Less info" : "More info"}</span>
 					{isInfoOpen ? (
@@ -33,28 +34,43 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 					)}
 				</button>
 				{isInfoOpen && (
-					<div className="absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)]">
+					<div className="absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full">
 						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-							<div className="text-base-900 flex flex-col gap-2 text-xs leading-[1.35]">
-								<div className="font-semibold uppercase">About OS</div>
-								<p>
-									An independent design engineering studio for the web. We solve
-									the gap between creative vision and technical execution.
+							<div className="text-base-900 flex flex-col gap-1 text-xs leading-[1.35]">
+								<div className="font-semibold uppercase">About</div>
+								<p className="text-base-700">
+									This site is a curated collection of my experiments in web
+									design and interaction. I build things I find interesting to
+									learn about how they work. Many of them are inspired by other
+									works on the web, or my attempt at recreating them one-to-one.
+									I've made sure to credit the original source when I can.
 								</p>
-								<a className="underline" href="#">
-									Learn more
-								</a>
+								<p className="text-base-700">
+									I build mainly with Astro and React. I also quite like motion
+									design, if you can't tell. Other than that, I also like
+									writing notes, reading psychology, and doing recreational
+									mathematics.
+								</p>
 							</div>
-							<div className="text-base-900 flex flex-col gap-2 text-xs leading-[1.35]">
-								<div className="font-semibold uppercase">Philosophy</div>
-								<ul className="list-disc pl-5">
-									<li>Win in the details</li>
-									<li>Build to elevate, not just execute</li>
-									<li>Extension of teams, not external vendors</li>
+							<div className="text-base-900 flex flex-col gap-1 text-xs leading-[1.35]">
+								<div className="font-semibold uppercase">Find me</div>
+								<ul className="text-base-700 flex gap-2">
+									<li>
+										<UnderlineLink href="mailto:chun.chayut@gmail.com">
+											Email
+										</UnderlineLink>
+									</li>
+									<li>
+										<UnderlineLink href="https://github.com/chayut-chunsamphran">
+											GitHub
+										</UnderlineLink>
+									</li>
+									<li>
+										<UnderlineLink href="https://x.com/ChunChayut">
+											Twitter
+										</UnderlineLink>
+									</li>
 								</ul>
-								<a className="underline" href="#">
-									Contact
-								</a>
 							</div>
 						</div>
 					</div>
@@ -112,7 +128,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 										"flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
 										activeFilter === filter
 											? "text-base-900"
-											: "text-base-300 hover:text-base-700",
+											: "text-base-300 hover:text-base-600",
 									)}
 								>
 									<span>{filter.toLowerCase()}</span>
@@ -155,8 +171,8 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 					{/* Description Section (spans 2 columns) */}
 					<div className="col-span-2 flex flex-col gap-1">
 						<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
-							I'm a self-taught designer-builder exploring interesting patterns
-							on the web.
+							Self-taught designer-builder exploring interesting patterns on the
+							web.
 						</div>
 
 						{infoButton}
@@ -181,8 +197,8 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						{/* Description Section (spans 3 columns) */}
 						<div className="col-span-3 flex flex-col gap-1">
 							<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
-								I'm a self-taught designer-builder exploring interesting
-								patterns on the web.
+								Self-taught designer-builder exploring interesting patterns on
+								the web.
 							</div>
 
 							{infoButton}
