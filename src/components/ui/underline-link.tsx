@@ -5,12 +5,14 @@ interface UnderlineLinkProps {
 	href: string;
 	children: React.ReactNode;
 	className?: string;
+	[key: string]: any;
 }
 
 export function UnderlineLink({
 	href,
 	children,
 	className = "",
+	...rest
 }: UnderlineLinkProps) {
 	const [isHovered, setIsHovered] = useState(false);
 
@@ -27,6 +29,7 @@ export function UnderlineLink({
 				className={`relative inline-flex items-baseline overflow-hidden ${className}`}
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
+				{...rest}
 			>
 				{children}
 
