@@ -44,90 +44,99 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 	]}
 	{...rest}
 >
-	<a
-		href={`/work/${encodeURIComponent(id)}/`}
-		class="block"
-		aria-label={`View ${title}`}
-		data-cursor-hover
-		data-cursor-title={title}
-	>
-		<div
-			class:list={[
-				"group relative flex w-full items-center justify-center",
-				"aspect-4/5",
-			]}
-			style={{
-				backgroundImage: `url(${bgImageUrl})`,
-				backgroundSize: "cover",
-			}}
+	{/** Desktop preview (unchanged) */}
+	<div class="hidden md:block">
+		<a
+			href={`/work/${encodeURIComponent(id)}/`}
+			class="block"
+			aria-label={`View ${title}`}
+			data-cursor-hover
+			data-cursor-title={title}
 		>
-			<BlurOverlay client:load />
-
-			{
-				types && types.length > 0 && (
-					<div class="absolute top-2 right-2 hidden gap-2 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100">
-						{types.map((t) => (
-							<Badge
-								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
-								variant={tone}
-							/>
-						))}
-					</div>
-				)
-			}
-
 			<div
 				class:list={[
-					"absolute top-2 left-2",
-					"opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100",
-					dateColorClass,
+					"group relative flex w-full items-center justify-center",
+					"aspect-4/5",
 				]}
+				style={{
+					backgroundImage: `url(${bgImageUrl})`,
+					backgroundSize: "cover",
+				}}
 			>
-				<span class="inline-block px-3 py-1 font-mono text-[10px] select-none">
-					{date}
-				</span>
-			</div>
+				<BlurOverlay client:load />
 
-			<video
-				src={previewVideoUrl}
-				loop
-				muted
-				autoplay
-				playsinline
-				class="relative z-10 h-auto w-[90%]"></video>
+				{
+					types && types.length > 0 && (
+						<div class="absolute top-2 right-2 hidden gap-2 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100">
+							{types.map((t) => (
+								<Badge
+									text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
+									variant={tone}
+								/>
+							))}
+						</div>
+					)
+				}
 
-			<div
-				class="pointer-events-none absolute right-2 bottom-2 left-2 hidden flex-col gap-1 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100"
-			>
-				<h2
+				<div
 					class:list={[
-						"font-switzer text-base leading-tight font-medium",
-						titleColorClass,
+						"absolute top-2 left-2",
+						"opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100",
+						dateColorClass,
 					]}
 				>
-					{title}
-				</h2>
-				<p
-					class:list={[
-						"font-switzer text-xs leading-none",
-						descriptionColorClass,
-					]}
+					<span class="inline-block px-3 py-1 font-mono text-[10px] select-none">
+						{date}
+					</span>
+				</div>
+
+				<video
+					src={previewVideoUrl}
+					loop
+					muted
+					autoplay
+					playsinline
+					class="relative z-10 h-auto w-[90%]"></video>
+
+				<div
+					class="pointer-events-none absolute right-2 bottom-2 left-2 hidden flex-col gap-1 opacity-0 transition-opacity duration-300 md:flex md:opacity-0 md:group-hover:opacity-100"
 				>
-					{description}
-				</p>
+					<h2
+						class:list={[
+							"font-switzer text-base leading-tight font-medium",
+							titleColorClass,
+						]}
+					>
+						{title}
+					</h2>
+					<p
+						class:list={[
+							"font-switzer text-xs leading-none",
+							descriptionColorClass,
+						]}
+					>
+						{description}
+					</p>
+				</div>
 			</div>
-		</div>
-	</a>
-	<div class="flex flex-col gap-2 md:hidden">
-		<div class="flex items-center justify-between gap-2">
-			<h2
-				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
+		</a>
+	</div>
+
+	{/** Mobile redesigned layout */}
+	<div class="grid grid-cols-5 items-start gap-2.5 md:hidden">
+		<div class="col-span-2 flex flex-col gap-2">
+			<h2 class="text-base-900 text-sm leading-tight font-medium">{title}</h2>
+			<p class="text-base-600 text-xs leading-[1.35] line-clamp-5">{description}</p>
+			<a
+				href={`/work/${encodeURIComponent(id)}/`}
+				class="text-base-300 hover:text-base-600 text-[10px] leading-[1.1] font-semibold uppercase transition-colors"
+				aria-label={`View ${title}`}
 			>
-				{title}
-			</h2>
+				See more
+			</a>
 			{
 				types && types.length > 0 && (
-					<div class="flex flex-none gap-2">
+					<div class="flex flex-wrap gap-1.5 pt-1">
 						{types.map((t) => (
 							<Badge
 								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
@@ -138,8 +147,21 @@ const dateColorClass = tone === "light" ? "text-white" : "text-base-500";
 				)
 			}
 		</div>
-		<p class="font-switzer text-base-600 leading-none">
-			{description}
-		</p>
+		<div class="col-span-3">
+			<a
+				href={`/work/${encodeURIComponent(id)}/`}
+				class="block"
+				aria-label={`View ${title}`}
+				data-cursor-hover
+				data-cursor-title={title}
+			>
+				<div
+					class="relative overflow-hidden rounded-xl border border-base-100 bg-white"
+					style={{ backgroundImage: `url(${bgImageUrl})`, backgroundSize: "cover" }}
+				>
+					<div class="aspect-4/5 w-full"></div>
+				</div>
+			</a>
+		</div>
 	</div>
 </Widget>

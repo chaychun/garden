@@ -48,38 +48,51 @@ const containerJustifyClass =
 	]}
 	{...rest}
 >
-	<div
-		class:list={["w-full md:h-[var(--media-h)] md:min-h-[300px]"]}
-		style={mediaWrapperStyle}
-	>
-		<a
-			href={id ? `/work/${encodeURIComponent(id)}/` : undefined}
-			class="block md:h-full md:w-full"
-			aria-label={`View ${title}`}
-			data-cursor-hover
-			data-cursor-title={title}
-		>
-			<video
-				src={videoUrl}
-				poster={poster}
-				loop
-				muted
-				autoplay
-				playsinline
-				class="h-auto w-full md:h-full md:w-auto md:max-w-full"></video>
-		</a>
+	{/** Desktop media (unchanged) */}
+	<div class="hidden md:block" style={mediaWrapperStyle}>
+		<div class:list={["w-full md:h-[var(--media-h)] md:min-h-[300px]"]}>
+			<a
+				href={id ? `/work/${encodeURIComponent(id)}/` : undefined}
+				class="block md:h-full md:w-full"
+				aria-label={`View ${title}`}
+				data-cursor-hover
+				data-cursor-title={title}
+			>
+				<video
+					src={videoUrl}
+					poster={poster}
+					loop
+					muted
+					autoplay
+					playsinline
+					class="h-auto w-full md:h-full md:w-auto md:max-w-full"></video>
+			</a>
+		</div>
 	</div>
 
-	<div class="flex flex-col gap-2 md:hidden">
-		<div class="flex items-center justify-between gap-2">
-			<h2
-				class="font-switzer text-base-900 min-w-0 truncate text-lg leading-tight font-medium"
-			>
-				{title}
-			</h2>
+	{/** Mobile redesigned layout */}
+	<div class="grid grid-cols-5 items-start gap-2.5 md:hidden">
+		<div class="col-span-2 flex flex-col gap-2">
+			<h2 class="text-base-900 text-sm leading-tight font-medium">{title}</h2>
+			{
+				description && (
+					<p class="text-base-600 text-xs leading-[1.35] line-clamp-5">{description}</p>
+				)
+			}
+			{
+				id && (
+					<a
+						href={`/work/${encodeURIComponent(id)}/`}
+						class="text-base-300 hover:text-base-600 text-[10px] leading-[1.1] font-semibold uppercase transition-colors"
+						aria-label={`View ${title}`}
+					>
+						See more
+					</a>
+				)
+			}
 			{
 				types && types.length > 0 && (
-					<div class="flex flex-none gap-2">
+					<div class="flex flex-wrap gap-1.5 pt-1">
 						{types.map((t) => (
 							<Badge
 								text={`${t.slice(0, 1).toUpperCase()}${t.slice(1)}`}
@@ -90,10 +103,17 @@ const containerJustifyClass =
 				)
 			}
 		</div>
-		{
-			description && (
-				<p class="font-switzer text-base-600 leading-none">{description}</p>
-			)
-		}
+		<div class="col-span-3">
+			<div class="overflow-hidden rounded-xl border border-base-100 bg-white" style={mediaWrapperStyle}>
+				<video
+					src={videoUrl}
+					poster={poster}
+					loop
+					muted
+					autoplay
+					playsinline
+					class="h-auto w-full"></video>
+			</div>
+		</div>
 	</div>
 </Widget>
