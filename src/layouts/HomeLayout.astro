@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import Header from "../components/nav/header";
+import type { FilterType } from "@/lib/content-types";
 
 interface Props {
 	title: string;
 	scrollAreaId?: string;
-	filterCounts: Record<string, number>;
+	filterCounts: Record<FilterType, number>;
 }
 
 const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
