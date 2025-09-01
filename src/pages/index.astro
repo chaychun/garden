@@ -12,9 +12,9 @@ import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 import CursorFollower from "@/components/ui/cursor-follower";
 import { getCldImageUrl } from "astro-cloudinary/helpers";
 
-const works = await getCollection("works");
+const projects = await getCollection("projects");
 
-const allItems = works.sort(
+const allItems = projects.sort(
 	(a, b) => b.data.lastUpdatedDate.getTime() - a.data.lastUpdatedDate.getTime(),
 );
 
@@ -23,14 +23,14 @@ const filterCounts: Record<FilterType, number> = (() => {
 	for (const def of AVAILABLE_FILTERS.slice(1) as FilterType[]) {
 		counts.set(def, 0);
 	}
-	for (const entry of works) {
+	for (const entry of projects) {
 		const types = (entry.data.types ?? ["interaction"]) as ContentTypeId[];
 		for (const t of types) {
 			const label = getDefinitionById(t).labelPlural as FilterType;
 			counts.set(label, (counts.get(label) ?? 0) + 1);
 		}
 	}
-	const total = works.length;
+	const total = projects.length;
 	return {
 		All: total,
 		...(Object.fromEntries(counts.entries()) as Record<FilterType, number>),

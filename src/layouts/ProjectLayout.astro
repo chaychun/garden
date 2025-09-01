@@ -1,5 +1,5 @@
 ---
-import WorkSidebar from "@/components/nav/WorkSidebar";
+import ProjectSidebar from "@/components/nav/ProjectSidebar";
 import BaseLayout from "./BaseLayout.astro";
 import InfoDrawer from "@/components/nav/InfoDrawer";
 
@@ -34,7 +34,7 @@ const {
 					: "",
 			]}
 		>
-			<WorkSidebar
+			<ProjectSidebar
 				client:media="(min-width: 824px)"
 				title={title}
 				description={description}
@@ -44,7 +44,7 @@ const {
 				disableClickOutside={disableSidebarClickOutside}
 			>
 				<slot />
-			</WorkSidebar>
+			</ProjectSidebar>
 		</div>
 		<div
 			id="content-area"

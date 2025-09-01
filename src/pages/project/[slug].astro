@@ -1,10 +1,10 @@
 ---
-import WorkLayout from "@/layouts/WorkLayout.astro";
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
 import type { AstroInstance } from "astro";
 import { getCollection, render } from "astro:content";
 
 export const getStaticPaths = async () => {
-	const entries = await getCollection("works");
+	const entries = await getCollection("projects");
 	return entries.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
@@ -15,17 +15,17 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 
 const interactiveModules = import.meta.glob<AstroInstance>(
-	"../../works/*/*.astro",
+	"../../projects/*/*.astro",
 	{ eager: true },
 );
-const key = `../../works/${entry.id}/${entry.id}.astro`;
+const key = `../../projects/${entry.id}/${entry.id}.astro`;
 let ComponentToRender: AstroInstance["default"] | null = null;
 if (key in interactiveModules) {
 	ComponentToRender = interactiveModules[key].default;
 }
 ---
 
-<WorkLayout
+<ProjectLayout
 	title={entry.data.title}
 	description={entry.data.description}
 	createdDate={entry.data.createdDate.toISOString()}
@@ -36,4 +36,4 @@ if (key in interactiveModules) {
 >
 	{ComponentToRender && <ComponentToRender slot="interactive" />}
 	<Content />
-</WorkLayout>
+</ProjectLayout>
