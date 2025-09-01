@@ -20,7 +20,7 @@ const { title, image, description, types, id, alt, height, position, ...rest } =
 	Astro.props;
 
 const imageUrl = getCldImageUrl({ src: image, width: 1200, format: "auto" });
-const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+const href = id ? `/project/${encodeURIComponent(id)}/` : undefined;
 
 const mediaHeightCss = toCssHeight(height);
 const mediaWrapperStyle = `--media-h:${mediaHeightCss};`;
