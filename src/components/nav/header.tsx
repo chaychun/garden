@@ -153,12 +153,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 		[isInfoOpen],
 	);
 
-	const getFilterCount = (filter: FilterType): number => {
-		if (filter === "All") {
-			return filterCounts["All"] ?? 0;
-		}
-		return filterCounts[filter] ?? 0;
-	};
+	const getFilterCount = (filter: FilterType): number => filterCounts[filter] ?? 0;
 
 	const isMobile = () => window.innerWidth < 768;
 
