@@ -47,7 +47,7 @@ const infoVariants = {
 
 interface HeaderProps {
 	title: string;
-	filterCounts: Record<string, number>;
+	filterCounts: Record<FilterType, number>;
 }
 
 export default function Header({ title, filterCounts }: HeaderProps) {
@@ -153,12 +153,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 		[isInfoOpen],
 	);
 
-	const getFilterCount = (filter: FilterType): number => {
-		if (filter === "All") {
-			return Object.values(filterCounts).reduce((sum, count) => sum + count, 0);
-		}
-		return filterCounts[filter] || 0;
-	};
+	const getFilterCount = (filter: FilterType): number => filterCounts[filter] ?? 0;
 
 	const isMobile = () => window.innerWidth < 768;
 
