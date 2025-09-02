@@ -126,7 +126,9 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 				</div>
 				<div className="h-14 md:hidden" />
 				<div className="hidden grid-cols-5 items-start gap-2.5 md:grid">
-					<div className="text-base-900 text-xl font-medium">{title}.</div>
+					<a href="/" className="text-base-900 text-xl font-medium">
+						{title}.
+					</a>
 
 					<div className="flex gap-2.5">
 						<div className="flex flex-col">
@@ -173,9 +175,12 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 
 				<div className="flex flex-col gap-4 md:hidden">
 					<div className="grid grid-cols-5 items-start gap-2.5">
-						<div className="text-base-900 col-span-2 text-xl font-medium">
+						<a
+							href="/"
+							className="text-base-900 col-span-2 text-xl font-medium"
+						>
 							{title}.
-						</div>
+						</a>
 
 						<div className="col-span-3 flex flex-col gap-1">
 							<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
