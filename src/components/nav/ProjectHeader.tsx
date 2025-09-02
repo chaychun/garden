@@ -41,20 +41,13 @@ export default function ProjectHeader({
 									<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
 								</button>
 							</BlurDialogTrigger>
-							<BlurDialogContent
-								overlayZIndex={10}
-								ariaLabelledby="project-header-info-title"
-							>
+							<BlurDialogContent overlayZIndex={10}>
 								<motion.div
 									variants={BlurDialogVariants.block}
-									className="text-base-900 text-xs font-semibold uppercase"
-									id="project-header-info-title"
+									className="text-base-700 [&_a]:text-base-500 mt-0 flex flex-col gap-3 text-xs leading-[1.35] [&_a]:underline"
 								>
-									Info
-								</motion.div>
-								<div className="text-base-700 [&_a]:text-base-500 mt-3 flex flex-col gap-4 text-sm [&_a]:underline">
 									{children}
-								</div>
+								</motion.div>
 							</BlurDialogContent>
 						</BlurDialog>
 					</div>
@@ -87,20 +80,13 @@ export default function ProjectHeader({
 										<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
 									</button>
 								</BlurDialogTrigger>
-								<BlurDialogContent
-									overlayZIndex={10}
-									ariaLabelledby="project-header-info-title-mobile"
-								>
+								<BlurDialogContent overlayZIndex={10}>
 									<motion.div
 										variants={BlurDialogVariants.block}
-										className="text-base-900 text-xs font-semibold uppercase"
-										id="project-header-info-title-mobile"
+										className="text-base-700 [&_a]:text-base-500 mt-0 flex flex-col gap-3 text-xs leading-[1.35] [&_a]:underline"
 									>
-										Info
-									</motion.div>
-									<div className="text-base-700 [&_a]:text-base-500 mt-3 flex flex-col gap-4 text-sm [&_a]:underline">
 										{children}
-									</div>
+									</motion.div>
 								</BlurDialogContent>
 							</BlurDialog>
 						</div>
