@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 import { easeOut } from "motion";
 import { AnimatePresence, motion, stagger } from "motion/react";
 import {
+	cloneElement,
 	createContext,
+	isValidElement,
 	useCallback,
 	useContext,
 	useEffect,
@@ -52,6 +54,15 @@ export function BlurDialog({ children, className }: BlurDialogProps) {
 		};
 	}, [open]);
 
+	useEffect(() => {
+		if (!open) return;
+		const onKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") close();
+		};
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [open, close]);
+
 	const value = useMemo(
 		() => ({ open, setOpen, toggle, close }),
 		[open, toggle, close],
@@ -65,7 +76,7 @@ export function BlurDialog({ children, className }: BlurDialogProps) {
 }
 
 interface BlurDialogTriggerProps {
-	children: React.ReactNode | ((open: boolean) => React.ReactNode);
+	children: React.ReactElement | ((open: boolean) => React.ReactElement);
 	className?: string;
 }
 
@@ -74,15 +85,51 @@ export function BlurDialogTrigger({
 	className,
 }: BlurDialogTriggerProps) {
 	const { open, toggle } = useBlurDialogContext();
-	const content =
+	const element =
 		typeof children === "function"
-			? (children as (o: boolean) => React.ReactNode)(open)
+			? (children as (o: boolean) => React.ReactElement)(open)
 			: children;
-	return (
-		<div className={className} onClick={toggle}>
-			{content}
-		</div>
-	);
+
+	if (!isValidElement(element)) {
+		return (
+			<div
+				className={className}
+				onClick={toggle}
+				role="button"
+				tabIndex={0}
+				aria-expanded={open}
+				aria-haspopup="dialog"
+			>
+				{element}
+			</div>
+		);
+	}
+
+	const isNativeButton = element.type === "button";
+
+	return cloneElement(element as React.ReactElement<any>, {
+		className: cn(className, (element as any).props?.className),
+		"aria-expanded": open,
+		"aria-haspopup": "dialog",
+		onClick: (e: React.MouseEvent) => {
+			(element as any).props?.onClick?.(e);
+			if (!e.defaultPrevented) toggle();
+		},
+		onKeyDown: (e: React.KeyboardEvent) => {
+			(element as any).props?.onKeyDown?.(e);
+			if (e.defaultPrevented) return;
+			if (!isNativeButton && (e.key === "Enter" || e.key === " ")) {
+				e.preventDefault();
+				toggle();
+			}
+		},
+		role: !isNativeButton
+			? ((element as any).props?.role ?? "button")
+			: (element as any).props?.role,
+		tabIndex: !isNativeButton
+			? ((element as any).props?.tabIndex ?? 0)
+			: (element as any).props?.tabIndex,
+	});
 }
 
 interface BlurDialogContentProps {
@@ -90,6 +137,8 @@ interface BlurDialogContentProps {
 	className?: string;
 	overlayClassName?: string;
 	overlayZIndex?: number;
+	ariaLabelledby?: string;
+	ariaDescribedby?: string;
 }
 
 export function BlurDialogContent({
@@ -97,6 +146,8 @@ export function BlurDialogContent({
 	className,
 	overlayClassName,
 	overlayZIndex = 30,
+	ariaLabelledby,
+	ariaDescribedby,
 }: BlurDialogContentProps) {
 	const { open, close } = useBlurDialogContext();
 	const [mounted, setMounted] = useState(false);
@@ -158,6 +209,10 @@ export function BlurDialogContent({
 							"absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full",
 							className,
 						)}
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={ariaLabelledby}
+						aria-describedby={ariaDescribedby}
 						initial="hidden"
 						animate="visible"
 						exit="hidden"

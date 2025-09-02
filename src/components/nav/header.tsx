@@ -9,8 +9,82 @@ import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ArrowDown } from "lucide-react";
 import { motion } from "motion/react";
-import { useMemo } from "react";
 import { UnderlineLink } from "../ui/underline-link";
+
+function InfoDialog() {
+	return (
+		<BlurDialog>
+			<BlurDialogTrigger>
+				<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
+					<span>More info</span>
+					<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
+				</button>
+			</BlurDialogTrigger>
+			<BlurDialogContent overlayZIndex={10} ariaLabelledby="header-info-title">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div className="flex flex-col gap-3">
+						<motion.div
+							variants={BlurDialogVariants.block}
+							className="text-base-900 text-xs font-semibold uppercase"
+							id="header-info-title"
+						>
+							About
+						</motion.div>
+						<motion.p
+							variants={BlurDialogVariants.block}
+							className="text-base-700 text-xs leading-[1.35]"
+						>
+							This site is a curated collection of my experiments in web design
+							and interaction. I build things I find interesting to learn about
+							how they work. Many of them are inspired by other works on the
+							web, or my attempt at recreating them one-to-one. I've made sure
+							to credit the original source when I can.
+						</motion.p>
+						<motion.p
+							variants={BlurDialogVariants.block}
+							className="text-base-700 text-xs leading-[1.35]"
+						>
+							I build mainly with Astro and React. I also quite like motion
+							design, if you can't tell. Other than that, I also like writing
+							notes, reading psychology, and doing recreational mathematics.
+						</motion.p>
+					</div>
+					<div className="flex flex-col gap-3">
+						<motion.div
+							variants={BlurDialogVariants.block}
+							className="text-base-900 text-xs font-semibold uppercase"
+						>
+							Find me
+						</motion.div>
+						<motion.ul
+							variants={BlurDialogVariants.block}
+							className="text-base-700 flex gap-2 text-xs"
+						>
+							<li>
+								<UnderlineLink href="mailto:chun.chayut@gmail.com">
+									Email
+								</UnderlineLink>
+							</li>
+							<li>
+								<UnderlineLink
+									href="https://github.com/chaychun"
+									target="_blank"
+								>
+									GitHub
+								</UnderlineLink>
+							</li>
+							<li>
+								<UnderlineLink href="https://x.com/ChunChayut" target="_blank">
+									Twitter
+								</UnderlineLink>
+							</li>
+						</motion.ul>
+					</div>
+				</div>
+			</BlurDialogContent>
+		</BlurDialog>
+	);
+}
 
 interface HeaderProps {
 	title: string;
@@ -23,84 +97,6 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 	const handleFilterClick = (filter: FilterType) => {
 		setActiveFilter(filter);
 	};
-
-	const infoButton = useMemo(
-		() => (
-			<BlurDialog>
-				<BlurDialogTrigger>
-					<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
-						<span>More info</span>
-						<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
-					</button>
-				</BlurDialogTrigger>
-				<BlurDialogContent overlayZIndex={10}>
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-						<div className="flex flex-col gap-3">
-							<motion.div
-								variants={BlurDialogVariants.block}
-								className="text-base-900 text-xs font-semibold uppercase"
-							>
-								About
-							</motion.div>
-							<motion.p
-								variants={BlurDialogVariants.block}
-								className="text-base-700 text-xs leading-[1.35]"
-							>
-								This site is a curated collection of my experiments in web
-								design and interaction. I build things I find interesting to
-								learn about how they work. Many of them are inspired by other
-								works on the web, or my attempt at recreating them one-to-one.
-								I've made sure to credit the original source when I can.
-							</motion.p>
-							<motion.p
-								variants={BlurDialogVariants.block}
-								className="text-base-700 text-xs leading-[1.35]"
-							>
-								I build mainly with Astro and React. I also quite like motion
-								design, if you can't tell. Other than that, I also like writing
-								notes, reading psychology, and doing recreational mathematics.
-							</motion.p>
-						</div>
-						<div className="flex flex-col gap-3">
-							<motion.div
-								variants={BlurDialogVariants.block}
-								className="text-base-900 text-xs font-semibold uppercase"
-							>
-								Find me
-							</motion.div>
-							<motion.ul
-								variants={BlurDialogVariants.block}
-								className="text-base-700 flex gap-2 text-xs"
-							>
-								<li>
-									<UnderlineLink href="mailto:chun.chayut@gmail.com">
-										Email
-									</UnderlineLink>
-								</li>
-								<li>
-									<UnderlineLink
-										href="https://github.com/chaychun"
-										target="_blank"
-									>
-										GitHub
-									</UnderlineLink>
-								</li>
-								<li>
-									<UnderlineLink
-										href="https://x.com/ChunChayut"
-										target="_blank"
-									>
-										Twitter
-									</UnderlineLink>
-								</li>
-							</motion.ul>
-						</div>
-					</div>
-				</BlurDialogContent>
-			</BlurDialog>
-		),
-		[],
-	);
 
 	const getFilterCount = (filter: FilterType): number =>
 		filterCounts[filter] ?? 0;
@@ -164,7 +160,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 							web.
 						</div>
 
-						{infoButton}
+						<InfoDialog />
 					</div>
 
 					<a
@@ -187,7 +183,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 								the web.
 							</div>
 
-							{infoButton}
+							<InfoDialog />
 						</div>
 					</div>
 				</div>
