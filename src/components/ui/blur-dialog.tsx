@@ -94,11 +94,13 @@ export function BlurDialog({ children, className }: BlurDialogProps) {
 interface BlurDialogTriggerProps {
 	children: React.ReactElement | ((open: boolean) => React.ReactElement);
 	className?: string;
+	disableEventBubbling?: boolean;
 }
 
 export function BlurDialogTrigger({
 	children,
 	className,
+	disableEventBubbling = true,
 }: BlurDialogTriggerProps) {
 	const { open, toggle } = useBlurDialogContext();
 	const element =
@@ -110,7 +112,18 @@ export function BlurDialogTrigger({
 		return (
 			<div
 				className={className}
-				onClick={toggle}
+				onClick={(e) => {
+					if (disableEventBubbling) e.stopPropagation();
+					toggle();
+				}}
+				onKeyDown={(e) => {
+					if (e.defaultPrevented) return;
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						if (disableEventBubbling) e.stopPropagation();
+						toggle();
+					}
+				}}
 				role="button"
 				tabIndex={0}
 				aria-expanded={open}
@@ -129,6 +142,7 @@ export function BlurDialogTrigger({
 		"aria-haspopup": "dialog",
 		onClick: (e: React.MouseEvent) => {
 			(element as any).props?.onClick?.(e);
+			if (disableEventBubbling) e.stopPropagation();
 			if (!e.defaultPrevented) toggle();
 		},
 		onKeyDown: (e: React.KeyboardEvent) => {
@@ -136,6 +150,7 @@ export function BlurDialogTrigger({
 			if (e.defaultPrevented) return;
 			if (!isNativeButton && (e.key === "Enter" || e.key === " ")) {
 				e.preventDefault();
+				if (disableEventBubbling) e.stopPropagation();
 				toggle();
 			}
 		},

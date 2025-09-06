@@ -91,7 +91,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						</div>
 
 						<BlurDialog>
-							<BlurDialogTrigger>
+							<BlurDialogTrigger disableEventBubbling>
 								{(open) => (
 									<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
 										<span>{open ? "Less info" : "More info"}</span>
