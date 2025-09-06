@@ -161,7 +161,7 @@ export function BlurDialogContent({
 	children,
 	className,
 	overlayClassName,
-	overlayZIndex = 30,
+	overlayZIndex = 9990,
 	ariaLabelledby,
 	ariaDescribedby,
 }: BlurDialogContentProps) {

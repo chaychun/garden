@@ -19,8 +19,8 @@ export default function ProjectHeader({
 	children,
 }: ProjectHeaderProps) {
 	return (
-		<header className="relative z-50 p-4">
-			<div className="relative z-50">
+		<header className="relative z-[10000] p-4">
+			<div className="relative z-[10000]">
 				<div className="grid grid-cols-5 items-start gap-2.5">
 					<a
 						href="/"
@@ -50,7 +50,7 @@ export default function ProjectHeader({
 									</button>
 								)}
 							</BlurDialogTrigger>
-							<BlurDialogContent overlayZIndex={10}>
+							<BlurDialogContent overlayZIndex={9990}>
 								<motion.div
 									variants={BlurDialogVariants.block}
 									className="text-base-700 [&_a]:text-base-500 mt-0 flex flex-col gap-3 text-xs leading-[1.35] [&_a]:underline"

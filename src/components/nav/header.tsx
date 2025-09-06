@@ -27,9 +27,9 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 		filterCounts[filter] ?? 0;
 
 	return (
-		<header className="relative z-50 p-4">
-			<div className="relative z-50">
-				<div className="border-base-100 bg-base-50 fixed top-0 right-0 left-0 z-40 border-b md:hidden">
+		<header className="relative z-[10000] p-4">
+			<div className="relative z-[10000]">
+				<div className="border-base-100 bg-base-50 fixed top-0 right-0 left-0 z-[10000] border-b md:hidden">
 					<div className="mx-auto px-4 py-3">
 						<div className="flex justify-between">
 							{AVAILABLE_FILTERS.map((filter) => (
@@ -104,7 +104,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent
-								overlayZIndex={10}
+								overlayZIndex={9990}
 								ariaLabelledby="header-info-title"
 							>
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
