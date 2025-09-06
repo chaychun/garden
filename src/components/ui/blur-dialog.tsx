@@ -63,6 +63,22 @@ export function BlurDialog({ children, className }: BlurDialogProps) {
 		return () => window.removeEventListener("keydown", onKeyDown);
 	}, [open, close]);
 
+	useEffect(() => {
+		if (!open) return;
+		if (typeof window === "undefined") return;
+		const syncScrollLock = () => {
+			const isMobile = window.innerWidth < 768;
+			if (isMobile) {
+				document.documentElement.classList.add("mobile-menu-open");
+			} else {
+				document.documentElement.classList.remove("mobile-menu-open");
+			}
+		};
+		syncScrollLock();
+		window.addEventListener("resize", syncScrollLock);
+		return () => window.removeEventListener("resize", syncScrollLock);
+	}, [open]);
+
 	const value = useMemo(
 		() => ({ open, setOpen, toggle, close }),
 		[open, toggle, close],
