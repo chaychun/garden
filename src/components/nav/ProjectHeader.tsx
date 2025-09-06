@@ -4,7 +4,7 @@ import {
 	BlurDialogTrigger,
 	BlurDialogVariants,
 } from "@/components/ui/blur-dialog";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { motion } from "motion/react";
 
 interface ProjectHeaderProps {
@@ -36,10 +36,16 @@ export default function ProjectHeader({
 
 						<BlurDialog>
 							<BlurDialogTrigger>
-								<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
-									<span>More info</span>
-									<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
-								</button>
+								{(open) => (
+									<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
+										<span>{open ? "Less info" : "More info"}</span>
+										{open ? (
+											<ArrowUp className="h-3 w-3" strokeWidth={2.5} />
+										) : (
+											<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
+										)}
+									</button>
+								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent overlayZIndex={10}>
 								<motion.div
@@ -75,10 +81,16 @@ export default function ProjectHeader({
 
 							<BlurDialog>
 								<BlurDialogTrigger>
-									<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
-										<span>More info</span>
-										<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
-									</button>
+									{(open) => (
+										<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
+											<span>{open ? "Less info" : "More info"}</span>
+											{open ? (
+												<ArrowUp className="h-3 w-3" strokeWidth={2.5} />
+											) : (
+												<ArrowDown className="h-3 w-3" strokeWidth={2.5} />
+											)}
+										</button>
+									)}
 								</BlurDialogTrigger>
 								<BlurDialogContent overlayZIndex={10}>
 									<motion.div
