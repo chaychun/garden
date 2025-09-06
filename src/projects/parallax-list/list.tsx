@@ -168,7 +168,7 @@ const ParallaxList = ({ works }: { works: Work[] }) => {
 	);
 
 	return (
-		<div className="clamp-[ml,8,60,@64rem,@96rem] selection:bg-base-50 selection:text-base-900 flex h-full">
+		<div className="clamp-[ml,8,60,@64rem,@96rem] selection:bg-base-50 selection:text-base-900 relative flex h-full">
 			<div className="pointer-events-none absolute top-8 right-8 z-10 w-[30cqw] max-w-[30cqw]">
 				{works.map((work, index) => (
 					<img

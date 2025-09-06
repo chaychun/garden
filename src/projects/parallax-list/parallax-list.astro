@@ -63,9 +63,7 @@ const works = [
 	{works.map((w) => <link rel="preload" as="image" href={w.image} />)}
 </head>
 
-<div
-	class="bg-base-900 @container h-screen w-full overflow-hidden"
->
+<div class="bg-base-900 @container h-full w-full overflow-hidden">
 	<ParallaxListComponent works={works} client:load />
 </div>
 

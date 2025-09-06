@@ -3,9 +3,7 @@ import { cn } from "@/lib/utils";
 import { easeOut } from "motion";
 import { AnimatePresence, motion, stagger } from "motion/react";
 import {
-	cloneElement,
 	createContext,
-	isValidElement,
 	useCallback,
 	useContext,
 	useEffect,
@@ -33,26 +31,33 @@ export function useBlurDialogContext() {
 interface BlurDialogProps {
 	children: React.ReactNode;
 	className?: string;
+	disableScrollBarAdjustment?: boolean;
 }
 
-export function BlurDialog({ children, className }: BlurDialogProps) {
+export function BlurDialog({
+	children,
+	className,
+	disableScrollBarAdjustment,
+}: BlurDialogProps) {
 	const [open, setOpen] = useState(false);
 	const toggle = useCallback(() => setOpen((v) => !v), []);
 	const close = useCallback(() => setOpen(false), []);
 
 	useEffect(() => {
-		if (typeof window === "undefined") return;
-		const isMobile = window.innerWidth < 768;
-		if (isMobile && open) {
-			window.scrollTo({ top: 0, behavior: "smooth" });
-			document.documentElement.classList.add("mobile-menu-open");
-		} else {
+		if (typeof document === "undefined") return;
+		if (disableScrollBarAdjustment) {
 			document.documentElement.classList.remove("mobile-menu-open");
+			return;
 		}
-		return () => {
-			document.documentElement.classList.remove("mobile-menu-open");
-		};
-	}, [open]);
+		if (open) {
+			document.documentElement.classList.add("mobile-menu-open");
+			return () => {
+				document.documentElement.classList.remove("mobile-menu-open");
+			};
+		}
+		document.documentElement.classList.remove("mobile-menu-open");
+		return undefined;
+	}, [open, disableScrollBarAdjustment]);
 
 	useEffect(() => {
 		if (!open) return;
@@ -78,11 +83,13 @@ export function BlurDialog({ children, className }: BlurDialogProps) {
 interface BlurDialogTriggerProps {
 	children: React.ReactElement | ((open: boolean) => React.ReactElement);
 	className?: string;
+	disableEventBubbling?: boolean;
 }
 
 export function BlurDialogTrigger({
 	children,
 	className,
+	disableEventBubbling = true,
 }: BlurDialogTriggerProps) {
 	const { open, toggle } = useBlurDialogContext();
 	const element =
@@ -90,46 +97,45 @@ export function BlurDialogTrigger({
 			? (children as (o: boolean) => React.ReactElement)(open)
 			: children;
 
-	if (!isValidElement(element)) {
-		return (
-			<div
-				className={className}
-				onClick={toggle}
-				role="button"
-				tabIndex={0}
-				aria-expanded={open}
-				aria-haspopup="dialog"
-			>
-				{element}
-			</div>
-		);
-	}
-
-	const isNativeButton = element.type === "button";
-
-	return cloneElement(element as React.ReactElement<any>, {
-		className: cn(className, (element as any).props?.className),
-		"aria-expanded": open,
-		"aria-haspopup": "dialog",
-		onClick: (e: React.MouseEvent) => {
-			(element as any).props?.onClick?.(e);
-			if (!e.defaultPrevented) toggle();
-		},
-		onKeyDown: (e: React.KeyboardEvent) => {
-			(element as any).props?.onKeyDown?.(e);
-			if (e.defaultPrevented) return;
-			if (!isNativeButton && (e.key === "Enter" || e.key === " ")) {
-				e.preventDefault();
-				toggle();
-			}
-		},
-		role: !isNativeButton
-			? ((element as any).props?.role ?? "button")
-			: (element as any).props?.role,
-		tabIndex: !isNativeButton
-			? ((element as any).props?.tabIndex ?? 0)
-			: (element as any).props?.tabIndex,
-	});
+	return (
+		<div
+			className={className}
+			onClick={(e) => {
+				if (disableEventBubbling) e.stopPropagation();
+				if (!e.defaultPrevented) {
+					if (
+						!open &&
+						typeof window !== "undefined" &&
+						window.innerWidth < 768
+					) {
+						window.scrollTo({ top: 0, behavior: "smooth" });
+					}
+					toggle();
+				}
+			}}
+			onKeyDown={(e) => {
+				if (e.defaultPrevented) return;
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					if (disableEventBubbling) e.stopPropagation();
+					if (
+						!open &&
+						typeof window !== "undefined" &&
+						window.innerWidth < 768
+					) {
+						window.scrollTo({ top: 0, behavior: "smooth" });
+					}
+					toggle();
+				}
+			}}
+			role="button"
+			tabIndex={0}
+			aria-expanded={open}
+			aria-haspopup="dialog"
+		>
+			{element}
+		</div>
+	);
 }
 
 interface BlurDialogContentProps {
@@ -145,7 +151,7 @@ export function BlurDialogContent({
 	children,
 	className,
 	overlayClassName,
-	overlayZIndex = 30,
+	overlayZIndex = 9990,
 	ariaLabelledby,
 	ariaDescribedby,
 }: BlurDialogContentProps) {
