@@ -35,6 +35,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 							{AVAILABLE_FILTERS.map((filter) => (
 								<button
 									key={filter}
+									type="button"
 									onClick={() => handleFilterClick(filter)}
 									className={cn(
 										"flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
@@ -63,6 +64,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 							{AVAILABLE_FILTERS.map((filter) => (
 								<button
 									key={filter}
+									type="button"
 									onClick={() => handleFilterClick(filter)}
 									className={cn(
 										"relative text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
@@ -93,7 +95,10 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						<BlurDialog>
 							<BlurDialogTrigger disableEventBubbling>
 								{(open) => (
-									<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
+									<button
+										type="button"
+										className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
+									>
 										<span>{open ? "Less info" : "More info"}</span>
 										{open ? (
 											<ArrowUp className="h-3 w-3" strokeWidth={2.5} />

@@ -24,12 +24,12 @@ export default function ProjectHeader({
 				<div className="grid grid-cols-5 items-start gap-2.5">
 					<a
 						href="/"
-						className="text-base-900 col-span-2 text-xl font-medium md:col-span-1"
+						className="text-base-900 col-span-1 text-xl font-medium md:col-span-2"
 					>
-						Chayut.
+						<h1>Chayut.</h1>
 					</a>
 
-					<div className="col-span-3 flex flex-col gap-1 md:col-span-2 md:col-start-3">
+					<div className="col-span-3 col-start-3 flex flex-col gap-1 md:col-span-2">
 						<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
 							{projectTitle}
 						</div>
@@ -37,10 +37,13 @@ export default function ProjectHeader({
 							{projectDescription}
 						</p>
 
-						<BlurDialog>
+						<BlurDialog disableScrollBarAdjustment>
 							<BlurDialogTrigger disableEventBubbling>
 								{(open) => (
-									<button className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors">
+									<button
+										type="button"
+										className="text-base-300 hover:text-base-600 inline-flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors"
+									>
 										<span>{open ? "Less info" : "More info"}</span>
 										{open ? (
 											<ArrowUp className="h-3 w-3" strokeWidth={2.5} />
@@ -50,7 +53,17 @@ export default function ProjectHeader({
 									</button>
 								)}
 							</BlurDialogTrigger>
-							<BlurDialogContent overlayZIndex={9990}>
+							<BlurDialogContent
+								overlayZIndex={9990}
+								ariaLabelledby="project-info-title"
+							>
+								<motion.div
+									variants={BlurDialogVariants.block}
+									className="text-base-900 invisible hidden text-xs font-semibold uppercase"
+									id="project-info-title"
+								>
+									Project info
+								</motion.div>
 								<motion.div
 									variants={BlurDialogVariants.block}
 									className="text-base-700 [&_a]:text-base-500 mt-0 flex flex-col gap-3 text-xs leading-[1.35] [&_a]:underline"
