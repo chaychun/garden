@@ -82,8 +82,6 @@ const swapDemoImages = [
 				id: item.id,
 			};
 
-			const animationStyle =
-				"opacity: 0; transform: translateY(10px); visibility: hidden;";
 			const dataTypes = typeTokens.join(" ");
 
 			// If widget configuration exists, use it
@@ -100,7 +98,6 @@ const swapDemoImages = [
 								date={formattedDate}
 								tone={config.tone || "light"}
 								data-types={dataTypes}
-								style={animationStyle}
 							/>
 						);
 					case "image":
@@ -112,7 +109,6 @@ const swapDemoImages = [
 								height={config.height}
 								position={config.position}
 								data-types={dataTypes}
-								style={animationStyle}
 							/>
 						);
 					case "video":
@@ -124,7 +120,6 @@ const swapDemoImages = [
 								height={config.height}
 								position={config.position}
 								data-types={dataTypes}
-								style={animationStyle}
 							/>
 						);
 					case "imageSwap":
@@ -138,7 +133,6 @@ const swapDemoImages = [
 								aspect={config.aspect}
 								intervalMs={config.intervalMs}
 								data-types={dataTypes}
-								style={animationStyle}
 							/>
 						);
 				}
@@ -153,7 +147,6 @@ const swapDemoImages = [
 					date={formattedDate}
 					tone="light"
 					data-types={dataTypes}
-					style={animationStyle}
 				/>
 			);
 		})
@@ -190,7 +183,6 @@ const swapDemoImages = [
 
 			if (filter === "all" || widgetTypes.includes(filterToken)) {
 				widget.classList.remove("hidden");
-				(widget as HTMLElement).style.visibility = "visible";
 				visibleWidgets.push(widget as HTMLElement);
 			} else {
 				widget.classList.add("hidden");

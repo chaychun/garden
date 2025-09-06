@@ -32,7 +32,7 @@ const {
 	...rest
 } = Astro.props as Props;
 
-const href = id ? `/work/${encodeURIComponent(id)}/` : undefined;
+const href = id ? `/project/${encodeURIComponent(id)}/` : undefined;
 
 const mediaHeightCss = toCssHeight(height);
 const mediaWrapperStyle = `--media-h:${mediaHeightCss};`;
@@ -75,6 +75,7 @@ const aspectClass =
 							aspectClass,
 							"md:h-[var(--media-h)]",
 						]}
+						transition:name={id}
 					>
 						<ImageSwapMedia
 							client:load

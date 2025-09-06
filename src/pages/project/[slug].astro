@@ -33,6 +33,7 @@ if (key in interactiveModules) {
 	types={entry.data.types || []}
 	disableSidebarClickOutside={entry.data.disableSidebarClickOutside}
 	floatingSidebar={entry.data.floatingSidebar}
+	id={entry.id}
 >
 	{ComponentToRender && <ComponentToRender slot="interactive" />}
 	<Content />

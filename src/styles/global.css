@@ -176,3 +176,12 @@ html {
 		color: var(--color-base-50);
 	}
 }
+::view-transition-group(*) {
+	animation-duration: 700ms;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+	animation-duration: 700ms;
+	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
