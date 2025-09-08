@@ -34,7 +34,6 @@ const projects = defineCollection({
 						image: z.string(),
 						alt: z.string().optional(),
 						height: z.union([z.string(), z.number()]).optional(),
-						position: z.enum(["top", "bottom"]).optional(),
 					}),
 				}),
 				z.object({
@@ -43,7 +42,6 @@ const projects = defineCollection({
 						video: z.string(),
 						poster: z.string().optional(),
 						height: z.union([z.string(), z.number()]).optional(),
-						position: z.enum(["top", "bottom"]).optional(),
 					}),
 				}),
 				z.object({
@@ -52,7 +50,6 @@ const projects = defineCollection({
 						images: z.array(z.string()),
 						alt: z.string().optional(),
 						height: z.union([z.string(), z.number()]).optional(),
-						position: z.enum(["top", "bottom"]).optional(),
 						aspect: z.enum(["portrait", "landscape", "square"]).optional(),
 						intervalMs: z.number().optional(),
 					}),
