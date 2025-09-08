@@ -2,13 +2,11 @@ import {
 	BlurDialog,
 	BlurDialogContent,
 	BlurDialogTrigger,
-	BlurDialogVariants,
 } from "@/components/ui/blur-dialog";
 import { AVAILABLE_FILTERS, type FilterType } from "@/lib/content-types";
 import { useFilterStore } from "@/lib/stores/filterStore";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { motion } from "motion/react";
 import { UnderlineLink } from "../ui/underline-link";
 
 interface HeaderProps {
@@ -113,46 +111,33 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 								ariaLabelledby="header-info-title"
 							>
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-									<div className="flex flex-col gap-3">
-										<motion.div
-											variants={BlurDialogVariants.block}
+									<div className="flex flex-col gap-3" data-blur-dialog-stagger>
+										<div
 											className="text-base-900 text-xs font-semibold uppercase"
 											id="header-info-title"
 										>
 											About
-										</motion.div>
-										<motion.p
-											variants={BlurDialogVariants.block}
-											className="text-base-700 text-xs leading-[1.35]"
-										>
+										</div>
+										<p className="text-base-700 text-xs leading-[1.35]">
 											This site is a curated collection of my experiments in web
 											design and interaction. I build things I find interesting
 											to learn about how they work. Many of them are inspired by
 											other works on the web, or my attempt at recreating them
 											one-to-one. I've made sure to credit the original source
 											when I can.
-										</motion.p>
-										<motion.p
-											variants={BlurDialogVariants.block}
-											className="text-base-700 text-xs leading-[1.35]"
-										>
+										</p>
+										<p className="text-base-700 text-xs leading-[1.35]">
 											I build mainly with Astro and React. I also quite like
 											motion design, if you can't tell. Other than that, I also
 											like writing notes, reading psychology, and doing
 											recreational mathematics.
-										</motion.p>
+										</p>
 									</div>
-									<div className="flex flex-col gap-3">
-										<motion.div
-											variants={BlurDialogVariants.block}
-											className="text-base-900 text-xs font-semibold uppercase"
-										>
+									<div className="flex flex-col gap-3" data-blur-dialog-stagger>
+										<div className="text-base-900 text-xs font-semibold uppercase">
 											Find me
-										</motion.div>
-										<motion.ul
-											variants={BlurDialogVariants.block}
-											className="text-base-700 flex gap-2 text-xs"
-										>
+										</div>
+										<ul className="text-base-700 flex gap-2 text-xs">
 											<li>
 												<UnderlineLink href="mailto:chun.chayut@gmail.com">
 													Email
@@ -174,7 +159,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 													Twitter
 												</UnderlineLink>
 											</li>
-										</motion.ul>
+										</ul>
 									</div>
 								</div>
 							</BlurDialogContent>

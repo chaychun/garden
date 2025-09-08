@@ -2,10 +2,8 @@ import {
 	BlurDialog,
 	BlurDialogContent,
 	BlurDialogTrigger,
-	BlurDialogVariants,
 } from "@/components/ui/blur-dialog";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { motion } from "motion/react";
 
 interface ProjectHeaderProps {
 	projectTitle: string;
@@ -57,19 +55,18 @@ export default function ProjectHeader({
 								overlayZIndex={9990}
 								ariaLabelledby="project-info-title"
 							>
-								<motion.div
-									variants={BlurDialogVariants.block}
+								<div
 									className="text-base-900 invisible hidden text-xs font-semibold uppercase"
 									id="project-info-title"
 								>
 									Project info
-								</motion.div>
-								<motion.div
-									variants={BlurDialogVariants.block}
+								</div>
+								<div
 									className="text-base-700 [&_a]:text-base-500 mt-0 flex flex-col gap-3 text-xs leading-[1.35] [&_a]:underline"
+									data-blur-dialog-stagger
 								>
 									{children}
-								</motion.div>
+								</div>
 							</BlurDialogContent>
 						</BlurDialog>
 					</div>
