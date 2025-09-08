@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -102,15 +103,15 @@ export default function CursorFollower() {
 				>
 					<motion.div
 						layout
-						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 pr-2 leading-tight shadow-sm backdrop-blur-md"
+						className="bg-base-950/80 text-base-50 inline-block overflow-hidden p-1 pr-2 shadow-sm backdrop-blur-md"
 					>
-						<div className="flex items-start gap-1">
+						<div className="flex items-center gap-1">
 							<motion.div
 								layout
-								className="font-switzer text-base-50 text-lg leading-none select-none"
+								className="font-switzer text-base-50 leading-none select-none"
 								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 							>
-								+
+								<Plus className="h-[11px] w-[11px]" />
 							</motion.div>
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.div
@@ -119,14 +120,14 @@ export default function CursorFollower() {
 									initial={{ opacity: 0 }}
 									animate={{
 										opacity: 1,
-										transition: { duration: 0.4, ease: "easeIn", delay: 0.2 },
+										transition: { duration: 0.2, ease: "easeIn", delay: 0.2 },
 									}}
 									exit={{
 										opacity: 0,
 										transition: { type: "spring", duration: 0.2, bounce: 0 },
 									}}
 								>
-									<div className="font-switzer w-fit max-w-[40vw] truncate text-xs font-medium md:max-w-[24rem] md:text-[14px]">
+									<div className="font-switzer w-fit max-w-[40vw] truncate text-[11px] leading-none font-medium uppercase md:max-w-[24rem]">
 										{data.title}
 									</div>
 								</motion.div>
