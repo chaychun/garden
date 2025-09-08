@@ -1,13 +1,14 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { cn } from "@/lib/utils";
-import { easeOut } from "motion";
-import { AnimatePresence, motion, stagger } from "motion/react";
+import { animate, easeOut, stagger } from "motion";
+import { AnimatePresence, motion } from "motion/react";
 import {
 	createContext,
 	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -157,9 +158,49 @@ export function BlurDialogContent({
 }: BlurDialogContentProps) {
 	const { open, close } = useBlurDialogContext();
 	const [mounted, setMounted] = useState(false);
+	const contentRef = useRef<HTMLDivElement | null>(null);
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	useEffect(() => {
+		const root = contentRef.current;
+		if (!root) return;
+		const nodes = root.querySelectorAll<HTMLElement>(
+			"[data-blur-dialog-stagger] > *, [data-blur-dialog-stagger] > astro-slot > *",
+		);
+		const elements = Array.from(nodes);
+		if (!elements.length) return;
+		if (open) {
+			const delayFor = stagger(0.05);
+			const enterKeyframes = {
+				opacity: [0, 1],
+				y: [8, 0],
+				filter: ["blur(8px)", "blur(0px)"],
+			};
+			elements.forEach((el, i) => {
+				animate(el, enterKeyframes, {
+					delay: delayFor(i, elements.length),
+					duration: 0.2,
+					ease: "easeOut",
+				});
+			});
+		} else {
+			const delayFor = stagger(0.05, { from: "last" });
+			const exitKeyframes = {
+				opacity: [1, 0],
+				y: [0, 8],
+				filter: ["blur(0px)", "blur(8px)"],
+			};
+			elements.forEach((el, i) => {
+				animate(el, exitKeyframes, {
+					delay: delayFor(i, elements.length),
+					duration: 0.2,
+					ease: "easeOut",
+				});
+			});
+		}
+	}, [open]);
 
 	const overlay = (
 		<AnimatePresence>
@@ -211,6 +252,7 @@ export function BlurDialogContent({
 			<AnimatePresence>
 				{open && (
 					<motion.div
+						ref={contentRef}
 						className={cn(
 							"absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full",
 							className,
@@ -219,10 +261,14 @@ export function BlurDialogContent({
 						aria-modal="true"
 						aria-labelledby={ariaLabelledby}
 						aria-describedby={ariaDescribedby}
-						initial="hidden"
-						animate="visible"
-						exit="hidden"
-						variants={BlurDialogVariants.container}
+						initial={{ opacity: 0, y: 8 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{
+							opacity: 0,
+							y: 8,
+							transition: { duration: 0.3, ease: easeOut },
+						}}
+						transition={{ duration: 0.3, ease: easeOut }}
 					>
 						{children}
 					</motion.div>
@@ -231,31 +277,3 @@ export function BlurDialogContent({
 		</>
 	);
 }
-
-export const BlurDialogVariants = {
-	container: {
-		hidden: {
-			transition: {
-				duration: 0.3,
-				delayChildren: stagger(0.05, { from: "last" }),
-				ease: easeOut,
-			},
-		},
-		visible: {
-			transition: {
-				duration: 0.3,
-				delayChildren: stagger(0.05),
-				ease: easeOut,
-			},
-		},
-	},
-	block: {
-		hidden: { opacity: 0, y: 8, filter: "blur(8px)" },
-		visible: {
-			opacity: 1,
-			y: 0,
-			filter: "blur(0px)",
-			transition: { duration: 0.2, ease: easeOut },
-		},
-	},
-};
