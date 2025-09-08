@@ -54,6 +54,7 @@ export default function ProjectHeader({
 							<BlurDialogContent
 								overlayZIndex={9990}
 								ariaLabelledby="project-info-title"
+								keepMounted
 							>
 								<div
 									className="text-base-900 invisible hidden text-xs font-semibold uppercase"

@@ -1,6 +1,6 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { cn } from "@/lib/utils";
-import { animate, easeOut, stagger } from "motion";
+import { animate, stagger } from "motion";
 import { AnimatePresence, motion } from "motion/react";
 import {
 	createContext,
@@ -12,6 +12,7 @@ import {
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { ScrollArea } from "./scroll-area";
 
 interface BlurDialogContextValue {
 	open: boolean;
@@ -146,6 +147,7 @@ interface BlurDialogContentProps {
 	overlayZIndex?: number;
 	ariaLabelledby?: string;
 	ariaDescribedby?: string;
+	keepMounted?: boolean;
 }
 
 export function BlurDialogContent({
@@ -155,6 +157,7 @@ export function BlurDialogContent({
 	overlayZIndex = 9990,
 	ariaLabelledby,
 	ariaDescribedby,
+	keepMounted,
 }: BlurDialogContentProps) {
 	const { open, close } = useBlurDialogContext();
 	const [mounted, setMounted] = useState(false);
@@ -171,8 +174,16 @@ export function BlurDialogContent({
 		);
 		const elements = Array.from(nodes);
 		if (!elements.length) return;
+		const count = elements.length;
+		const totalStaggerTarget = 0.4;
+		const maxPerStepDelay = 0.05;
+		const perStepDelay = Math.min(
+			maxPerStepDelay,
+			totalStaggerTarget / Math.max(1, count),
+		);
+
 		if (open) {
-			const delayFor = stagger(0.05);
+			const delayFor = stagger(perStepDelay);
 			const enterKeyframes = {
 				opacity: [0, 1],
 				y: [8, 0],
@@ -186,7 +197,7 @@ export function BlurDialogContent({
 				});
 			});
 		} else {
-			const delayFor = stagger(0.05, { from: "last" });
+			const delayFor = stagger(perStepDelay, { from: "last" });
 			const exitKeyframes = {
 				opacity: [1, 0],
 				y: [0, 8],
@@ -222,9 +233,9 @@ export function BlurDialogContent({
 						exit={{
 							scale: 1,
 							opacity: 0,
-							transition: { ease: "easeIn", duration: 0.3 },
+							transition: { ease: "easeInOut", duration: 0.4 },
 						}}
-						transition={{ duration: 0.4, ease: easeOut }}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
 					/>
 					<ProgressiveBlur
 						direction="top"
@@ -235,9 +246,9 @@ export function BlurDialogContent({
 						animate={{ opacity: 1 }}
 						exit={{
 							opacity: 0,
-							transition: { ease: "easeIn", duration: 0.3 },
+							transition: { ease: "easeInOut", duration: 0.4 },
 						}}
-						transition={{ duration: 0.4, ease: easeOut }}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
 					/>
 				</div>
 			)}
@@ -249,31 +260,56 @@ export function BlurDialogContent({
 			{mounted && typeof document !== "undefined"
 				? createPortal(overlay, document.body)
 				: null}
-			<AnimatePresence>
-				{open && (
-					<motion.div
-						ref={contentRef}
-						className={cn(
-							"absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full",
-							className,
-						)}
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby={ariaLabelledby}
-						aria-describedby={ariaDescribedby}
-						initial={{ opacity: 0, y: 8 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{
-							opacity: 0,
-							y: 8,
-							transition: { duration: 0.3, ease: easeOut },
-						}}
-						transition={{ duration: 0.3, ease: easeOut }}
-					>
-						{children}
-					</motion.div>
-				)}
-			</AnimatePresence>
+			{keepMounted ? (
+				<motion.div
+					ref={contentRef}
+					className={cn(
+						"absolute top-full right-0 left-0 z-50 mt-6 w-full",
+						!open && "pointer-events-none",
+						className,
+					)}
+					role="dialog"
+					aria-modal="true"
+					aria-hidden={!open || undefined}
+					aria-labelledby={ariaLabelledby}
+					aria-describedby={ariaDescribedby}
+					initial={false}
+					animate={
+						open
+							? { opacity: 1, y: 0, filter: "blur(0px)" }
+							: { opacity: 0, y: 8, filter: "blur(8px)" }
+					}
+					transition={{ duration: 0.4, ease: "easeInOut" }}
+				>
+					<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
+				</motion.div>
+			) : (
+				<AnimatePresence>
+					{open && (
+						<motion.div
+							ref={contentRef}
+							className={cn(
+								"absolute top-full right-0 left-0 z-50 mt-6 w-full",
+								className,
+							)}
+							role="dialog"
+							aria-modal="true"
+							aria-labelledby={ariaLabelledby}
+							aria-describedby={ariaDescribedby}
+							initial={{ opacity: 0, y: 8, filter: "blur(8px)" }}
+							animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+							exit={{
+								opacity: 0,
+								y: 8,
+								filter: "blur(8px)",
+							}}
+							transition={{ duration: 0.4, ease: "easeInOut" }}
+						>
+							<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
+						</motion.div>
+					)}
+				</AnimatePresence>
+			)}
 		</>
 	);
 }
