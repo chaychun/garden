@@ -107,6 +107,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent
+								className="max-w-none"
 								overlayZIndex={9990}
 								ariaLabelledby="header-info-title"
 								keepMounted
