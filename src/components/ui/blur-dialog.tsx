@@ -99,35 +99,27 @@ export function BlurDialogTrigger({
 			? (children as (o: boolean) => React.ReactElement)(open)
 			: children;
 
+	const activate = useCallback(
+		(e?: React.SyntheticEvent) => {
+			if (disableEventBubbling && e) e.stopPropagation();
+			if (e && e.defaultPrevented) return;
+			if (!open && typeof window !== "undefined" && window.innerWidth < 768) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
+			toggle();
+		},
+		[disableEventBubbling, open, toggle],
+	);
+
 	return (
 		<div
 			className={className}
-			onClick={(e) => {
-				if (disableEventBubbling) e.stopPropagation();
-				if (!e.defaultPrevented) {
-					if (
-						!open &&
-						typeof window !== "undefined" &&
-						window.innerWidth < 768
-					) {
-						window.scrollTo({ top: 0, behavior: "smooth" });
-					}
-					toggle();
-				}
-			}}
+			onClick={activate}
 			onKeyDown={(e) => {
 				if (e.defaultPrevented) return;
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
-					if (disableEventBubbling) e.stopPropagation();
-					if (
-						!open &&
-						typeof window !== "undefined" &&
-						window.innerWidth < 768
-					) {
-						window.scrollTo({ top: 0, behavior: "smooth" });
-					}
-					toggle();
+					activate(e);
 				}
 			}}
 			role="button"
@@ -260,56 +252,48 @@ export function BlurDialogContent({
 			{mounted && typeof document !== "undefined"
 				? createPortal(overlay, document.body)
 				: null}
-			{keepMounted ? (
-				<motion.div
-					ref={contentRef}
-					className={cn(
-						"absolute top-full right-0 left-0 z-50 mt-6 w-full",
-						!open && "pointer-events-none",
-						className,
-					)}
-					role="dialog"
-					aria-modal="true"
-					aria-hidden={!open || undefined}
-					aria-labelledby={ariaLabelledby}
-					aria-describedby={ariaDescribedby}
-					initial={false}
-					animate={
-						open
-							? { opacity: 1, y: 0, filter: "blur(0px)" }
-							: { opacity: 0, y: 8, filter: "blur(8px)" }
-					}
-					transition={{ duration: 0.4, ease: "easeInOut" }}
-				>
-					<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
-				</motion.div>
-			) : (
-				<AnimatePresence>
-					{open && (
-						<motion.div
-							ref={contentRef}
-							className={cn(
-								"absolute top-full right-0 left-0 z-50 mt-6 w-full",
-								className,
-							)}
-							role="dialog"
-							aria-modal="true"
-							aria-labelledby={ariaLabelledby}
-							aria-describedby={ariaDescribedby}
-							initial={{ opacity: 0, y: 8, filter: "blur(8px)" }}
-							animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-							exit={{
-								opacity: 0,
-								y: 8,
-								filter: "blur(8px)",
-							}}
-							transition={{ duration: 0.4, ease: "easeInOut" }}
-						>
-							<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
-						</motion.div>
-					)}
-				</AnimatePresence>
-			)}
+			{(() => {
+				const panelClassName = cn(
+					"absolute top-full right-0 left-0 z-50 mt-6 w/full max-w-[400px]",
+					keepMounted && !open && "pointer-events-none",
+					className,
+				);
+
+				const motionStateProps = keepMounted
+					? {
+							initial: false,
+							animate: open
+								? { opacity: 1, y: 0, filter: "blur(0px)" }
+								: { opacity: 0, y: 8, filter: "blur(8px)" },
+						}
+					: {
+							initial: { opacity: 0, y: 8, filter: "blur(8px)" },
+							animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+							exit: { opacity: 0, y: 8, filter: "blur(8px)" },
+						};
+
+				const panel = (
+					<motion.div
+						ref={contentRef}
+						className={panelClassName}
+						role="dialog"
+						aria-modal="true"
+						aria-hidden={keepMounted ? !open || undefined : undefined}
+						aria-labelledby={ariaLabelledby}
+						aria-describedby={ariaDescribedby}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
+						{...motionStateProps}
+					>
+						<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
+					</motion.div>
+				);
+
+				return keepMounted ? (
+					panel
+				) : (
+					<AnimatePresence>{open && panel}</AnimatePresence>
+				);
+			})()}
 		</>
 	);
 }
