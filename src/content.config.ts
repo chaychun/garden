@@ -23,6 +23,7 @@ const projects = defineCollection({
 						bgImage: z.string(),
 						previewImage: z.string(),
 						alt: z.string().optional(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 				z.object({
@@ -30,6 +31,7 @@ const projects = defineCollection({
 					config: z.object({
 						bgImage: z.string(),
 						previewVideo: z.string(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 				z.object({
@@ -40,6 +42,7 @@ const projects = defineCollection({
 						alt: z.string().optional(),
 						aspect: z.enum(["portrait", "landscape", "square"]).optional(),
 						intervalMs: z.number().optional(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 			])

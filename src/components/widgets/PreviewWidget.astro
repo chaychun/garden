@@ -32,14 +32,16 @@ interface Props {
 	href: string;
 	bgImage: string;
 	variant: VariantProps;
+	previewWidth?: number;
 	[key: string]: any;
 }
 
-const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
+const { title, href, bgImage, variant, previewWidth, ...rest } =
+	Astro.props as Props;
 
 const bgImageUrl = getCldImageUrl({
 	src: bgImage,
-	width: 1200,
+	width: 600,
 	format: "auto",
 });
 
@@ -51,6 +53,13 @@ const aspectClass = (() => {
 	}
 	return "aspect-4/5";
 })();
+
+const clampedWidth = (() => {
+	if (typeof previewWidth !== "number" || Number.isNaN(previewWidth))
+		return 0.9;
+	return Math.max(0, Math.min(1, previewWidth));
+})();
+const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 ---
 
 <Widget
@@ -85,7 +94,8 @@ const aspectClass = (() => {
 						muted
 						autoplay
 						playsinline
-						class="relative z-10 h-auto w-[90%]"
+						class="relative z-10 h-auto"
+						style={{ width: previewWidthCss }}
 					/>
 				)
 			}
@@ -95,13 +105,14 @@ const aspectClass = (() => {
 					<img
 						src={getCldImageUrl({
 							src: variant.previewImage,
-							width: 1200,
+							width: 600,
 							format: "auto",
 						})}
 						alt={variant.alt || title}
 						loading="lazy"
 						decoding="async"
-						class="relative z-10 h-auto w-[90%] object-contain"
+						class="relative z-10 h-auto object-contain"
+						style={{ width: previewWidthCss }}
 					/>
 				)
 			}
@@ -114,7 +125,8 @@ const aspectClass = (() => {
 						alt={variant.alt || title}
 						intervalMs={variant.intervalMs}
 						containerClassName="absolute inset-0 h-full w-full"
-						className="relative z-10 h-auto w-[90%] object-contain"
+						className="relative z-10 h-auto object-contain"
+						imageStyle={{ width: previewWidthCss }}
 					/>
 				)
 			}
