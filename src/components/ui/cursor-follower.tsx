@@ -1,9 +1,10 @@
-import { Plus } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type HoverData = {
 	title: string;
+	external: boolean;
 };
 
 export default function CursorFollower() {
@@ -45,8 +46,9 @@ export default function CursorFollower() {
 		function onEnter(e: Event) {
 			const el = e.currentTarget as HTMLElement;
 			const title = el.getAttribute("data-cursor-title") || "";
+			const external = el.hasAttribute("data-cursor-external");
 
-			setData({ title });
+			setData({ title, external });
 			setIsVisible(true);
 			isVisibleRef.current = true;
 		}
@@ -111,7 +113,28 @@ export default function CursorFollower() {
 								className="font-switzer text-base-50 leading-none select-none"
 								transition={{ type: "spring", duration: 0.5, bounce: 0 }}
 							>
-								<Plus className="h-[11px] w-[11px]" />
+								<AnimatePresence mode="popLayout" initial={false}>
+									<motion.div
+										key={data.external ? "external" : "internal"}
+										className="min-w-0"
+										initial={{ opacity: 0 }}
+										animate={{
+											opacity: 1,
+											transition: { duration: 0.2, ease: "easeIn", delay: 0.2 },
+										}}
+										exit={{
+											opacity: 0,
+											transition: { type: "spring", duration: 0.2, bounce: 0 },
+										}}
+										layout
+									>
+										{data.external ? (
+											<ArrowUpRight className="h-[11px] w-[11px]" />
+										) : (
+											<Plus className="h-[11px] w-[11px]" />
+										)}
+									</motion.div>
+								</AnimatePresence>
 							</motion.div>
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.div

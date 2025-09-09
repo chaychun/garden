@@ -33,18 +33,19 @@ type VariantProps =
 interface Props {
 	title: string;
 	href: string;
-	bgImage: string;
+	bgImage?: string;
+	bgFillClass?: string;
 	variant: VariantProps;
+	external?: boolean;
 	[key: string]: any;
 }
 
-const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
+const { title, href, bgImage, bgFillClass, variant, external, ...rest } =
+	Astro.props as Props;
 
-const bgImageUrl = getCldImageUrl({
-	src: bgImage,
-	width: 600,
-	format: "auto",
-});
+const bgImageUrl = bgImage
+	? getCldImageUrl({ src: bgImage, width: 600, format: "auto" })
+	: undefined;
 
 const clampedWidth = (() => {
 	const vw = variant.previewWidth;
@@ -56,7 +57,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 
 <Widget
 	class:list={[
-		"flex max-w-[528px] flex-col gap-3 md:justify-between",
+		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	{...rest}
@@ -67,14 +68,25 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		aria-label={`View ${title}`}
 		data-cursor-hover
 		data-cursor-title={title}
+		data-cursor-external={external ? "true" : undefined}
+		target={external ? "_blank" : undefined}
+		rel={external ? "noopener noreferrer" : undefined}
 	>
 		<div
-			class="group relative flex aspect-4/5 w-full items-center justify-center"
-			style={{
-				backgroundImage: `url(${bgImageUrl})`,
-				backgroundSize: "cover",
-			}}
+			class:list={[
+				"group relative flex aspect-4/5 w-full items-center justify-center overflow-hidden",
+				bgFillClass,
+			]}
 		>
+			{
+				bgImageUrl && (
+					<div
+						aria-hidden="true"
+						class="absolute inset-0 z-0 bg-cover bg-center"
+						style={{ backgroundImage: `url(${bgImageUrl})` }}
+					/>
+				)
+			}
 			{
 				variant.type === "video" && (
 					<video
@@ -99,7 +111,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 							format: "auto",
 						})}
 						alt={variant.alt || title}
-						loading="lazy"
+						loading="eager"
 						decoding="async"
 						class="relative z-10 h-auto object-contain"
 						style={{ width: previewWidthCss }}
@@ -111,12 +123,18 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 				variant.type === "image-swap" && (
 					<ImageSwapMedia
 						client:load
-						images={variant.previewImages}
+						images={variant.previewImages.map((id) =>
+							getCldImageUrl({
+								src: id,
+								width: 600,
+								format: "auto",
+							}),
+						)}
 						alt={variant.alt || title}
 						intervalMs={variant.intervalMs}
-						containerClassName="absolute inset-0 h-full w-full"
-						className="relative z-10 h-auto object-contain"
+						className="relative z-10 h-auto object-cover"
 						imageStyle={{ width: previewWidthCss }}
+						aspect={variant.aspect}
 					/>
 				)
 			}

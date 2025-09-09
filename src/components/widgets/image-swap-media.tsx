@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface ImageSwapMediaProps {
@@ -5,9 +6,8 @@ export interface ImageSwapMediaProps {
 	alt?: string;
 	intervalMs?: number;
 	className?: string;
-	containerClassName?: string;
-	fadeMs?: number;
-	imageStyle?: React.CSSProperties;
+	imageStyle?: CSSProperties;
+	aspect?: "portrait" | "landscape" | "square";
 }
 
 const ImageSwapMedia = ({
@@ -15,9 +15,8 @@ const ImageSwapMedia = ({
 	alt = "",
 	intervalMs = 500,
 	className,
-	containerClassName,
-	fadeMs = 0,
 	imageStyle,
+	aspect,
 }: ImageSwapMediaProps) => {
 	const validImages = useMemo(() => images.filter(Boolean), [images]);
 	const [index, setIndex] = useState(0);
@@ -39,25 +38,28 @@ const ImageSwapMedia = ({
 
 	if (validImages.length === 0) return null;
 
+	const aspectRatioCss = (() => {
+		if (!aspect) return undefined;
+		const map = {
+			portrait: "4 / 5",
+			landscape: "5 / 4",
+			square: "1 / 1",
+		} as const;
+		return map[aspect] ?? undefined;
+	})();
+
 	return (
-		<div className={containerClassName}>
-			{validImages.map((src, i) => (
-				<img
-					key={`${src}-${i}`}
-					src={src}
-					alt={i === index ? alt : ""}
-					aria-hidden={i !== index}
-					loading={i === 0 ? "eager" : "lazy"}
-					decoding="async"
-					style={{
-						opacity: i === index ? 1 : 0,
-						transition: `opacity ${Math.max(0, fadeMs)}ms ease`,
-						...imageStyle,
-					}}
-					className={className}
-				/>
-			))}
-		</div>
+		<img
+			src={validImages[index]}
+			alt={alt}
+			loading={index === 0 ? "eager" : "lazy"}
+			decoding="async"
+			style={{
+				aspectRatio: aspectRatioCss,
+				...imageStyle,
+			}}
+			className={className}
+		/>
 	);
 };
 

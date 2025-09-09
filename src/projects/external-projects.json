@@ -1,0 +1,29 @@
+{
+	"graeco-latin-square-generator": {
+		"title": "Graeco-Latin Square Generator",
+		"description": "Generate beautiful art from a mathematical construct.",
+		"types": ["experiment"],
+		"createdDate": "2025-08-28",
+		"lastUpdatedDate": "2025-09-09",
+		"externalUrl": "https://graecolatin.vercel.app/",
+		"widget": {
+			"type": "image-swap",
+			"config": {
+				"bgFillClass": "bg-base-200",
+				"previewImages": [
+					"graeco-latin-4x4_amyvvn",
+					"graeco-latin-4x4_5_ockdg1",
+					"graeco-latin-4x4_1_b6mzln",
+					"graeco-latin-4x4_3_keue1q",
+					"graeco-latin-4x4_7_n8jii1",
+					"graeco-latin-4x4_4_lta167",
+					"graeco-latin-4x4_6_m1jenf",
+					"graeco-latin-4x4_2_vpyxor"
+				],
+				"alt": "Graeco-Latin Squares",
+				"aspect": "square",
+				"previewWidth": 0.8
+			}
+		}
+	}
+}
