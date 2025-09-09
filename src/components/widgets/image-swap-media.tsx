@@ -7,6 +7,7 @@ export interface ImageSwapMediaProps {
 	className?: string;
 	containerClassName?: string;
 	fadeMs?: number;
+	imageStyle?: React.CSSProperties;
 }
 
 const ImageSwapMedia = ({
@@ -16,6 +17,7 @@ const ImageSwapMedia = ({
 	className,
 	containerClassName,
 	fadeMs = 0,
+	imageStyle,
 }: ImageSwapMediaProps) => {
 	const validImages = useMemo(() => images.filter(Boolean), [images]);
 	const [index, setIndex] = useState(0);
@@ -50,6 +52,7 @@ const ImageSwapMedia = ({
 					style={{
 						opacity: i === index ? 1 : 0,
 						transition: `opacity ${Math.max(0, fadeMs)}ms ease`,
+						...imageStyle,
 					}}
 					className={className}
 				/>

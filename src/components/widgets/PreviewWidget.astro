@@ -1,24 +1,57 @@
 ---
-import BlurOverlay from "@/components/ui/blur-overlay";
 import Widget from "@/components/widgets/Widget.astro";
+import ImageSwapMedia from "@/components/widgets/image-swap-media";
 import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
+
+interface VideoVariantProps {
+	type: "video";
+	previewVideo: string;
+	previewWidth?: number;
+}
+
+interface ImageVariantProps {
+	type: "image";
+	previewImage: string;
+	alt?: string;
+	previewWidth?: number;
+}
+
+interface ImageSwapVariantProps {
+	type: "image-swap";
+	previewImages: string[];
+	alt?: string;
+	aspect?: "portrait" | "landscape" | "square";
+	intervalMs?: number;
+	previewWidth?: number;
+}
+
+type VariantProps =
+	| VideoVariantProps
+	| ImageVariantProps
+	| ImageSwapVariantProps;
 
 interface Props {
 	title: string;
-	description: string;
-	date: string;
+	href: string;
 	bgImage: string;
-	previewVideo: string;
-	types?: string[];
-	tone?: "light" | "dark";
-	id: string;
+	variant: VariantProps;
 	[key: string]: any;
 }
 
-const { title, bgImage, previewVideo, id, ...rest } = Astro.props;
+const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
 
-const bgImageUrl = getCldImageUrl({ src: bgImage, width: 600 });
-const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
+const bgImageUrl = getCldImageUrl({
+	src: bgImage,
+	width: 600,
+	format: "auto",
+});
+
+const clampedWidth = (() => {
+	const vw = variant.previewWidth;
+	if (typeof vw !== "number" || Number.isNaN(vw) || vw <= 0) return 0.9;
+	return Math.max(0, Math.min(1, vw));
+})();
+const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 ---
 
 <Widget
@@ -29,31 +62,64 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 	{...rest}
 >
 	<a
-		href={`/project/${encodeURIComponent(id)}/`}
+		href={href}
 		class="block"
 		aria-label={`View ${title}`}
 		data-cursor-hover
 		data-cursor-title={title}
 	>
 		<div
-			class:list={[
-				"group relative flex w-full items-center justify-center",
-				"aspect-4/5",
-			]}
+			class="group relative flex aspect-4/5 w-full items-center justify-center"
 			style={{
 				backgroundImage: `url(${bgImageUrl})`,
 				backgroundSize: "cover",
 			}}
 		>
-			<BlurOverlay client:load />
+			{
+				variant.type === "video" && (
+					<video
+						src={getCldVideoUrl({ src: variant.previewVideo })}
+						loop
+						muted
+						autoplay
+						preload="metadata"
+						playsinline
+						class="relative z-10 h-auto"
+						style={{ width: previewWidthCss }}
+					/>
+				)
+			}
 
-			<video
-				src={previewVideoUrl}
-				loop
-				muted
-				autoplay
-				playsinline
-				class="relative z-10 h-auto w-[90%]"></video>
+			{
+				variant.type === "image" && (
+					<img
+						src={getCldImageUrl({
+							src: variant.previewImage,
+							width: 600,
+							format: "auto",
+						})}
+						alt={variant.alt || title}
+						loading="lazy"
+						decoding="async"
+						class="relative z-10 h-auto object-contain"
+						style={{ width: previewWidthCss }}
+					/>
+				)
+			}
+
+			{
+				variant.type === "image-swap" && (
+					<ImageSwapMedia
+						client:load
+						images={variant.previewImages}
+						alt={variant.alt || title}
+						intervalMs={variant.intervalMs}
+						containerClassName="absolute inset-0 h-full w-full"
+						className="relative z-10 h-auto object-contain"
+						imageStyle={{ width: previewWidthCss }}
+					/>
+				)
+			}
 		</div>
 	</a>
 </Widget>

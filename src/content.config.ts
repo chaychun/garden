@@ -15,43 +15,34 @@ const projects = defineCollection({
 		description: z.string(),
 		createdDate: z.coerce.date(),
 		lastUpdatedDate: z.coerce.date(),
-		disableSidebarClickOutside: z.boolean().default(false),
-		floatingSidebar: z.boolean().default(false),
 		widget: z
 			.discriminatedUnion("type", [
 				z.object({
-					type: z.literal("preview"),
-					config: z.object({
-						bgImage: z.string(),
-						previewVideo: z.string(),
-						tone: z.enum(["light", "dark"]).optional(),
-						id: z.string().optional(),
-					}),
-				}),
-				z.object({
 					type: z.literal("image"),
 					config: z.object({
-						image: z.string(),
+						bgImage: z.string(),
+						previewImage: z.string(),
 						alt: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 				z.object({
 					type: z.literal("video"),
 					config: z.object({
-						video: z.string(),
-						poster: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
+						bgImage: z.string(),
+						previewVideo: z.string(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 				z.object({
-					type: z.literal("imageSwap"),
+					type: z.literal("image-swap"),
 					config: z.object({
-						images: z.array(z.string()),
+						bgImage: z.string(),
+						previewImages: z.array(z.string()),
 						alt: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
 						aspect: z.enum(["portrait", "landscape", "square"]).optional(),
 						intervalMs: z.number().optional(),
+						previewWidth: z.number().min(0).max(1).optional(),
 					}),
 				}),
 			])
