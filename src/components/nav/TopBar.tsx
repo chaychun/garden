@@ -25,7 +25,9 @@ export default function TopBar({
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
 	const rafIdRef = useRef<number | null>(null);
 	const { activeFilter } = useFilterStore();
-	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS];
+	const availableFilters: FilterType[] = [...AVAILABLE_FILTERS].filter(
+		(f) => f !== "Designs",
+	);
 
 	const isSingleRow = isDesktop || (!isDesktop && isScrolled);
 	const HEADER_HEIGHT_SINGLE_ROW = 100;
