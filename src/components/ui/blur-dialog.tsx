@@ -1,6 +1,6 @@
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { cn } from "@/lib/utils";
-import { animate, easeOut, stagger } from "motion";
+import { animate, stagger } from "motion";
 import { AnimatePresence, motion } from "motion/react";
 import {
 	createContext,
@@ -12,6 +12,7 @@ import {
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { ScrollArea } from "./scroll-area";
 
 interface BlurDialogContextValue {
 	open: boolean;
@@ -98,35 +99,27 @@ export function BlurDialogTrigger({
 			? (children as (o: boolean) => React.ReactElement)(open)
 			: children;
 
+	const activate = useCallback(
+		(e?: React.SyntheticEvent) => {
+			if (disableEventBubbling && e) e.stopPropagation();
+			if (e && e.defaultPrevented) return;
+			if (!open && typeof window !== "undefined" && window.innerWidth < 768) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
+			toggle();
+		},
+		[disableEventBubbling, open, toggle],
+	);
+
 	return (
 		<div
 			className={className}
-			onClick={(e) => {
-				if (disableEventBubbling) e.stopPropagation();
-				if (!e.defaultPrevented) {
-					if (
-						!open &&
-						typeof window !== "undefined" &&
-						window.innerWidth < 768
-					) {
-						window.scrollTo({ top: 0, behavior: "smooth" });
-					}
-					toggle();
-				}
-			}}
+			onClick={activate}
 			onKeyDown={(e) => {
 				if (e.defaultPrevented) return;
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
-					if (disableEventBubbling) e.stopPropagation();
-					if (
-						!open &&
-						typeof window !== "undefined" &&
-						window.innerWidth < 768
-					) {
-						window.scrollTo({ top: 0, behavior: "smooth" });
-					}
-					toggle();
+					activate(e);
 				}
 			}}
 			role="button"
@@ -146,6 +139,7 @@ interface BlurDialogContentProps {
 	overlayZIndex?: number;
 	ariaLabelledby?: string;
 	ariaDescribedby?: string;
+	keepMounted?: boolean;
 }
 
 export function BlurDialogContent({
@@ -155,6 +149,7 @@ export function BlurDialogContent({
 	overlayZIndex = 9990,
 	ariaLabelledby,
 	ariaDescribedby,
+	keepMounted,
 }: BlurDialogContentProps) {
 	const { open, close } = useBlurDialogContext();
 	const [mounted, setMounted] = useState(false);
@@ -171,8 +166,16 @@ export function BlurDialogContent({
 		);
 		const elements = Array.from(nodes);
 		if (!elements.length) return;
+		const count = elements.length;
+		const totalStaggerTarget = 0.4;
+		const maxPerStepDelay = 0.05;
+		const perStepDelay = Math.min(
+			maxPerStepDelay,
+			totalStaggerTarget / Math.max(1, count),
+		);
+
 		if (open) {
-			const delayFor = stagger(0.05);
+			const delayFor = stagger(perStepDelay);
 			const enterKeyframes = {
 				opacity: [0, 1],
 				y: [8, 0],
@@ -186,7 +189,7 @@ export function BlurDialogContent({
 				});
 			});
 		} else {
-			const delayFor = stagger(0.05, { from: "last" });
+			const delayFor = stagger(perStepDelay, { from: "last" });
 			const exitKeyframes = {
 				opacity: [1, 0],
 				y: [0, 8],
@@ -222,9 +225,9 @@ export function BlurDialogContent({
 						exit={{
 							scale: 1,
 							opacity: 0,
-							transition: { ease: "easeIn", duration: 0.3 },
+							transition: { ease: "easeInOut", duration: 0.4 },
 						}}
-						transition={{ duration: 0.4, ease: easeOut }}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
 					/>
 					<ProgressiveBlur
 						direction="top"
@@ -235,9 +238,9 @@ export function BlurDialogContent({
 						animate={{ opacity: 1 }}
 						exit={{
 							opacity: 0,
-							transition: { ease: "easeIn", duration: 0.3 },
+							transition: { ease: "easeInOut", duration: 0.4 },
 						}}
-						transition={{ duration: 0.4, ease: easeOut }}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
 					/>
 				</div>
 			)}
@@ -249,31 +252,48 @@ export function BlurDialogContent({
 			{mounted && typeof document !== "undefined"
 				? createPortal(overlay, document.body)
 				: null}
-			<AnimatePresence>
-				{open && (
+			{(() => {
+				const panelClassName = cn(
+					"absolute top-full right-0 left-0 z-50 mt-6 w-full max-w-[400px]",
+					keepMounted && !open && "pointer-events-none",
+					className,
+				);
+
+				const motionStateProps = keepMounted
+					? {
+							initial: false,
+							animate: open
+								? { opacity: 1, y: 0, filter: "blur(0px)" }
+								: { opacity: 0, y: 8, filter: "blur(8px)" },
+						}
+					: {
+							initial: { opacity: 0, y: 8, filter: "blur(8px)" },
+							animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+							exit: { opacity: 0, y: 8, filter: "blur(8px)" },
+						};
+
+				const panel = (
 					<motion.div
 						ref={contentRef}
-						className={cn(
-							"absolute top-full right-0 left-0 z-50 mt-6 max-w-[min(92vw,720px)] md:-right-full",
-							className,
-						)}
+						className={panelClassName}
 						role="dialog"
-						aria-modal="true"
+						aria-modal={open}
+						aria-hidden={keepMounted ? !open || undefined : undefined}
 						aria-labelledby={ariaLabelledby}
 						aria-describedby={ariaDescribedby}
-						initial={{ opacity: 0, y: 8 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{
-							opacity: 0,
-							y: 8,
-							transition: { duration: 0.3, ease: easeOut },
-						}}
-						transition={{ duration: 0.3, ease: easeOut }}
+						transition={{ duration: 0.4, ease: "easeInOut" }}
+						{...motionStateProps}
 					>
-						{children}
+						<ScrollArea className="h-[70dvh]">{children}</ScrollArea>
 					</motion.div>
-				)}
-			</AnimatePresence>
+				);
+
+				return keepMounted ? (
+					panel
+				) : (
+					<AnimatePresence>{open && panel}</AnimatePresence>
+				);
+			})()}
 		</>
 	);
 }

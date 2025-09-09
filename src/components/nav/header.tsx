@@ -107,8 +107,10 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent
+								className="max-w-none"
 								overlayZIndex={9990}
 								ariaLabelledby="header-info-title"
+								keepMounted
 							>
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div className="flex flex-col gap-3" data-blur-dialog-stagger>
