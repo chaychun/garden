@@ -15,8 +15,6 @@ const projects = defineCollection({
 		description: z.string(),
 		createdDate: z.coerce.date(),
 		lastUpdatedDate: z.coerce.date(),
-		disableSidebarClickOutside: z.boolean().default(false),
-		floatingSidebar: z.boolean().default(false),
 		widget: z
 			.discriminatedUnion("type", [
 				z.object({
