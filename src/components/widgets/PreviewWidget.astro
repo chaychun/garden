@@ -58,7 +58,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 
 <Widget
 	class:list={[
-		"flex max-w-[528px] flex-col gap-3 md:justify-between",
+		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	{...rest}
@@ -114,12 +114,18 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 				variant.type === "image-swap" && (
 					<ImageSwapMedia
 						client:load
-						images={variant.previewImages}
+						images={variant.previewImages.map((id) =>
+							getCldImageUrl({
+								src: id,
+								width: 600,
+								format: "auto",
+							}),
+						)}
 						alt={variant.alt || title}
 						intervalMs={variant.intervalMs}
-						containerClassName="absolute inset-0 h-full w-full"
-						className="relative z-10 h-auto object-contain"
+						className="relative z-10 h-auto object-cover"
 						imageStyle={{ width: previewWidthCss }}
+						aspect={variant.aspect}
 					/>
 				)
 			}
