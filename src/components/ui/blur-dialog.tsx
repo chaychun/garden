@@ -254,7 +254,7 @@ export function BlurDialogContent({
 				: null}
 			{(() => {
 				const panelClassName = cn(
-					"absolute top-full right-0 left-0 z-50 mt-6 w/full max-w-[400px]",
+					"absolute top-full right-0 left-0 z-50 mt-6 w-full max-w-[400px]",
 					keepMounted && !open && "pointer-events-none",
 					className,
 				);
@@ -277,7 +277,7 @@ export function BlurDialogContent({
 						ref={contentRef}
 						className={panelClassName}
 						role="dialog"
-						aria-modal="true"
+						aria-modal={open}
 						aria-hidden={keepMounted ? !open || undefined : undefined}
 						aria-labelledby={ariaLabelledby}
 						aria-describedby={ariaDescribedby}
