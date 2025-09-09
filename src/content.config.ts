@@ -1,12 +1,33 @@
 import { file, glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+const backgroundFields = {
+	bgImage: z.string().optional(),
+	bgFillClass: z.string().optional(),
+};
+
+function withBackground<T extends z.ZodRawShape>(shape: T) {
+	return z
+		.object({
+			...backgroundFields,
+			...shape,
+		})
+		.superRefine((v, ctx) => {
+			if (!v.bgImage && !v.bgFillClass) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: "Provide bgImage or bgFillClass",
+					path: ["bgImage"],
+				});
+			}
+		});
+}
+
 const widgetSchema = z
 	.discriminatedUnion("type", [
 		z.object({
 			type: z.literal("image"),
-			config: z.object({
-				bgImage: z.string(),
+			config: withBackground({
 				previewImage: z.string(),
 				alt: z.string().optional(),
 				previewWidth: z.number().min(0).max(1).optional(),
@@ -14,16 +35,14 @@ const widgetSchema = z
 		}),
 		z.object({
 			type: z.literal("video"),
-			config: z.object({
-				bgImage: z.string(),
+			config: withBackground({
 				previewVideo: z.string(),
 				previewWidth: z.number().min(0).max(1).optional(),
 			}),
 		}),
 		z.object({
 			type: z.literal("image-swap"),
-			config: z.object({
-				bgImage: z.string(),
+			config: withBackground({
 				previewImages: z.array(z.string()),
 				alt: z.string().optional(),
 				aspect: z.enum(["portrait", "landscape", "square"]).optional(),

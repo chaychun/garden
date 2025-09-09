@@ -9,7 +9,7 @@
 		"widget": {
 			"type": "image-swap",
 			"config": {
-				"bgImage": "photo-1635744837759-051facae9e6a_yrhmtk",
+				"bgFillClass": "bg-base-200",
 				"previewImages": [
 					"graeco-latin-4x4_amyvvn",
 					"graeco-latin-4x4_5_ockdg1",
