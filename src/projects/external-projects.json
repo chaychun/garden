@@ -1,0 +1,18 @@
+{
+	"bbva-innovation-center": {
+		"title": "BBVA Innovation Center",
+		"description": "External case study hosted elsewhere.",
+		"types": ["design"],
+		"createdDate": "2023-10-01",
+		"lastUpdatedDate": "2024-07-15",
+		"externalUrl": "https://www.bbva.com/",
+		"widget": {
+			"type": "image",
+			"config": {
+				"bgImage": "storage1_y3hrfm",
+				"previewImage": "chair2_bs3tqs",
+				"alt": "BBVA Innovation Center"
+			}
+		}
+	}
+}
