@@ -35,10 +35,12 @@ interface Props {
 	href: string;
 	bgImage: string;
 	variant: VariantProps;
+	external?: boolean;
 	[key: string]: any;
 }
 
-const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
+const { title, href, bgImage, variant, external, ...rest } =
+	Astro.props as Props;
 
 const bgImageUrl = getCldImageUrl({
 	src: bgImage,
@@ -67,6 +69,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		aria-label={`View ${title}`}
 		data-cursor-hover
 		data-cursor-title={title}
+		data-cursor-external={external ? "true" : undefined}
 	>
 		<div
 			class="group relative flex aspect-4/5 w-full items-center justify-center"

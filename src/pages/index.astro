@@ -17,6 +17,7 @@ type UnifiedItem = {
 	types: ContentTypeId[];
 	lastUpdatedDate: Date;
 	href: string;
+	isExternal: boolean;
 	widget?: {
 		type: "image" | "video" | "image-swap";
 		config: any;
@@ -30,6 +31,7 @@ const allItems: UnifiedItem[] = [
 		types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
 		lastUpdatedDate: item.data.lastUpdatedDate,
 		href: `/project/${encodeURIComponent(item.id)}/`,
+		isExternal: false,
 		widget: item.data.widget,
 	})),
 	...externalProjects.map((item) => ({
@@ -38,6 +40,7 @@ const allItems: UnifiedItem[] = [
 		types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
 		lastUpdatedDate: item.data.lastUpdatedDate,
 		href: item.data.externalUrl || "#",
+		isExternal: true,
 		widget: item.data.widget,
 	})),
 ].sort((a, b) => b.lastUpdatedDate.getTime() - a.lastUpdatedDate.getTime());
@@ -87,6 +90,7 @@ const filterName =
 				title: item.title,
 				types: typeTokens,
 				href: item.href,
+				external: item.isExternal,
 			};
 
 			const animationStyle =
