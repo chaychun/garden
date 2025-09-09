@@ -7,6 +7,7 @@ import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
 import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 import CursorFollower from "@/components/ui/cursor-follower";
+import type { WidgetUnion } from "@/content/widgets-schema";
 
 const projects = await getCollection("projects");
 const externalProjects = await getCollection("externalProjects");
@@ -18,10 +19,7 @@ type UnifiedItem = {
 	lastUpdatedDate: Date;
 	href: string;
 	isExternal: boolean;
-	widget?: {
-		type: "image" | "video" | "image-swap";
-		config: any;
-	};
+	widget?: WidgetUnion;
 };
 
 const allItems: UnifiedItem[] = [
@@ -39,7 +37,7 @@ const allItems: UnifiedItem[] = [
 		title: item.data.title,
 		types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
 		lastUpdatedDate: item.data.lastUpdatedDate,
-		href: item.data.externalUrl || "#",
+		href: item.data.externalUrl,
 		isExternal: true,
 		widget: item.data.widget,
 	})),

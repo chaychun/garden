@@ -6,7 +6,6 @@ export interface ImageSwapMediaProps {
 	alt?: string;
 	intervalMs?: number;
 	className?: string;
-	fadeMs?: number;
 	imageStyle?: CSSProperties;
 	aspect?: "portrait" | "landscape" | "square";
 }
@@ -16,7 +15,6 @@ const ImageSwapMedia = ({
 	alt = "",
 	intervalMs = 500,
 	className,
-	fadeMs = 0,
 	imageStyle,
 	aspect,
 }: ImageSwapMediaProps) => {
@@ -54,11 +52,10 @@ const ImageSwapMedia = ({
 		<img
 			src={validImages[index]}
 			alt={alt}
-			loading="lazy"
+			loading={index === 0 ? "eager" : "lazy"}
 			decoding="async"
 			style={{
 				aspectRatio: aspectRatioCss,
-				transition: `opacity ${Math.max(0, fadeMs)}ms ease`,
 				...imageStyle,
 			}}
 			className={className}

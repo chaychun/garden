@@ -69,6 +69,8 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		data-cursor-hover
 		data-cursor-title={title}
 		data-cursor-external={external ? "true" : undefined}
+		target={external ? "_blank" : undefined}
+		rel={external ? "noopener noreferrer" : undefined}
 	>
 		<div
 			class:list={[
@@ -109,7 +111,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 							format: "auto",
 						})}
 						alt={variant.alt || title}
-						loading="lazy"
+						loading="eager"
 						decoding="async"
 						class="relative z-10 h-auto object-contain"
 						style={{ width: previewWidthCss }}
