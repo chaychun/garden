@@ -20,36 +20,26 @@ const projects = defineCollection({
 		widget: z
 			.discriminatedUnion("type", [
 				z.object({
-					type: z.literal("preview"),
-					config: z.object({
-						bgImage: z.string(),
-						previewVideo: z.string(),
-						tone: z.enum(["light", "dark"]).optional(),
-						id: z.string().optional(),
-					}),
-				}),
-				z.object({
 					type: z.literal("image"),
 					config: z.object({
-						image: z.string(),
+						bgImage: z.string(),
+						previewImage: z.string(),
 						alt: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
 					}),
 				}),
 				z.object({
 					type: z.literal("video"),
 					config: z.object({
-						video: z.string(),
-						poster: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
+						bgImage: z.string(),
+						previewVideo: z.string(),
 					}),
 				}),
 				z.object({
-					type: z.literal("imageSwap"),
+					type: z.literal("image-swap"),
 					config: z.object({
-						images: z.array(z.string()),
+						bgImage: z.string(),
+						previewImages: z.array(z.string()),
 						alt: z.string().optional(),
-						height: z.union([z.string(), z.number()]).optional(),
 						aspect: z.enum(["portrait", "landscape", "square"]).optional(),
 						intervalMs: z.number().optional(),
 					}),

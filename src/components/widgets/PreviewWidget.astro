@@ -1,24 +1,56 @@
 ---
-import BlurOverlay from "@/components/ui/blur-overlay";
 import Widget from "@/components/widgets/Widget.astro";
+import ImageSwapMedia from "@/components/widgets/image-swap-media";
 import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
+
+interface VideoVariantProps {
+	type: "video";
+	previewVideo: string;
+}
+
+interface ImageVariantProps {
+	type: "image";
+	previewImage: string;
+	alt?: string;
+}
+
+interface ImageSwapVariantProps {
+	type: "image-swap";
+	previewImages: string[];
+	alt?: string;
+	aspect?: "portrait" | "landscape" | "square";
+	intervalMs?: number;
+}
+
+type VariantProps =
+	| VideoVariantProps
+	| ImageVariantProps
+	| ImageSwapVariantProps;
 
 interface Props {
 	title: string;
-	description: string;
-	date: string;
+	href: string;
 	bgImage: string;
-	previewVideo: string;
-	types?: string[];
-	tone?: "light" | "dark";
-	id: string;
+	variant: VariantProps;
 	[key: string]: any;
 }
 
-const { title, bgImage, previewVideo, id, ...rest } = Astro.props;
+const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
 
-const bgImageUrl = getCldImageUrl({ src: bgImage, width: 600 });
-const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
+const bgImageUrl = getCldImageUrl({
+	src: bgImage,
+	width: 1200,
+	format: "auto",
+});
+
+const aspectClass = (() => {
+	if (variant.type === "image-swap") {
+		if (variant.aspect === "landscape") return "aspect-4/3";
+		if (variant.aspect === "square") return "aspect-square";
+		return "aspect-3/4";
+	}
+	return "aspect-4/5";
+})();
 ---
 
 <Widget
@@ -29,7 +61,7 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 	{...rest}
 >
 	<a
-		href={`/project/${encodeURIComponent(id)}/`}
+		href={href}
 		class="block"
 		aria-label={`View ${title}`}
 		data-cursor-hover
@@ -38,22 +70,54 @@ const previewVideoUrl = getCldVideoUrl({ src: previewVideo });
 		<div
 			class:list={[
 				"group relative flex w-full items-center justify-center",
-				"aspect-4/5",
+				aspectClass,
 			]}
 			style={{
 				backgroundImage: `url(${bgImageUrl})`,
 				backgroundSize: "cover",
 			}}
 		>
-			<BlurOverlay client:load />
+			{
+				variant.type === "video" && (
+					<video
+						src={getCldVideoUrl({ src: variant.previewVideo })}
+						loop
+						muted
+						autoplay
+						playsinline
+						class="relative z-10 h-auto w-[90%]"
+					/>
+				)
+			}
 
-			<video
-				src={previewVideoUrl}
-				loop
-				muted
-				autoplay
-				playsinline
-				class="relative z-10 h-auto w-[90%]"></video>
+			{
+				variant.type === "image" && (
+					<img
+						src={getCldImageUrl({
+							src: variant.previewImage,
+							width: 1200,
+							format: "auto",
+						})}
+						alt={variant.alt || title}
+						loading="lazy"
+						decoding="async"
+						class="relative z-10 h-auto w-[90%] object-contain"
+					/>
+				)
+			}
+
+			{
+				variant.type === "image-swap" && (
+					<ImageSwapMedia
+						client:load
+						images={variant.previewImages}
+						alt={variant.alt || title}
+						intervalMs={variant.intervalMs}
+						containerClassName="absolute inset-0 h-full w-full"
+						className="relative z-10 h-auto w-[90%] object-contain"
+					/>
+				)
+			}
 		</div>
 	</a>
 </Widget>

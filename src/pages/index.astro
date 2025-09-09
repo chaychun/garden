@@ -2,15 +2,11 @@
 export const prerender = false;
 
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
-import ImageWidget from "@/components/widgets/ImageWidget.astro";
-import VideoWidget from "@/components/widgets/VideoWidget.astro";
-import ImageSwapWidget from "@/components/widgets/ImageSwapWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
 import { AVAILABLE_FILTERS, getDefinitionById } from "@/lib/content-types";
 import CursorFollower from "@/components/ui/cursor-follower";
-import { getCldImageUrl } from "astro-cloudinary/helpers";
 
 const projects = await getCollection("projects");
 
@@ -43,22 +39,6 @@ const urlParams = new URLSearchParams(
 const initialFilterParam = urlParams.get("filter") || "all";
 const filterName =
 	initialFilterParam.charAt(0).toUpperCase() + initialFilterParam.slice(1);
-
-// Demo images reused from parallax-list
-const swapDemoImages = [
-	getCldImageUrl({ src: "bbva_mkmupf", width: 1200, format: "auto" }),
-	getCldImageUrl({
-		src: "cedrus-residential_rdpmyb",
-		width: 1200,
-		format: "auto",
-	}),
-	getCldImageUrl({ src: "icc-sydney_daohjj", width: 1200, format: "auto" }),
-	getCldImageUrl({
-		src: "john-cranko-school_xi8wyq",
-		width: 1200,
-		format: "auto",
-	}),
-];
 ---
 
 <HomeLayout
@@ -77,85 +57,62 @@ const swapDemoImages = [
 			const typeTokens = (item.data.types ?? []) as ContentTypeId[];
 			const baseProps = {
 				title: item.data.title,
-				description: item.data.description,
 				types: typeTokens,
-				id: item.id,
+				href: `/project/${encodeURIComponent(item.id)}/`,
 			};
 
 			const animationStyle =
 				"opacity: 0; transform: translateY(10px); visibility: hidden;";
 			const dataTypes = typeTokens.join(" ");
 
-			// If widget configuration exists, use it
 			if (item.data.widget) {
 				const { type, config } = item.data.widget;
-
-				switch (type) {
-					case "preview":
-						return (
-							<PreviewWidget
-								{...baseProps}
-								bgImage={config.bgImage}
-								previewVideo={config.previewVideo}
-								date={formattedDate}
-								tone={config.tone || "light"}
-								data-types={dataTypes}
-								style={animationStyle}
-							/>
-						);
-					case "image":
-						return (
-							<ImageWidget
-								{...baseProps}
-								image={config.image}
-								alt={config.alt}
-								height={config.height}
-								position={config.position}
-								data-types={dataTypes}
-								style={animationStyle}
-							/>
-						);
-					case "video":
-						return (
-							<VideoWidget
-								{...baseProps}
-								video={config.video}
-								poster={config.poster}
-								height={config.height}
-								position={config.position}
-								data-types={dataTypes}
-								style={animationStyle}
-							/>
-						);
-					case "imageSwap":
-						return (
-							<ImageSwapWidget
-								{...baseProps}
-								images={config.images}
-								alt={config.alt}
-								height={config.height}
-								position={config.position}
-								aspect={config.aspect}
-								intervalMs={config.intervalMs}
-								data-types={dataTypes}
-								style={animationStyle}
-							/>
-						);
+				if (type === "video") {
+					return (
+						<PreviewWidget
+							{...baseProps}
+							bgImage={config.bgImage}
+							variant={{ type: "video", previewVideo: config.previewVideo }}
+							data-types={dataTypes}
+							style={animationStyle}
+						/>
+					);
+				}
+				if (type === "image") {
+					return (
+						<PreviewWidget
+							{...baseProps}
+							bgImage={config.bgImage}
+							variant={{
+								type: "image",
+								previewImage: config.previewImage,
+								alt: config.alt,
+							}}
+							data-types={dataTypes}
+							style={animationStyle}
+						/>
+					);
+				}
+				if (type === "image-swap") {
+					return (
+						<PreviewWidget
+							{...baseProps}
+							bgImage={config.bgImage}
+							variant={{
+								type: "image-swap",
+								previewImages: config.previewImages,
+								alt: config.alt,
+								aspect: config.aspect,
+								intervalMs: config.intervalMs,
+							}}
+							data-types={dataTypes}
+							style={animationStyle}
+						/>
+					);
 				}
 			}
 
-			// Default to PreviewWidget for backward compatibility
-			return (
-				<PreviewWidget
-					{...baseProps}
-					bgImage=""
-					previewVideo=""
-					date={formattedDate}
-					tone="light"
-					data-types={dataTypes}
-					style={animationStyle}
-				/>
-			);
+			return null;
 		})
 	}
 	<CursorFollower
