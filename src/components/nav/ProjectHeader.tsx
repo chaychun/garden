@@ -19,7 +19,7 @@ export default function ProjectHeader({
 	return (
 		<header className="relative z-[10000] p-4">
 			<div className="relative z-[10000]">
-				<div className="grid grid-cols-5 items-start gap-2.5">
+				<div className="grid grid-cols-3 md:grid-cols-5 items-start gap-2.5">
 					<a
 						href="/"
 						className="text-base-900 col-span-1 text-xl font-medium md:col-span-2"
@@ -27,7 +27,7 @@ export default function ProjectHeader({
 						<h1>Chayut.</h1>
 					</a>
 
-					<div className="col-span-3 col-start-3 flex flex-col gap-1 md:col-span-2">
+					<div className="col-span-2 flex flex-col gap-1 md:col-span-2">
 						<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
 							{projectTitle}
 						</div>
@@ -52,6 +52,7 @@ export default function ProjectHeader({
 								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent
+								className="max-w-none"
 								overlayZIndex={9990}
 								ariaLabelledby="project-info-title"
 								keepMounted
