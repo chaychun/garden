@@ -72,8 +72,11 @@ const filterName =
 						<PreviewWidget
 							{...baseProps}
 							bgImage={config.bgImage}
-							previewWidth={config.previewWidth}
-							variant={{ type: "video", previewVideo: config.previewVideo }}
+							variant={{
+								type: "video",
+								previewVideo: config.previewVideo,
+								previewWidth: config.previewWidth,
+							}}
 							data-types={dataTypes}
 							style={animationStyle}
 						/>
@@ -84,11 +87,11 @@ const filterName =
 						<PreviewWidget
 							{...baseProps}
 							bgImage={config.bgImage}
-							previewWidth={config.previewWidth}
 							variant={{
 								type: "image",
 								previewImage: config.previewImage,
 								alt: config.alt,
+								previewWidth: config.previewWidth,
 							}}
 							data-types={dataTypes}
 							style={animationStyle}
@@ -100,13 +103,13 @@ const filterName =
 						<PreviewWidget
 							{...baseProps}
 							bgImage={config.bgImage}
-							previewWidth={config.previewWidth}
 							variant={{
 								type: "image-swap",
 								previewImages: config.previewImages,
 								alt: config.alt,
 								aspect: config.aspect,
 								intervalMs: config.intervalMs,
+								previewWidth: config.previewWidth,
 							}}
 							data-types={dataTypes}
 							style={animationStyle}

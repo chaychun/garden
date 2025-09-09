@@ -6,12 +6,14 @@ import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
 interface VideoVariantProps {
 	type: "video";
 	previewVideo: string;
+	previewWidth?: number;
 }
 
 interface ImageVariantProps {
 	type: "image";
 	previewImage: string;
 	alt?: string;
+	previewWidth?: number;
 }
 
 interface ImageSwapVariantProps {
@@ -20,6 +22,7 @@ interface ImageSwapVariantProps {
 	alt?: string;
 	aspect?: "portrait" | "landscape" | "square";
 	intervalMs?: number;
+	previewWidth?: number;
 }
 
 type VariantProps =
@@ -32,12 +35,10 @@ interface Props {
 	href: string;
 	bgImage: string;
 	variant: VariantProps;
-	previewWidth?: number;
 	[key: string]: any;
 }
 
-const { title, href, bgImage, variant, previewWidth, ...rest } =
-	Astro.props as Props;
+const { title, href, bgImage, variant, ...rest } = Astro.props as Props;
 
 const bgImageUrl = getCldImageUrl({
 	src: bgImage,
@@ -45,19 +46,10 @@ const bgImageUrl = getCldImageUrl({
 	format: "auto",
 });
 
-const aspectClass = (() => {
-	if (variant.type === "image-swap") {
-		if (variant.aspect === "landscape") return "aspect-4/3";
-		if (variant.aspect === "square") return "aspect-square";
-		return "aspect-3/4";
-	}
-	return "aspect-4/5";
-})();
-
 const clampedWidth = (() => {
-	if (typeof previewWidth !== "number" || Number.isNaN(previewWidth))
-		return 0.9;
-	return Math.max(0, Math.min(1, previewWidth));
+	const vw = variant.previewWidth;
+	if (typeof vw !== "number" || Number.isNaN(vw) || vw <= 0) return 0.9;
+	return Math.max(0, Math.min(1, vw));
 })();
 const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 ---
@@ -77,10 +69,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		data-cursor-title={title}
 	>
 		<div
-			class:list={[
-				"group relative flex w-full items-center justify-center",
-				aspectClass,
-			]}
+			class="group relative flex aspect-4/5 w-full items-center justify-center"
 			style={{
 				backgroundImage: `url(${bgImageUrl})`,
 				backgroundSize: "cover",
@@ -93,6 +82,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 						loop
 						muted
 						autoplay
+						preload="metadata"
 						playsinline
 						class="relative z-10 h-auto"
 						style={{ width: previewWidthCss }}
