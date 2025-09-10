@@ -30,7 +30,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 				<div className="border-base-100 bg-base-50 fixed top-0 right-0 left-0 z-[10000] border-b md:hidden">
 					<div className="mx-auto px-4 py-3">
 						<div className="flex justify-between">
-							{AVAILABLE_FILTERS.map((filter) => (
+							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map((filter) => (
 								<button
 									key={filter}
 									type="button"
@@ -59,7 +59,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 
 					<div className="hidden gap-2.5 md:flex">
 						<div className="flex flex-col">
-							{AVAILABLE_FILTERS.map((filter) => (
+							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map((filter) => (
 								<button
 									key={filter}
 									type="button"
