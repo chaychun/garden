@@ -50,7 +50,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 				</div>
 				<div className="h-14 md:hidden" />
 
-				<div className="grid grid-cols-3 md:grid-cols-5 items-start gap-2.5">
+				<div className="grid grid-cols-3 items-start gap-2.5 md:grid-cols-5">
 					<div className="col-span-1 md:col-span-1">
 						<a href="/" className="text-base-900 text-xl font-medium">
 							{title}.

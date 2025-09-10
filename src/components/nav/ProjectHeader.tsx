@@ -19,7 +19,7 @@ export default function ProjectHeader({
 	return (
 		<header className="relative z-[10000] p-4">
 			<div className="relative z-[10000]">
-				<div className="grid grid-cols-3 md:grid-cols-5 items-start gap-2.5">
+				<div className="grid grid-cols-3 items-start gap-2.5 md:grid-cols-5">
 					<a
 						href="/"
 						className="text-base-900 col-span-1 text-xl font-medium md:col-span-2"
@@ -52,7 +52,6 @@ export default function ProjectHeader({
 								)}
 							</BlurDialogTrigger>
 							<BlurDialogContent
-								className="max-w-none"
 								overlayZIndex={9990}
 								ariaLabelledby="project-info-title"
 								keepMounted
