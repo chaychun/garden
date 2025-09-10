@@ -12,6 +12,8 @@ import type { WidgetUnion } from "@/content/widgets-schema";
 const projects = await getCollection("projects");
 const externalProjects = await getCollection("externalProjects");
 
+const HIDDEN_PROJECT_IDS = new Set(["filter-layout-transition"]);
+
 type UnifiedItem = {
 	id: string;
 	title: string;
@@ -22,8 +24,11 @@ type UnifiedItem = {
 	widget?: WidgetUnion;
 };
 
+
 const allItems: UnifiedItem[] = [
-	...projects.map((item) => ({
+	...projects
+		.filter((item) => !HIDDEN_PROJECT_IDS.has(item.id))
+		.map((item) => ({
 		id: item.id,
 		title: item.data.title,
 		types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
@@ -161,12 +166,12 @@ const filterName =
 
 <script>
 	import type { FilterType } from "@/lib/content-types";
-	import {
-		filterFromUrlValue,
-		urlFilterValueToTypeId,
-	} from "@/lib/content-types";
-	import { useFilterStore } from "@/lib/stores/filterStore";
-	import { animate, stagger } from "motion";
+import {
+filterFromUrlValue,
+urlFilterValueToTypeId,
+} from "@/lib/content-types";
+import { useFilterStore } from "@/lib/stores/filterStore";
+import { animate, stagger } from "motion";
 
 	function updateTitle(urlFilterValue: string) {
 		const titleFilter = filterFromUrlValue(urlFilterValue);
