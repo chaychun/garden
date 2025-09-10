@@ -50,8 +50,8 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 				</div>
 				<div className="h-14 md:hidden" />
 
-				<div className="grid grid-cols-5 items-start gap-2.5">
-					<div className="col-span-2 md:col-span-1">
+				<div className="grid grid-cols-3 items-start gap-2.5 md:grid-cols-5">
+					<div className="col-span-1 md:col-span-1">
 						<a href="/" className="text-base-900 text-xl font-medium">
 							{title}.
 						</a>
@@ -84,7 +84,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 						</div>
 					</div>
 
-					<div className="col-span-3 flex flex-col gap-1 md:col-span-2">
+					<div className="col-span-2 flex flex-col gap-1 md:col-span-2">
 						<div className="text-base-900 text-xs leading-[1.1] font-semibold uppercase">
 							Self-taught designer-builder exploring interesting patterns on the
 							web.
