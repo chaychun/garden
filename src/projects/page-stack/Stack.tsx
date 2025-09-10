@@ -172,7 +172,6 @@ const Stack = () => {
 
 			<StackControls
 				isMobile={isMobile}
-				activeIndex={activeIndex}
 				numCards={numCards}
 				onAddCard={addCard}
 				onRemoveCard={removeCard}

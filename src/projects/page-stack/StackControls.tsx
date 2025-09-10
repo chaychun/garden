@@ -3,7 +3,6 @@ import { Minus, Plus } from "lucide-react";
 
 interface StackControlsProps {
 	isMobile: boolean;
-	activeIndex: number;
 	numCards: number;
 	onAddCard: () => void;
 	onRemoveCard: () => void;
@@ -11,7 +10,6 @@ interface StackControlsProps {
 
 const StackControls = ({
 	isMobile,
-	activeIndex,
 	numCards,
 	onAddCard,
 	onRemoveCard,

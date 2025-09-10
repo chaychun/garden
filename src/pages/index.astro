@@ -24,19 +24,18 @@ type UnifiedItem = {
 	widget?: WidgetUnion;
 };
 
-
 const allItems: UnifiedItem[] = [
 	...projects
 		.filter((item) => !HIDDEN_PROJECT_IDS.has(item.id))
 		.map((item) => ({
-		id: item.id,
-		title: item.data.title,
-		types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
-		lastUpdatedDate: item.data.lastUpdatedDate,
-		href: `/project/${encodeURIComponent(item.id)}/`,
-		isExternal: false,
-		widget: item.data.widget,
-	})),
+			id: item.id,
+			title: item.data.title,
+			types: (item.data.types ?? ["interaction"]) as ContentTypeId[],
+			lastUpdatedDate: item.data.lastUpdatedDate,
+			href: `/project/${encodeURIComponent(item.id)}/`,
+			isExternal: false,
+			widget: item.data.widget,
+		})),
 	...externalProjects.map((item) => ({
 		id: item.id,
 		title: item.data.title,
@@ -82,12 +81,6 @@ const filterName =
 >
 	{
 		allItems.map((item) => {
-			const itemDate = item.lastUpdatedDate;
-			const formattedDate = itemDate.toLocaleDateString("en-US", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-			});
 			const typeTokens = (item.types ?? []) as ContentTypeId[];
 			const baseProps = {
 				title: item.title,
@@ -166,12 +159,12 @@ const filterName =
 
 <script>
 	import type { FilterType } from "@/lib/content-types";
-import {
-filterFromUrlValue,
-urlFilterValueToTypeId,
-} from "@/lib/content-types";
-import { useFilterStore } from "@/lib/stores/filterStore";
-import { animate, stagger } from "motion";
+	import {
+		filterFromUrlValue,
+		urlFilterValueToTypeId,
+	} from "@/lib/content-types";
+	import { useFilterStore } from "@/lib/stores/filterStore";
+	import { animate, stagger } from "motion";
 
 	function updateTitle(urlFilterValue: string) {
 		const titleFilter = filterFromUrlValue(urlFilterValue);
@@ -203,7 +196,7 @@ import { animate, stagger } from "motion";
 
 	function animateWidgets(widgets: Element[]) {
 		if (widgets.length === 0) return;
-		const animation = animate(
+		animate(
 			widgets,
 			{
 				opacity: [0, 1],

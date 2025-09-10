@@ -10,7 +10,7 @@ export default defineConfig([
 	eslintConfigPrettier,
 	{
 		files: ["**/*.{ts,tsx}"],
-		ignores: [".vercel/**", "dist/**", "build/**"],
+		ignores: [".vercel/**", "dist/**", "build/**", "node_modules/**"],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
