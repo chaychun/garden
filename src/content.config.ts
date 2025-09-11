@@ -1,4 +1,4 @@
-import { widgetSchema } from "@/content/widgets-schema";
+import { widgetSchema } from "@/lib/widgets-schema";
 import { file, glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
