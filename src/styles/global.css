@@ -176,3 +176,17 @@ html {
 		color: var(--color-base-50);
 	}
 }
+
+@utility scrollbar-hide {
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@utility scrollbar-default {
+	scrollbar-width: auto;
+	&::-webkit-scrollbar {
+		display: block;
+	}
+}

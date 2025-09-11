@@ -1,0 +1,81 @@
+---
+import { getEntry, render } from "astro:content";
+import InfoSideBar from "./sidebar.tsx";
+
+const entry = await getEntry("projects", "info-sidebar");
+if (!entry) {
+	throw new Error("Info sidebar entry not found");
+}
+const { Content } = await render(entry);
+
+const title = entry?.data.title ?? "Info Sidebar";
+const description = entry?.data.description ?? "";
+const createdDate =
+	entry?.data.createdDate?.toISOString?.() ?? new Date().toISOString();
+const lastUpdatedDate =
+	entry?.data.lastUpdatedDate?.toISOString?.() ?? new Date().toISOString();
+const types = entry?.data.types ?? ["interaction"];
+
+const scrollAreaId = "info-sidebar-display";
+
+const tileClasses = [
+	"row-span-2 lg:col-span-2",
+	"row-span-1",
+	"row-span-1",
+	"row-span-2",
+	"row-span-3 lg:col-span-2",
+	"row-span-1",
+	"row-span-2",
+	"row-span-1",
+	"row-span-2 lg:col-span-2",
+	"row-span-1",
+	"row-span-2",
+	"row-span-1",
+	"row-span-3 lg:col-span-2",
+	"row-span-1",
+	"row-span-2",
+	"row-span-1",
+	"row-span-2 lg:col-span-2",
+	"row-span-1",
+	"row-span-2",
+	"row-span-1",
+];
+---
+
+<div class="bg-base-950 relative h-full w-full">
+	<InfoSideBar
+		client:only="react"
+		title={title}
+		description={description}
+		createdDate={createdDate}
+		lastUpdatedDate={lastUpdatedDate}
+		types={types}
+		scrollAreaId={scrollAreaId}
+	>
+		<div class="text-base-500 [&_a]:text-base-700 space-y-2 [&_a]:underline">
+			<Content />
+		</div>
+	</InfoSideBar>
+
+	<div
+		data-scroll-area-id={scrollAreaId}
+		class="scrollbar-hide absolute inset-0 overflow-y-auto pr-4 pl-20"
+	>
+		<div class="py-8 md:py-12">
+			<div class="text-base-600 mb-6">
+				This area is vertically scrollable. The sidebar listens to this
+				container’s scroll.
+			</div>
+			<div
+				class="grid auto-rows-[300px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+			>
+				{
+					Array.from({ length: 28 }).map((_, i) => {
+						const span = tileClasses[i % tileClasses.length];
+						return <div class:list={["bg-base-900 relative", span]} />;
+					})
+				}
+			</div>
+		</div>
+	</div>
+</div>
