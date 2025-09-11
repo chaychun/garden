@@ -1,47 +1,92 @@
-# Astro Starter Kit: Minimal
+## Garden
+
+Personal portfolio/playground. Each project is an experiment in web design and interaction. Many projects include interactive components users can play with.
+
+## Stack
+
+- Astro for pages/layouts and content collections
+- React for interactive UI
+- Tailwind CSS for styling
+- GSAP for timeline/scroll smoothing in `.astro` scripts
+- Motion for React animations
+- TypeScript, pnpm, Prettier, ESLint
+
+## Quick start
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+Build and preview:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm build
+pnpm preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Project structure
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- `src/pages/`: routes kept minimal
+- `src/layouts/`: page shells (`BaseLayout.astro`, `HomeLayout.astro`, `ProjectLayout.astro`) control header and scroll behavior
+- `src/components/`: reusable UI (Astro or React). React components live in `*.tsx` and are hydrated via client directives from `.astro` parents
+- `src/projects/[project]/`: one folder per project with content and optional interactive view
+- `src/lib/`: shared logic (`content-types.ts`, `widgets-schema.ts`, `scroll-smoothing.ts`, stores, utils)
+- `src/styles/global.css`: Tailwind setup and theme tokens
+- `public/`: static assets
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Content model
 
-## 🧞 Commands
+Collections are defined in `src/content.config.ts`:
 
-All commands are run from the root of the project, from a terminal:
+- `projects`: MD/MDX under `src/projects/*/content.mdx`
+- `externalProjects`: `src/projects/external-projects.json`
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+Base fields:
 
-## 👀 Want to learn more?
+- `types`: `interaction | experiment | design` (array)
+- `title`, `description`
+- `createdDate`, `lastUpdatedDate`
+- `widget`: discriminated union defined in `src/lib/widgets-schema.ts`
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Widgets:
+
+- `image`: `previewImage`, optional `alt`, `previewWidth`, plus background
+- `video`: `previewVideo`, optional `previewWidth`, plus background
+- `image-swap`: `previewImages[]`, optional `alt`, `aspect`, `intervalMs`, `previewWidth`, plus background
+- Background requires one of `bgImage` or `bgFillClass`
+
+Filtering is centralized in `src/lib/content-types.ts` with URL sync via `?filter=`.
+
+## Adding a new project
+
+1. Create `src/projects/[project]/`
+2. Add `content.mdx` with frontmatter using the shared schema, including `types` and `widget`
+3. Add `[project].astro` for an interactive view if needed; keep it self-contained and import only project-scoped pieces and safe shared libs
+4. If you add new content fields or a widget type, update `content.config.ts` and/or `src/lib/widgets-schema.ts`, then run:
+
+```sh
+pnpm astro sync
+```
+
+## Scroll behavior
+
+- Horizontal on desktop, vertical on mobile
+- Layouts call helpers from `src/lib/scroll-smoothing.ts` in client `<script>` blocks
+
+## Conventions
+
+- Keep pages thin; push logic into layouts/components
+- Use Tailwind utilities; avoid ad-hoc CSS
+- Prefer small React components; minimize `useEffect`
+- Server-only imports like `astro:content` stay in `.astro` frontmatter, not React
+
+## Scripts
+
+- `pnpm dev`
+- `pnpm build`
+- `pnpm preview`
+- `pnpm astro` (CLI)
+- `pnpm check` (Astro Check)
+- `pnpm lint` (ESLint)
+- `pnpm format` (Prettier)
