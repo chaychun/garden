@@ -1,10 +1,12 @@
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowUpRight, MousePointerClick, Plus } from "lucide-react";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+type CursorType = "external" | "interactive" | "default";
+
 type HoverData = {
 	title: string;
-	external: boolean;
+	type: CursorType;
 };
 
 export default function CursorFollower() {
@@ -46,9 +48,12 @@ export default function CursorFollower() {
 		function onEnter(e: Event) {
 			const el = e.currentTarget as HTMLElement;
 			const title = el.getAttribute("data-cursor-title") || "";
-			const external = el.hasAttribute("data-cursor-external");
+			const typeAttr = el.getAttribute("data-cursor-type");
+			let type: CursorType = "default";
+			if (typeAttr === "external" || typeAttr === "interactive")
+				type = typeAttr;
 
-			setData({ title, external });
+			setData({ title, type });
 			setIsVisible(true);
 			isVisibleRef.current = true;
 		}
@@ -115,7 +120,7 @@ export default function CursorFollower() {
 							>
 								<AnimatePresence mode="popLayout" initial={false}>
 									<motion.div
-										key={data.external ? "external" : "internal"}
+										key={data.type}
 										className="min-w-0"
 										initial={{ opacity: 0 }}
 										animate={{
@@ -128,8 +133,10 @@ export default function CursorFollower() {
 										}}
 										layout
 									>
-										{data.external ? (
+										{data.type === "external" ? (
 											<ArrowUpRight className="h-[11px] w-[11px]" />
+										) : data.type === "interactive" ? (
+											<MousePointerClick className="h-[11px] w-[11px]" />
 										) : (
 											<Plus className="h-[11px] w-[11px]" />
 										)}

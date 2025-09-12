@@ -65,7 +65,7 @@ const InfoModal = ({
 	}, [isOpen]);
 
 	const overlayClasses = cn(
-		"absolute inset-0 z-[1000] flex items-center justify-center pointer-events-auto",
+		"absolute inset-0 flex items-center justify-center pointer-events-auto",
 	);
 
 	const panelClasses = cn(
