@@ -4,7 +4,7 @@ import { ChevronDown, Info, X } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-interface InfoDrawerProps {
+interface InfoModalProps {
 	title: string;
 	description: string;
 	children?: React.ReactNode;
@@ -13,19 +13,19 @@ interface InfoDrawerProps {
 	types: string[];
 }
 
-const InfoDrawer = ({
+const InfoModal = ({
 	title,
 	description,
 	children,
 	createdDate,
 	lastUpdatedDate,
 	types,
-}: InfoDrawerProps) => {
+}: InfoModalProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
-	const drawerRef = useRef<HTMLDivElement>(null);
+	const panelRef = useRef<HTMLDivElement>(null);
 
-	const toggleDrawer = (e: React.MouseEvent) => {
+	const toggleModal = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (isOpen) {
 			setShowDetails(false);
@@ -51,7 +51,7 @@ const InfoDrawer = ({
 		if (!isOpen) return;
 		function handleClick(event: MouseEvent | TouchEvent) {
 			const target = event.target as Node;
-			if (drawerRef.current && !drawerRef.current.contains(target)) {
+			if (panelRef.current && !panelRef.current.contains(target)) {
 				setIsOpen(false);
 				setShowDetails(false);
 			}
@@ -64,38 +64,37 @@ const InfoDrawer = ({
 		};
 	}, [isOpen]);
 
-	const fixedContainerClasses = cn(
-		"fixed bottom-4 z-1000",
-		isOpen ? "left-4 right-4" : "right-4",
+	const overlayClasses = cn(
+		"absolute inset-0 z-[1000] flex items-center justify-center pointer-events-auto",
 	);
 
-	const relativeContainerClasses = cn(
+	const panelClasses = cn(
 		"relative bg-base-50 overflow-hidden",
-		isOpen ? "" : "h-14 w-14",
+		isOpen ? "w-[min(528px,calc(100%-32px))] shadow-lg" : "h-14 w-14",
 	);
 
 	return (
 		<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
 			<div
-				ref={drawerRef}
-				className={fixedContainerClasses}
+				className={overlayClasses}
 				role={isOpen ? "dialog" : undefined}
 				aria-modal={isOpen ? "true" : undefined}
 				data-info-drawer
-				id="info-drawer"
+				id="info-modal"
 			>
 				<motion.div
 					key="drawer-content"
-					className={relativeContainerClasses}
+					className={panelClasses}
 					layout
+					ref={panelRef}
 				>
 					<AnimatePresence mode="popLayout">
 						{isOpen && (
 							<motion.div
 								key="drawer-content"
-								className="max-h-[calc(100dvh-32px)] overflow-y-auto"
+								className="scrollbar-hide max-h-[calc(100dvh-32px)] overflow-y-auto"
 								layout
-								initial={{ opacity: 0, y: 16 }}
+								initial={{ opacity: 0 }}
 								animate={{
 									opacity: 1,
 									y: 0,
@@ -106,14 +105,14 @@ const InfoDrawer = ({
 								<div className="h-full px-6 pt-6 pb-0">
 									<motion.h1
 										key="title"
-										className="text-base-900 font-cabinet mt-4 text-3xl font-medium"
+										className="text-base-900 mt-4 text-3xl font-medium"
 										layout
 									>
 										{title}
 									</motion.h1>
 									<motion.p
 										key="description"
-										className="text-base-500 mt-2 font-mono text-base"
+										className="text-base-500 mt-2 text-base leading-[1.1]"
 										layout
 									>
 										{description}
@@ -169,11 +168,14 @@ const InfoDrawer = ({
 					{/* Toggle button – always present */}
 					<motion.button
 						key="toggle-button"
-						aria-label={isOpen ? "Close info drawer" : "Open info drawer"}
+						aria-label={isOpen ? "Close info modal" : "Open info modal"}
 						aria-expanded={isOpen}
-						aria-controls="info-drawer"
-						className="text-base-900 absolute right-0 bottom-0 flex h-14 w-14 cursor-pointer items-center justify-center"
-						onClick={(e) => toggleDrawer(e)}
+						aria-controls="info-modal"
+						className={cn(
+							"text-base-900 flex h-14 w-14 cursor-pointer items-center justify-center",
+							isOpen ? "absolute right-0 bottom-0" : "",
+						)}
+						onClick={(e) => toggleModal(e)}
 						whileTap={{ scale: 0.9 }}
 						layout
 					>
@@ -189,4 +191,4 @@ const InfoDrawer = ({
 	);
 };
 
-export default InfoDrawer;
+export default InfoModal;
