@@ -1,0 +1,36 @@
+---
+import Widget from "@/components/widgets/Widget.astro";
+import type { AstroInstance } from "astro";
+
+interface Props {
+	id: string;
+	title: string;
+	bgImage?: string;
+	bgFillClass?: string;
+	[key: string]: any;
+}
+
+const { id, title, bgImage, bgFillClass, ...rest } = Astro.props as Props;
+
+const interactiveModules = import.meta.glob<AstroInstance>(
+	"../../projects/*/*.astro",
+	{ eager: true },
+);
+const key = `../../projects/${id}/${id}.astro`;
+let ComponentToRender: AstroInstance["default"] | null = null;
+if (key in interactiveModules) {
+	ComponentToRender = interactiveModules[key].default;
+}
+---
+
+<Widget
+	class:list={[
+		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
+		"mb-12 md:mb-0",
+	]}
+	bgImage={bgImage}
+	bgFillClass={bgFillClass}
+	{...rest}
+>
+	{ComponentToRender && <ComponentToRender />}
+</Widget>

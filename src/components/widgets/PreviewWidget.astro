@@ -43,10 +43,6 @@ interface Props {
 const { title, href, bgImage, bgFillClass, variant, external, ...rest } =
 	Astro.props as Props;
 
-const bgImageUrl = bgImage
-	? getCldImageUrl({ src: bgImage, width: 600, format: "auto" })
-	: undefined;
-
 const clampedWidth = (() => {
 	const vw = variant.previewWidth;
 	if (typeof vw !== "number" || Number.isNaN(vw) || vw <= 0) return 0.9;
@@ -60,84 +56,65 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
 		"mb-12 md:mb-0",
 	]}
+	bgImage={bgImage}
+	bgFillClass={bgFillClass}
 	{...rest}
 >
+	{
+		variant.type === "video" && (
+			<video
+				src={getCldVideoUrl({ src: variant.previewVideo })}
+				loop
+				muted
+				autoplay
+				preload="metadata"
+				playsinline
+				class="relative z-10 h-auto"
+				style={{ width: previewWidthCss }}
+			/>
+		)
+	}
+
+	{
+		variant.type === "image" && (
+			<img
+				src={getCldImageUrl({
+					src: variant.previewImage,
+					width: 600,
+					format: "auto",
+				})}
+				alt={variant.alt || title}
+				loading="eager"
+				decoding="async"
+				class="relative z-10 h-auto object-contain"
+				style={{ width: previewWidthCss }}
+			/>
+		)
+	}
+
+	{
+		variant.type === "image-swap" && (
+			<ImageSwapMedia
+				client:load
+				images={variant.previewImages.map((id) =>
+					getCldImageUrl({ src: id, width: 600, format: "auto" }),
+				)}
+				alt={variant.alt || title}
+				intervalMs={variant.intervalMs}
+				className="relative z-10 h-auto object-cover"
+				imageStyle={{ width: previewWidthCss }}
+				aspect={variant.aspect}
+			/>
+		)
+	}
+
 	<a
 		href={href}
-		class="block"
+		class="absolute inset-0 z-20 block"
 		aria-label={`View ${title}`}
 		data-cursor-hover
 		data-cursor-title={title}
 		data-cursor-external={external ? "true" : undefined}
 		target={external ? "_blank" : undefined}
-		rel={external ? "noopener noreferrer" : undefined}
-	>
-		<div
-			class:list={[
-				"group relative flex aspect-4/5 w-full items-center justify-center overflow-hidden",
-				bgFillClass,
-			]}
-		>
-			{
-				bgImageUrl && (
-					<div
-						aria-hidden="true"
-						class="absolute inset-0 z-0 bg-cover bg-center"
-						style={{ backgroundImage: `url(${bgImageUrl})` }}
-					/>
-				)
-			}
-			{
-				variant.type === "video" && (
-					<video
-						src={getCldVideoUrl({ src: variant.previewVideo })}
-						loop
-						muted
-						autoplay
-						preload="metadata"
-						playsinline
-						class="relative z-10 h-auto"
-						style={{ width: previewWidthCss }}
-					/>
-				)
-			}
-
-			{
-				variant.type === "image" && (
-					<img
-						src={getCldImageUrl({
-							src: variant.previewImage,
-							width: 600,
-							format: "auto",
-						})}
-						alt={variant.alt || title}
-						loading="eager"
-						decoding="async"
-						class="relative z-10 h-auto object-contain"
-						style={{ width: previewWidthCss }}
-					/>
-				)
-			}
-
-			{
-				variant.type === "image-swap" && (
-					<ImageSwapMedia
-						client:load
-						images={variant.previewImages.map((id) =>
-							getCldImageUrl({
-								src: id,
-								width: 600,
-								format: "auto",
-							}),
-						)}
-						alt={variant.alt || title}
-						intervalMs={variant.intervalMs}
-						className="relative z-10 h-auto object-cover"
-						imageStyle={{ width: previewWidthCss }}
-						aspect={variant.aspect}
-					/>
-				)
-			}
-		</div>
-	</a>
+		rel={external ? "noopener noreferrer" : undefined}></a>
 </Widget>

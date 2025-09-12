@@ -70,7 +70,9 @@ const InfoModal = ({
 
 	const panelClasses = cn(
 		"relative bg-base-50 overflow-hidden",
-		isOpen ? "w-[min(528px,calc(100%-32px))] shadow-lg" : "h-14 w-14",
+		isOpen
+			? "w-[min(440px,calc(100%-32px))] max-h-[calc(100%-32px)] flex flex-col"
+			: "h-14 w-14",
 	);
 
 	return (
@@ -92,7 +94,7 @@ const InfoModal = ({
 						{isOpen && (
 							<motion.div
 								key="drawer-content"
-								className="scrollbar-hide max-h-[calc(100dvh-32px)] overflow-y-auto"
+								className="scrollbar-hide min-h-0 flex-1 overflow-y-auto"
 								layout
 								initial={{ opacity: 0 }}
 								animate={{
