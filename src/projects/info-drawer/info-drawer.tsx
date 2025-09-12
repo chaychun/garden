@@ -23,7 +23,7 @@ const InfoDrawer = ({
 }: InfoDrawerProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
-	const drawerRef = useRef<HTMLDivElement>(null);
+	const panelRef = useRef<HTMLDivElement>(null);
 
 	const toggleDrawer = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -51,7 +51,7 @@ const InfoDrawer = ({
 		if (!isOpen) return;
 		function handleClick(event: MouseEvent | TouchEvent) {
 			const target = event.target as Node;
-			if (drawerRef.current && !drawerRef.current.contains(target)) {
+			if (panelRef.current && !panelRef.current.contains(target)) {
 				setIsOpen(false);
 				setShowDetails(false);
 			}
@@ -64,21 +64,19 @@ const InfoDrawer = ({
 		};
 	}, [isOpen]);
 
-	const fixedContainerClasses = cn(
-		"fixed bottom-4 z-1000",
-		isOpen ? "left-4 right-4" : "right-4",
+	const overlayClasses = cn(
+		"absolute inset-0 z-[1000] flex items-center justify-center pointer-events-auto",
 	);
 
-	const relativeContainerClasses = cn(
+	const panelClasses = cn(
 		"relative bg-base-50 overflow-hidden",
-		isOpen ? "" : "h-14 w-14",
+		isOpen ? "w-[min(528px,calc(100%-32px))] shadow-lg" : "h-14 w-14",
 	);
 
 	return (
 		<MotionConfig transition={{ type: "spring", duration: 0.6, bounce: 0 }}>
 			<div
-				ref={drawerRef}
-				className={fixedContainerClasses}
+				className={overlayClasses}
 				role={isOpen ? "dialog" : undefined}
 				aria-modal={isOpen ? "true" : undefined}
 				data-info-drawer
@@ -86,14 +84,15 @@ const InfoDrawer = ({
 			>
 				<motion.div
 					key="drawer-content"
-					className={relativeContainerClasses}
+					className={panelClasses}
 					layout
+					ref={panelRef}
 				>
 					<AnimatePresence mode="popLayout">
 						{isOpen && (
 							<motion.div
 								key="drawer-content"
-								className="max-h-[calc(100dvh-32px)] overflow-y-auto"
+								className="scrollbar-hide max-h-[calc(100dvh-32px)] overflow-y-auto"
 								layout
 								initial={{ opacity: 0, y: 16 }}
 								animate={{
@@ -172,7 +171,10 @@ const InfoDrawer = ({
 						aria-label={isOpen ? "Close info drawer" : "Open info drawer"}
 						aria-expanded={isOpen}
 						aria-controls="info-drawer"
-						className="text-base-900 absolute right-0 bottom-0 flex h-14 w-14 cursor-pointer items-center justify-center"
+						className={cn(
+							"text-base-900 flex h-14 w-14 cursor-pointer items-center justify-center",
+							isOpen ? "absolute right-0 bottom-0" : "",
+						)}
 						onClick={(e) => toggleDrawer(e)}
 						whileTap={{ scale: 0.9 }}
 						layout
