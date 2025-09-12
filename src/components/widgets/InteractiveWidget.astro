@@ -1,6 +1,7 @@
 ---
 import Widget from "@/components/widgets/Widget.astro";
 import type { AstroInstance } from "astro";
+import { MousePointerClick } from "lucide-react";
 
 interface Props {
 	id: string;
@@ -25,12 +26,22 @@ if (key in interactiveModules) {
 
 <Widget
 	class:list={[
-		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
+		"flex w-full shrink-0 flex-col gap-2 md:w-[528px] md:basis-[528px] md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	bgImage={bgImage}
 	bgFillClass={bgFillClass}
+	data-cursor-hover
+	data-cursor-title={title}
+	data-cursor-type="interactive"
 	{...rest}
 >
 	{ComponentToRender && <ComponentToRender />}
+	<div
+		slot="footer"
+		class="text-base-900 flex w-full items-center justify-between text-[11px] leading-none font-medium uppercase md:hidden"
+	>
+		<span class="min-w-0 flex-1 truncate">{title}</span>
+		<MousePointerClick className="h-[11px] w-[11px]" />
+	</div>
 </Widget>

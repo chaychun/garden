@@ -1,7 +1,8 @@
 ---
-import Widget from "@/components/widgets/Widget.astro";
 import ImageSwapMedia from "@/components/widgets/image-swap-media";
+import Widget from "@/components/widgets/Widget.astro";
 import { getCldImageUrl, getCldVideoUrl } from "astro-cloudinary/helpers";
+import { ArrowUpRight, Plus } from "lucide-react";
 
 interface VideoVariantProps {
 	type: "video";
@@ -53,7 +54,7 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 
 <Widget
 	class:list={[
-		"flex w-full shrink-0 flex-col gap-3 md:w-[528px] md:basis-[528px] md:justify-between",
+		"flex w-full shrink-0 flex-col gap-2 md:w-[528px] md:basis-[528px] md:justify-between",
 		"mb-12 md:mb-0",
 	]}
 	bgImage={bgImage}
@@ -117,4 +118,17 @@ const previewWidthCss = `${(clampedWidth * 100).toFixed(4)}%`;
 		data-cursor-type={external ? "external" : undefined}
 		target={external ? "_blank" : undefined}
 		rel={external ? "noopener noreferrer" : undefined}></a>
+	<div
+		slot="footer"
+		class="text-base-900 flex w-full items-center justify-between text-[11px] leading-none font-medium uppercase md:hidden"
+	>
+		<span class="min-w-0 flex-1 truncate">{title}</span>
+		{
+			external ? (
+				<ArrowUpRight className="h-[11px] w-[11px]" />
+			) : (
+				<Plus className="h-[11px] w-[11px]" />
+			)
+		}
+	</div>
 </Widget>

@@ -13,7 +13,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div class="bg-base-50 flex h-dvh flex-col justify-between">
+	<div class="bg-base-50 flex h-dvh flex-col md:justify-between">
 		<Header title="Chayut" filterCounts={filterCounts} client:load />
 
 		<div
