@@ -1,14 +1,14 @@
 ---
 import { getEntry, render } from "astro:content";
-import InfoDrawerComponent from "./info-drawer.tsx";
+import InfoModalComponent from "./info-modal.tsx";
 
-const entry = await getEntry("projects", "info-drawer");
+const entry = await getEntry("projects", "info-modal");
 if (!entry) {
-	throw new Error("Info drawer entry not found");
+	throw new Error("Info modal entry not found");
 }
 const { Content } = await render(entry);
 
-const title = entry?.data.title ?? "Info Drawer";
+const title = entry?.data.title ?? "Info Modal";
 const description = entry?.data.description ?? "";
 const createdDate =
 	entry?.data.createdDate?.toISOString?.() ?? new Date().toISOString();
@@ -18,7 +18,7 @@ const types = entry?.data.types ?? ["interaction"];
 ---
 
 <div class="bg-base-950 @container relative h-full w-full overflow-hidden">
-	<InfoDrawerComponent
+	<InfoModalComponent
 		client:load
 		title={title}
 		description={description}
@@ -29,5 +29,5 @@ const types = entry?.data.types ?? ["interaction"];
 		<div class="text-base-500 [&_a]:text-base-700 space-y-2 [&_a]:underline">
 			<Content />
 		</div>
-	</InfoDrawerComponent>
+	</InfoModalComponent>
 </div>
