@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import PreviewWidget from "@/components/widgets/PreviewWidget.astro";
+import InteractiveWidget from "@/components/widgets/InteractiveWidget.astro";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import { getCollection } from "astro:content";
 import type { ContentTypeId, FilterType } from "@/lib/content-types";
@@ -138,6 +139,18 @@ const filterName =
 								intervalMs: config.intervalMs,
 								previewWidth: config.previewWidth,
 							}}
+							data-types={dataTypes}
+							style={animationStyle}
+						/>
+					);
+				}
+				if (type === "interactive") {
+					return (
+						<InteractiveWidget
+							id={item.id}
+							title={item.title}
+							bgImage={config.bgImage}
+							bgFillClass={config.bgFillClass}
 							data-types={dataTypes}
 							style={animationStyle}
 						/>

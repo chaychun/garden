@@ -49,6 +49,10 @@ export const widgetSchema = z
 				previewWidth: z.number().min(0).max(1).optional(),
 			}),
 		}),
+		z.object({
+			type: z.literal("interactive"),
+			config: withBackground({}),
+		}),
 	])
 	.optional();
 
@@ -88,4 +92,16 @@ export type WidgetImageSwap = {
 	};
 };
 
-export type WidgetUnion = WidgetImage | WidgetVideo | WidgetImageSwap;
+export type WidgetInteractive = {
+	type: "interactive";
+	config: {
+		bgImage?: string;
+		bgFillClass?: string;
+	};
+};
+
+export type WidgetUnion =
+	| WidgetImage
+	| WidgetVideo
+	| WidgetImageSwap
+	| WidgetInteractive;

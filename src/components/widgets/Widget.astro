@@ -1,15 +1,44 @@
 ---
+import { getCldImageUrl } from "astro-cloudinary/helpers";
+
 interface Props {
 	class?: string;
+	bgImage?: string;
+	bgFillClass?: string;
 	[key: string]: any;
 }
 
-const { class: className, ...rest } = Astro.props;
+const {
+	class: className,
+	bgImage,
+	bgFillClass,
+	...rest
+} = Astro.props as Props;
+
+const bgImageUrl = bgImage
+	? getCldImageUrl({ src: bgImage, width: 600, format: "auto" })
+	: undefined;
 ---
 
 <div
 	class:list={["h-fit w-full md:h-full md:w-fit md:shrink-0", className]}
 	{...rest}
 >
-	<slot />
+	<div
+		class:list={[
+			"group relative flex aspect-4/5 w-full items-center justify-center overflow-hidden",
+			bgFillClass,
+		]}
+	>
+		{
+			bgImageUrl && (
+				<div
+					aria-hidden="true"
+					class="absolute inset-0 z-0 bg-cover bg-center"
+					style={{ backgroundImage: `url(${bgImageUrl})` }}
+				/>
+			)
+		}
+		<slot />
+	</div>
 </div>
