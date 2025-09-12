@@ -14,7 +14,7 @@ const { title, scrollAreaId = "main-scroll", filterCounts } = Astro.props;
 
 <BaseLayout title={title}>
 	<div class="bg-base-50 flex h-dvh flex-col justify-between">
-		<Header title="Chayut" filterCounts={filterCounts} client:only="react" />
+		<Header title="Chayut" filterCounts={filterCounts} client:load />
 
 		<div
 			class="p-4 md:flex md:max-h-3/4 md:overflow-x-auto md:overflow-y-hidden"
