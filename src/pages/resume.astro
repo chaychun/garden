@@ -1,0 +1,145 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Resume">
+	<div class="text-base-900 mx-auto grid w-[992px] grid-cols-4 px-12 py-8">
+		<h1 class="col-span-4 text-7xl leading-none font-semibold uppercase">
+			Chayut Chunsamphran
+		</h1>
+		<div class="col-start-4 flex w-full justify-between text-sm">
+			<span>Bangkok</span><span>Thailand</span>
+		</div>
+		<div
+			class="text-sml col-span-2 col-start-3 mt-8 grid grid-cols-subgrid leading-[1.1]"
+		>
+			<p class="col-start-1">[TEL]</p>
+			<p class="col-start-2"><a href="tel:+66959583990">+66 95 958 3990</a></p>
+			<p class="col-start-1">[MAIL]</p>
+			<p class="col-start-2">
+				<a href="mailto:chun.chayut@gmail.com">chun.chayut@gmail.com</a>
+			</p>
+			<p class="col-start-1">[WEB]</p>
+			<p class="col-start-2">
+				<a href="https://chayut.me" class="underline">chayut.me</a>
+			</p>
+		</div>
+		<h2 class="col-start-3 mt-32 text-3xl font-medium uppercase">[Projects]</h2>
+		<div class="col-span-4 col-start-1 mt-4 grid grid-cols-subgrid">
+			<p class="col-span-2 row-span-2 text-xl leading-none">
+				Physics graduate with strong math background and passion for frontend
+				development. Skilled in building interactive web experiences with React,
+				Astro, Tailwind, and motion design. Looking for opportunities to apply
+				creative UI and frontend skills in web development projects.
+			</p>
+			<h3 class="col-start-3 text-sm font-semibold uppercase">
+				Personal Playground
+			</h3>
+			<p class="col-start-4 text-right text-sm">
+				<a href="https://chayut.me" class="underline">chayut.me</a>
+			</p>
+			<ul
+				role="list"
+				class="col-span-2 col-start-3 list-disc space-y-1 pl-4 text-xs leading-none"
+			>
+				<li>
+					<span>
+						Design and develop a playground site, showcasing multiple
+						interactive experiments in UI design and web interactions
+					</span>
+				</li>
+				<li>
+					<span>
+						Built multiple interactive components focusing on calm user
+						experience, leveraging smooth motion design
+					</span>
+				</li>
+				<li>
+					<span>
+						Built with Astro for fast loads, supplimented by React for stateful
+						interactions, connected to Sanity CMS for content management,
+						deployed on Vercel.
+					</span>
+				</li>
+			</ul>
+		</div>
+		<div class="col-span-4 col-start-1 mt-12 grid grid-cols-subgrid">
+			<h3
+				class="col-start-3 overflow-visible text-sm font-semibold text-nowrap uppercase"
+			>
+				Graeco-Latin Square Generator
+			</h3>
+			<p class="col-start-4 text-right text-sm">
+				<a href="https://graecolatin.vercel.app/" class="underline"
+					>graecolatin.vercel.app</a
+				>
+			</p>
+			<ul
+				role="list"
+				class="col-span-2 col-start-3 list-disc space-y-1 pl-4 text-xs leading-none"
+			>
+				<li>
+					<span>
+						Built an interactive web tool for generating artistic patterns from
+						a mathematical concept
+					</span>
+				</li>
+				<li>
+					<span>
+						Implemented dynamic pattern generation, SVG and PNG downloads, and
+						generation logic with full unit tests
+					</span>
+				</li>
+			</ul>
+		</div>
+		<div class="col-span-4 col-start-1 mt-12 grid grid-cols-subgrid">
+			<h3 class="col-start-3 text-sm font-semibold uppercase">
+				react-blur-dialog
+			</h3>
+			<p class="col-start-4 text-right text-sm">
+				<a href="https://graecolatin.vercel.app/" class="underline"
+					>graecolatin.vercel.app</a
+				>
+			</p>
+			<ul
+				role="list"
+				class="col-span-2 col-start-3 list-disc space-y-1 pl-4 text-xs leading-none"
+			>
+				<li>
+					<span>
+						Designed and developed an accessible, extensible, Shadcn-compatible
+						UI component available as an npm package
+					</span>
+				</li>
+				<li>
+					<span> Designed and implemented smooth animation using Motion </span>
+				</li>
+			</ul>
+		</div>
+		<div class="col-span-4 col-start-1 mt-12 grid grid-cols-subgrid">
+			<h3 class="col-start-3 text-sm leading-none font-semibold uppercase">
+				Neural network for solving Schrödinger equation
+			</h3>
+			<p class="col-start-4 text-right text-sm">Senior project</p>
+			<ul
+				role="list"
+				class="col-span-2 col-start-3 list-disc space-y-1 pl-4 text-xs leading-none"
+			>
+				<li>
+					<span>
+						Built and trained an unsupervised, physics-informed neural network
+						for solving the Schrödinger equation in 1D quantum wells using
+						Python and TensorFlow
+					</span>
+				</li>
+				<li>
+					<span
+						>Model predicted energy values within 0.5% and probability
+						distribution within 10% error range, significantly improving on
+						prior literatures
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</BaseLayout>
