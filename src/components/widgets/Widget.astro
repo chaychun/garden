@@ -20,13 +20,15 @@ const bgImageUrl = bgImage
 	: undefined;
 ---
 
-<div class:list={["h-fit w-full md:h-full md:w-fit md:shrink-0", className]}>
+<div
+	class:list={["h-fit w-full md:h-full md:w-fit md:shrink-0", className]}
+	{...rest}
+>
 	<div
 		class:list={[
 			"group relative flex aspect-4/5 w-full items-center justify-center overflow-hidden",
 			bgFillClass,
 		]}
-		{...rest}
 	>
 		{
 			bgImageUrl && (
