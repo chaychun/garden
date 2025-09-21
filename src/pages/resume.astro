@@ -7,14 +7,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 		class="text-base-900 relative mx-auto flex h-[1402px] w-[992px] flex-col px-12 py-8"
 	>
 		<div class="grid grid-cols-4">
-			<h1 class="col-span-4 text-7xl leading-none font-semibold uppercase">
+			<h1 class="col-span-4 mt-4 text-7xl leading-none font-semibold uppercase">
 				Chayut Chunsamphran
 			</h1>
-			<p class="text-sm">Frontend Developer</p>
-			<div class="col-start-4 w-full text-right text-sm">Bangkok, Thailand</div>
+
+			<p class="col-start-1 mt-8">Frontend Developer</p>
 
 			<div
-				class="text-sml col-span-2 col-start-3 mt-8 grid grid-cols-subgrid leading-[1.1]"
+				class="col-span-2 col-start-3 mt-8 grid grid-cols-subgrid self-start text-sm leading-[1.1]"
 			>
 				<p class="col-start-1">[TEL]</p>
 				<p class="col-start-2">
@@ -35,16 +35,28 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 				</div>
 			</div>
 
-			<div class="col-span-2 mt-24">
+			<p class="text-base-400 col-span-2 mt-24 text-xs">About</p>
+			<p class="text-base-400 col-span-2 mt-24 text-xs">Projects</p>
+
+			<div class="col-span-2">
 				<p class="text-xl leading-none">
 					Physics graduate with strong math background and passion for frontend
 					development. Skilled in building interactive web experiences with
 					React, Astro, and Tailwind. Looking for opportunities to apply
 					creative UI and frontend skills in web development projects.
 				</p>
+				<div class="col-span-2 mt-68">
+					<div class="w-3/4">
+						<img
+							src="/images/profile.jpg"
+							alt="Profile photo"
+							class="h-auto w-full"
+						/>
+					</div>
+				</div>
 			</div>
 
-			<div class="col-span-2 mt-24 flex flex-col space-y-16">
+			<div class="col-span-2 flex flex-col space-y-24">
 				<div>
 					<div class="flex items-baseline justify-between gap-4">
 						<h3 class="text-sm font-medium uppercase">Personal Playground</h3>
