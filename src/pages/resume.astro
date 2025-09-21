@@ -1,0 +1,192 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Resume">
+	<div
+		class="text-base-900 relative mx-auto flex h-[1402px] w-[992px] flex-col px-12 py-8"
+	>
+		<div class="grid grid-cols-4">
+			<h1 class="col-span-4 mt-4 text-7xl leading-none font-semibold uppercase">
+				Chayut Chunsamphran
+			</h1>
+
+			<p class="col-start-1 mt-8">Frontend Developer</p>
+
+			<div
+				class="col-span-2 col-start-3 mt-8 grid grid-cols-subgrid self-start text-sm leading-[1.1]"
+			>
+				<p class="col-start-1">[TEL]</p>
+				<p class="col-start-2">
+					<a href="tel:+66959583990">+66 95 958 3990</a>
+				</p>
+				<p class="col-start-1">[MAIL]</p>
+				<p class="col-start-2">
+					<a href="mailto:chun.chayut@gmail.com">chun.chayut@gmail.com</a>
+				</p>
+				<p class="col-start-1">[LINKS]</p>
+				<div class="col-start-2 flex flex-col">
+					<a href="https://chayut.me" class="underline">Portfolio</a>
+					<a href="https://github.com/chaychun" class="underline">Github</a>
+					<a
+						href="https://www.linkedin.com/in/chayut-chunsamphran-81a832311/"
+						class="underline">Linkedin</a
+					>
+				</div>
+			</div>
+
+			<p class="text-base-400 col-span-2 mt-24 text-xs">About</p>
+			<p class="text-base-400 col-span-2 mt-24 text-xs">Projects</p>
+
+			<div class="col-span-2">
+				<p class="text-xl leading-none">
+					Physics graduate with strong math background and passion for frontend
+					development. Skilled in building interactive web experiences with
+					React, Astro, and Tailwind. Looking for opportunities to apply
+					creative UI and frontend skills in web development projects.
+				</p>
+				<div class="col-span-2 mt-68">
+					<div class="w-3/4">
+						<img
+							src="/images/profile.jpg"
+							alt="Profile photo"
+							class="h-auto w-full"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-span-2 flex flex-col space-y-24">
+				<div>
+					<div class="flex items-baseline justify-between gap-4">
+						<h3 class="text-sm font-medium uppercase">Personal Playground</h3>
+						<a href="https://chayut.me" class="text-sm underline">chayut.me</a>
+					</div>
+					<ul
+						role="list"
+						class="text-base-500 mt-2 list-disc pl-4 text-sm leading-none"
+					>
+						<li>
+							<span>
+								Design and develop a playground site, showcasing multiple
+								interactive experiments in UI design and web interactions
+							</span>
+						</li>
+						<li>
+							<span>
+								Built multiple interactive components focusing on calm user
+								experience, leveraging smooth motion design
+							</span>
+						</li>
+						<li>
+							<span>
+								Built with Astro for fast loads, supplemented by React for
+								stateful interactions, Cloudinary for assets, deployed on Vercel
+							</span>
+						</li>
+					</ul>
+				</div>
+
+				<div>
+					<div class="flex items-baseline justify-between gap-4">
+						<h3
+							class="overflow-visible text-sm font-medium text-nowrap uppercase"
+						>
+							Graeco-Latin Square Generator
+						</h3>
+						<a href="https://graecolatin.vercel.app/" class="text-sm underline"
+							>graecolatin.vercel.app</a
+						>
+					</div>
+					<ul
+						role="list"
+						class="text-base-500 mt-2 list-disc pl-4 text-sm leading-none"
+					>
+						<li>
+							<span>
+								Built an interactive web tool for generating artistic patterns
+								from a mathematical concept
+							</span>
+						</li>
+						<li>
+							<span>
+								Implemented dynamic pattern generation, SVG and PNG downloads,
+								and generation logic with full unit tests
+							</span>
+						</li>
+					</ul>
+				</div>
+
+				<div>
+					<div class="flex items-baseline justify-between gap-4">
+						<h3 class="text-sm leading-none font-medium uppercase">
+							Neural network for solving Schrödinger equation
+						</h3>
+						<span class="flex-shrink-0 text-sm">Senior project</span>
+					</div>
+					<ul
+						role="list"
+						class="text-base-500 mt-2 list-disc pl-4 text-sm leading-none"
+					>
+						<li>
+							<span>
+								Built and trained an unsupervised, physics-informed neural
+								network for solving the Schrödinger equation in 1D quantum wells
+								using Python and TensorFlow
+							</span>
+						</li>
+						<li>
+							<span
+								>Model predicted energy values within 0.5% and probability
+								distribution within 10% error range, significantly improving on
+								prior literatures
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex-1"></div>
+
+		<div class="grid grid-cols-4">
+			<h3 class="col-start-1 text-sm font-semibold uppercase">Skills</h3>
+			<h3 class="col-start-2 text-sm font-semibold uppercase">Tools</h3>
+			<h3 class="col-start-3 text-sm font-semibold uppercase">Education</h3>
+			<div class="text-base-500 col-start-1 mt-2 text-sm leading-tight">
+				<p>HTML</p>
+				<p>CSS</p>
+				<p>Javascript</p>
+				<p>Typescript</p>
+				<p>React</p>
+				<p>Astro</p>
+				<p>Tailwind</p>
+				<p>Headless CMS</p>
+			</div>
+			<div class="text-base-500 col-start-2 mt-2 text-sm leading-tight">
+				<p>Git / Github</p>
+				<p>npm / pnpm</p>
+				<p>Cursor</p>
+				<p>Figma</p>
+			</div>
+			<p class="col-span-2 col-start-3 mt-2 text-sm">
+				B.Sc. in Physics with minor in Applied Mathematics<br /><span
+					class="text-base-500"
+					>Mahidol University International College, 2024</span
+				>
+			</p>
+		</div>
+	</div>
+</BaseLayout>
+<style>
+	@page {
+		size: A4;
+		margin: 0;
+	}
+	@media print {
+		html,
+		body {
+			background: white;
+		}
+	}
+</style>
