@@ -30,21 +30,23 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 				<div className="border-base-100 bg-base-50 fixed top-0 right-0 left-0 z-[10000] border-b md:hidden">
 					<div className="mx-auto px-4 py-3">
 						<div className="flex justify-between">
-							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map((filter) => (
-								<button
-									key={filter}
-									type="button"
-									onClick={() => handleFilterClick(filter)}
-									className={cn(
-										"flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
-										activeFilter === filter
-											? "text-base-900"
-											: "text-base-300 hover:text-base-600",
-									)}
-								>
-									<span>{filter.toLowerCase()}</span>
-								</button>
-							))}
+							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map(
+								(filter) => (
+									<button
+										key={filter}
+										type="button"
+										onClick={() => handleFilterClick(filter)}
+										className={cn(
+											"flex items-center gap-1 text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
+											activeFilter === filter
+												? "text-base-900"
+												: "text-base-300 hover:text-base-600",
+										)}
+									>
+										<span>{filter.toLowerCase()}</span>
+									</button>
+								),
+							)}
 						</div>
 					</div>
 				</div>
@@ -59,28 +61,30 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 
 					<div className="hidden gap-2.5 md:flex">
 						<div className="flex flex-col">
-							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map((filter) => (
-								<button
-									key={filter}
-									type="button"
-									onClick={() => handleFilterClick(filter)}
-									className={cn(
-										"relative text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
-										activeFilter === filter
-											? "text-base-900"
-											: "text-base-300 hover:text-base-700",
-									)}
-								>
-									{activeFilter === filter && (
-										<span className="text-base-900 absolute -left-6 text-xs leading-[1.1] font-semibold">
-											({getFilterCount(filter)})
+							{AVAILABLE_FILTERS.filter((f) => f !== "Designs").map(
+								(filter) => (
+									<button
+										key={filter}
+										type="button"
+										onClick={() => handleFilterClick(filter)}
+										className={cn(
+											"relative text-left text-xs leading-[1.1] font-semibold uppercase transition-colors duration-200",
+											activeFilter === filter
+												? "text-base-900"
+												: "text-base-300 hover:text-base-700",
+										)}
+									>
+										{activeFilter === filter && (
+											<span className="text-base-900 absolute -left-6 text-xs leading-[1.1] font-semibold">
+												({getFilterCount(filter)})
+											</span>
+										)}
+										<span className="flex items-center">
+											{filter.toLowerCase()}
 										</span>
-									)}
-									<span className="flex items-center">
-										{filter.toLowerCase()}
-									</span>
-								</button>
-							))}
+									</button>
+								),
+							)}
 						</div>
 					</div>
 
@@ -134,6 +138,14 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 											like writing notes, reading psychology, and doing
 											recreational mathematics.
 										</p>
+										<UnderlineLink
+											href="https://github.com/chaychun/garden"
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-base-700 w-fit text-xs"
+										>
+											View project on Github
+										</UnderlineLink>
 									</div>
 									<div className="flex flex-col gap-3" data-blur-dialog-stagger>
 										<div className="text-base-900 text-xs font-semibold uppercase">
@@ -148,6 +160,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 											<li>
 												<UnderlineLink
 													href="https://github.com/chaychun"
+													rel="noopener noreferrer"
 													target="_blank"
 												>
 													GitHub
@@ -156,6 +169,7 @@ export default function Header({ title, filterCounts }: HeaderProps) {
 											<li>
 												<UnderlineLink
 													href="https://x.com/ChunChayut"
+													rel="noopener noreferrer"
 													target="_blank"
 												>
 													Twitter
