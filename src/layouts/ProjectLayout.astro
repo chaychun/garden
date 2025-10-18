@@ -1,6 +1,6 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
 import ProjectHeader from "@/components/nav/project-header";
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
 	title: string;
@@ -24,7 +24,7 @@ const { title, description } = Astro.props;
 		</ProjectHeader>
 
 		<div
-			class="relative z-0 min-h-0 flex-1 overflow-y-hidden p-4 md:overflow-x-auto"
+			class="relative z-0 min-h-0 flex-1 overflow-y-auto p-4 md:overflow-x-auto md:overflow-y-hidden"
 			id="scroll-container"
 		>
 			<slot name="interactive">
@@ -38,50 +38,5 @@ const { title, description } = Astro.props;
 				</div>
 			</slot>
 		</div>
-
-		<script>
-			import {
-				setupHorizontalScrollSmoothing,
-				setupVerticalScrollSmoothing,
-			} from "../lib/scroll-smoothing";
-
-			let currentCleanup: (() => void) | null = null;
-			let mediaQuery: MediaQueryList | null = null;
-
-			const setup = () => {
-				if (currentCleanup) {
-					currentCleanup();
-					currentCleanup = null;
-				}
-				const isDesktop = mediaQuery
-					? mediaQuery.matches
-					: window.matchMedia("(min-width: 768px)").matches;
-				currentCleanup = isDesktop
-					? setupHorizontalScrollSmoothing("#scroll-container")
-					: setupVerticalScrollSmoothing();
-			};
-
-			const attachMedia = () => {
-				if (mediaQuery) return;
-				mediaQuery = window.matchMedia("(min-width: 768px)");
-				mediaQuery.addEventListener("change", setup);
-			};
-
-			document.addEventListener("astro:page-load", () => {
-				attachMedia();
-				setup();
-			});
-
-			document.addEventListener("astro:before-swap", () => {
-				if (currentCleanup) {
-					currentCleanup();
-					currentCleanup = null;
-				}
-				if (mediaQuery) {
-					mediaQuery.removeEventListener("change", setup);
-					mediaQuery = null;
-				}
-			});
-		</script>
 	</div>
 </BaseLayout>
