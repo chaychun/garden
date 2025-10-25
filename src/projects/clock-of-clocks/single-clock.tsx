@@ -6,6 +6,8 @@ interface SingleClockProps {
 
 export default function SingleClock({ shape }: SingleClockProps) {
 	const angles = handleMap[shape];
+	const isI = shape === "i";
+	const handleOpacity = isI ? "opacity-20" : "opacity-100";
 
 	return (
 		<div
@@ -17,24 +19,22 @@ export default function SingleClock({ shape }: SingleClockProps) {
 				} as React.CSSProperties
 			}
 		>
-			{/* Handle 1 */}
 			<div
-				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-yellow-500 transition-transform duration-200"
+				className={`bg-base-50 absolute top-1/2 left-1/2 h-1/2 w-0.5 origin-top -translate-x-px transition-all duration-300 ease-in-out ${handleOpacity}`}
 				style={{
 					transform: `rotate(var(--handle1-rotation))`,
 				}}
 			/>
 
-			{/* Handle 2 */}
 			<div
-				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-yellow-500 transition-transform duration-200"
+				className={`bg-base-50 absolute top-1/2 left-1/2 h-1/2 w-0.5 origin-top -translate-x-px transition-all duration-300 ease-in-out ${handleOpacity}`}
 				style={{
 					transform: `rotate(var(--handle2-rotation))`,
 				}}
 			/>
 
 			<div
-				className="absolute top-1/2 left-1/2 h-1 w-1 origin-center -translate-x-1/2 -translate-y-1/2 bg-yellow-500 transition-transform duration-200"
+				className={`bg-base-50 absolute top-1/2 left-1/2 h-0.5 w-0.5 origin-center -translate-x-px -translate-y-1/2 transition-all duration-300 ease-in-out ${handleOpacity}`}
 				style={{
 					transform: `rotate(var(--handle1-rotation))`,
 				}}
