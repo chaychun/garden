@@ -9,7 +9,7 @@ export default function SingleClock({ shape }: SingleClockProps) {
 
 	return (
 		<div
-			className="relative h-20 w-20 border-2 border-gray-800 bg-white"
+			className="relative aspect-square w-full border-2 border-gray-800 bg-white"
 			style={
 				{
 					"--handle1-rotation": `${angles.handle1}deg`,

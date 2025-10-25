@@ -1,18 +1,10 @@
 ---
-import SingleClock from "./single-clock";
+import Counter from "./counter";
 ---
 
 <div class="flex h-full w-full items-center justify-center">
 	<div class="flex flex-col gap-8">
-		<h2 class="mb-4 text-center text-2xl font-bold">Clock of Clocks</h2>
-		<div class="grid grid-cols-4 gap-4">
-			<SingleClock client:load shape="tl" />
-			<SingleClock client:load shape="tr" />
-			<SingleClock client:load shape="bl" />
-			<SingleClock client:load shape="br" />
-			<SingleClock client:load shape="v" />
-			<SingleClock client:load shape="h" />
-			<SingleClock client:load shape="i" />
-		</div>
+		<h2 class="mb-4 text-center text-2xl font-bold">Clock of Clocks Counter</h2>
+		<Counter client:load />
 	</div>
 </div>
