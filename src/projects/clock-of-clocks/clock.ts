@@ -90,3 +90,17 @@ export const digitMap = {
 		["bl", "h", "h", "br"],
 	],
 };
+
+export function getGMTPlus7Time(): Date {
+	const now = new Date();
+	const gmtPlus7 = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+	return gmtPlus7;
+}
+
+export function formatTimeToDigits(date: Date): string[] {
+	const hours = date.getUTCHours().toString().padStart(2, "0");
+	const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+	const seconds = date.getUTCSeconds().toString().padStart(2, "0");
+
+	return [hours[0], hours[1], minutes[0], minutes[1], seconds[0], seconds[1]];
+}

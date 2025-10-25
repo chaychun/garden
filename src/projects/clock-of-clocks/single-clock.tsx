@@ -9,7 +9,7 @@ export default function SingleClock({ shape }: SingleClockProps) {
 
 	return (
 		<div
-			className="relative aspect-square w-full border-2 border-gray-800 bg-white"
+			className="relative aspect-square w-full"
 			style={
 				{
 					"--handle1-rotation": `${angles.handle1}deg`,
@@ -19,7 +19,7 @@ export default function SingleClock({ shape }: SingleClockProps) {
 		>
 			{/* Handle 1 */}
 			<div
-				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-red-500"
+				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-yellow-500 transition-transform duration-200"
 				style={{
 					transform: `rotate(var(--handle1-rotation))`,
 				}}
@@ -27,14 +27,14 @@ export default function SingleClock({ shape }: SingleClockProps) {
 
 			{/* Handle 2 */}
 			<div
-				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-green-500"
+				className="absolute top-1/2 left-1/2 h-1/2 w-1 origin-top -translate-x-0.5 bg-yellow-500 transition-transform duration-200"
 				style={{
 					transform: `rotate(var(--handle2-rotation))`,
 				}}
 			/>
 
 			<div
-				className="absolute top-1/2 left-1/2 h-1 w-1 origin-center -translate-x-1/2 -translate-y-1/2 bg-blue-500"
+				className="absolute top-1/2 left-1/2 h-1 w-1 origin-center -translate-x-1/2 -translate-y-1/2 bg-yellow-500 transition-transform duration-200"
 				style={{
 					transform: `rotate(var(--handle1-rotation))`,
 				}}
